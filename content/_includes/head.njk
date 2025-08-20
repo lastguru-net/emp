@@ -1,0 +1,40 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% if title %}{{ title }} - {% endif %}{{ siteconfig.title }}</title>
+{% if excerpt %}{% set description = excerpt | truncate(150, false, "…") %}
+{% elseif page and title and not posts %}{% set cp = collections.all | getCollectionItem(page) %}{% set description = cp.templateContent | safe | striptags | truncate(150, false, "…") %}
+{% else %}{% set description = siteconfig.description | truncate(150, false, "…") %}
+{% endif %}
+<meta name="author" content="{% if author %}{% if siteauthors[author] %}{{ siteauthors[author].fullName }}{% else %}{{ author }}{% endif %}{% else %}{{ siteconfig.author }}{% endif %}">
+<meta name="description" content="{{ description }}">
+{% if image %}{% set image_src = image %}{% else %}{% set image_src = siteconfig.openGraphDefaultImage %}{% endif %}
+{% include "opengraph.njk" %}
+{% include "twittercard.njk" %}
+{% for name, item in meta %}
+<meta name="{{ name }}" content="{{ item.value }}">
+{% endfor %}
+{% for iconsize in siteconfig.appleiconSizes %}
+<link rel="apple-touch-icon" sizes="{{ iconsize }}x{{ iconsize }}" href="{% imageTransform siteconfig.favicon, iconsize, 'png' %}">
+{% endfor %}
+{% for iconsize in siteconfig.faviconSizes %}
+<link rel="icon" type="image/png" sizes="{{ iconsize }}x{{ iconsize }}" href="{% imageTransform siteconfig.favicon, iconsize, 'png' %}">
+{% endfor %}
+{% if siteconfig.webmanifestSizes %}<link rel="manifest" href="/site.webmanifest" crossorigin="use-credentials">{% endif %}
+<link rel="canonical" href="{{ page.url | absoluteUrl }}" />
+{% if siteconfig.features.sitemap %}<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">{% endif %}
+{% if siteconfig.pixels.fbPixel %}<link rel="preconnect" href="https://connect.facebook.net">{% endif %}
+{% if siteconfig.pixels.googleTag %}<link rel="preconnect" href="https://www.googletagmanager.com">{% endif %}
+{% if siteconfig.fonts %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family={{ siteconfig.fonts.body.family }}:ital,wght@{{ siteconfig.fonts.body.weights }}&family={{ siteconfig.fonts.header.family }}:ital,wght@{{ siteconfig.fonts.header.weights }}{% if siteconfig.fonts.swap %}&display=swap{% endif %}" as="style">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ siteconfig.fonts.body.family }}:ital,wght@{{ siteconfig.fonts.body.weights }}&family={{ siteconfig.fonts.header.family }}:ital,wght@{{ siteconfig.fonts.header.weights }}{% if siteconfig.fonts.swap %}&display=swap{% endif %}">
+{% endif %}
+<link rel="stylesheet" href="{{ '/assets/css/site-build.css' | addHash }}">
+{% if siteconfig.features.js %}<script src="{{ '/assets/js/min.js' | addHash }}" type="module"></script>{% endif %}
+{% if siteconfig.pixels.googleTag %}
+{% include "google-tag.njk" %}
+{% endif %}
+{% if siteconfig.pixels.fbPixel %}
+{% include "meta-pixel.njk" %}
+{% endif %}

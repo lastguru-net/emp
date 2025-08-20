@@ -1,0 +1,28 @@
+<footer class="footer">
+    <div class="footer-content max-w-content">
+        {% set copyright = siteelements.copyright %}
+        <div class="footer-copyright">
+            <span class="footer-copyright-text">
+                &copy; {% if copyright.year %}{{ copyright.year }}{% else %}{% year %}{% endif %}
+            </span>
+            {% if copyright.link %}
+            <a href="{{ copyright.link }}" class="footer-copyright-author">
+                {{ siteconfig.author }}
+            </a>
+            {% else %}
+            <span class="footer-copyright-author">
+                {{ siteconfig.author }}
+            </span>
+            {% endif %}
+            <span class="footer-copyright-text">
+                {{ copyright.text }}
+            </span>
+            {% if siteconfig.features.privacyPolicy == "footer" and siteelements.privacyPolicy %}
+            <span class="footer-privacy-sep">&middot;</span>
+            <a href="{{ siteelements.privacyPolicy.url }}" class="footer-privacy-policy" aria-label="{{ siteelements.privacyPolicy.name }}">
+                {{ siteelements.privacyPolicy.name }}
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</footer>

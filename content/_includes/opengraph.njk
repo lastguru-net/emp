@@ -1,0 +1,27 @@
+{% set isPost = tags and ('posts' in tags) %}
+{% set isAuthorPage = tags and ('authorcard' in tags) %}
+<meta property="og:url" content="{{ page.url | absoluteUrl }}">
+<meta property="og:type" content="{% if isPost %}article{% elseif isAuthorPage %}profile{% else %}website{% endif %}">
+<meta property="og:site_name" content="{{ siteconfig.title }}">
+<meta property="og:title" content="{% if title %}{{ title }} - {% endif %}{{ siteconfig.title }}">
+{% if siteconfig.features.og_description %}<meta property="og:description" content="{{ description }}">{% endif %}
+<meta property="og:image" content="{{ siteconfig.url }}{% imageTransform image_src, 1200, 'webp' %}">
+<meta property="og:locale" content="{{ siteconfig.locale }}" />
+{% if isAuthorPage and author %}
+<meta property="profile:first_name" content="{{ siteauthors[author].fullName }}">
+{% endif %}
+{% if isPost %}
+{% set authorId = author or siteconfig.author %}
+{% if authorId and siteauthors[authorId] %}
+{% set authorUrl = ('/author/' ~ (authorId | slugify) ~ '/') | absoluteUrl %}
+{% endif %}
+<meta property="article:published_time" content="{{ page.date | isoDateTime }}">
+{% if authorUrl %}<meta property="article:author" content="{{ authorUrl }}">{% endif %}
+{% for t in tags %}
+{% if t not in sitetags.notag %}
+<meta property="article:tag" content="{% if sitestrings[t] %}{{ sitestrings[t] | capitalize }}{% else %}{{ t | capitalize }}{% endif %}">
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if siteconfig.pixels.fbApp %}<meta property="fb:app_id" content="{{ siteconfig.pixels.fbApp }}">{% endif %}
+{% if siteelements.social.fbPage %}<meta property="article:publisher" content="https://www.facebook.com/{{ siteelements.social.fbPage }}/">{% endif %}

@@ -1,0 +1,37 @@
+---
+layout: base.njk
+---
+
+<div class="content post">
+  	<h1>{{ title }}</h1>
+	{% if siteconfig.features.postproperties %}
+	{% set post = collections.posts | getCollectionItem(page) %}
+	{% include "postproperties.njk" %}
+	{% endif %}
+	{% if image %}
+	<img class="postimage" src="{{ image }}" alt="{{ imageAlt }}" />
+	{% endif %}
+	<div class="incontent">
+  		{{ content | safe }}
+	</div>
+  	{% if siteconfig.features.sharer %}{% include "social.njk" %}{% endif %}
+	{% if siteconfig.features.prevnext %}
+	<div class="postbreak"></div>
+	<div class="additions flex flex-col md:flex-row gap-3">
+		{% set previousPost = collections.posts | getPreviousCollectionItem(page) %}
+		{% set nextPost = collections.posts | getNextCollectionItem(page) %}
+	  	<a href="{{ previousPost.url }}" class="flex-1" aria-label="{% if previousPost.url %}{{ sitestrings.older }}: {{ previousPost.data.title }}{% endif %}">
+			<div class="prevnextprev {% if previousPost.url %}prevnextyes{% else %}prevnextno{% endif %}">
+				<span class="prevnexttitle">&lt; {{ sitestrings.older }}</span>
+				<span class="prevnextlink">{% if not previousPost.url %} - {% else %}{{ previousPost.data.title | truncate(60, false, "…") }}{% endif %}</span>
+			</div>
+		</a>
+	  	<a href="{{ nextPost.url }}" class="flex-1" aria-label="{% if nextPost.url %}{{ sitestrings.newer }}: {{ nextPost.data.title }}{% endif %}">
+		  	<div class="prevnextnext {% if nextPost.url %}prevnextyes{% else %}prevnextno{% endif %}">
+				<span class="prevnexttitle">{{ sitestrings.newer }} &gt;</span>
+				<span class="prevnextlink">{% if not nextPost.url %} - {% else %}{{ nextPost.data.title | truncate(60, false, "…") }}{% endif %}</span>
+			</div>
+		</a>
+	</div>
+	{% endif %}
+</div>

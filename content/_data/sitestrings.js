@@ -1,0 +1,20 @@
+export default {
+    words: "vārdi",
+    share: "Dalīties",
+    share_on: "Dalīties tīklā",
+    copy_to_clipboard: "Kopēt saiti starpliktuvē",
+    copied: "Saite ir nokopēta",
+    events: "Notikumi",
+    older: "Vecāks ieraksts",
+    newer: "Jaunāks ieraksts",
+    posts_by: "Ieraksti no",
+    posts_tagged: "Ieraksti ar birku",
+    first_page: "Pirmā lapa",
+    previous_page: "Iepriekšējā lapa",
+    go_to_page: "Doties uz lapu",
+    next_page: "Nākamā lapa",
+    last_page: "Pēdējā lapa",
+    about_me: "Par mani",
+    open_sidebar_menu: "Atvērt sānu izvēlni",
+    close_sidebar_menu: "Aizvērt sānu izvēlni"
+};

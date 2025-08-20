@@ -1,0 +1,52 @@
+export default {
+    linkedin: {
+        title: "LinkedIn",
+        prefix: "https://linkedin.com/in/",
+        aria: "Open LinkedIn profile"
+    },
+    github: {
+        title: "GitHub",
+        prefix: "https://github.com/",
+        aria: "Open GitHub profile"
+    },
+    twitter_x: {
+        title: "X",
+        prefix: "https://x.com/",
+        aria: "Open X profile"
+    },
+    youtube: {
+        title: "YouTube",
+        prefix: "https://youtube.com/channel/",
+        aria: "Open YouTube channel"
+    },
+    fbPage: {
+        title: "Facebook Page",
+        prefix: "https://facebook.com/",
+        aria: "Open Facebook page"
+    },
+    fbProfile: {
+        title: "Facebook",
+        prefix: "https://facebook.com/",
+        aria: "Open Facebook profile"
+    },
+    instagram: {
+        title: "Instagram",
+        prefix: "https://instagram.com/",
+        aria: "Open Instagram profile"
+    },
+    threads: {
+        title: "Threads",
+        prefix: "https://threads.net/@",
+        aria: "Open Threads profile"
+    },
+    mastodon: {
+        title: "Mastodon",
+        prefix: "",
+        aria: "Open Mastodon profile"
+    },
+    bluesky: {
+        title: "Bluesky",
+        prefix: "",
+        aria: "Open Bluesky profile"
+    }
+}

@@ -1,0 +1,9 @@
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="{{ page.url | absoluteUrl }}">
+<meta name="twitter:title" content="{% if title %}{{ title }} - {% endif %}{{ siteconfig.title }}">
+{% if siteconfig.features.og_description %}<meta name="twitter:description" content="{{ description }}">{% endif %}
+<meta name="twitter:image" content="{{ siteconfig.url }}{% imageTransform image_src, 1200, 'webp' %}">
+{% if siteelements.social.twitter_x %}
+<meta name="twitter:site" content="@{{ siteelements.social.twitter_x }}">
+<meta name="twitter:creator" content="@{{ siteelements.social.twitter_x }}">
+{% endif %}

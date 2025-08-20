@@ -1,0 +1,40 @@
+<div class="postpagination">
+	{% if pagination.hrefs.length > 1 %}
+	<ul class="pagination flex">
+	    {% if pagination.pageNumber > 0 %}
+	    <li>
+			<div>
+				<a href="{{ pagination.href.first }}" aria-label="{{ sitestrings.first_page }}">&lt;&lt;</a>
+			</div>
+		</li>
+	    <li>
+			<div>
+				<a href="{{ pagination.href.previous }}" aria-label="{{ sitestrings.previous_page }}">&lt;</a>
+			</div>
+		</li>
+		{% endif %}
+		{% if pagination.pageNumber < 2 %}{% set startWith = 0 %}{% else %}{% set startWith = pagination.pageNumber - 2 %}{% endif %}
+	    {% for pageHref in pagination.hrefs %}
+		{% if loop.index0 < 5  and pagination.hrefs[loop.index0 + startWith] %}
+	    <li>
+			<div class="{% if pagination.hrefs[loop.index0 + startWith] === page.url %}active{% endif %}">
+				<a href="{{ pagination.hrefs[loop.index0 + startWith] }}" aria-label="{{ sitestrings.go_to_page }} {{ loop.index + startWith }}">{{ loop.index + startWith }}</a>
+			</div>
+		</li>
+		{% endif %}
+		{% endfor %}
+		{% if (startWith + 5) < pagination.hrefs.length %}
+	    <li>
+			<div>
+				<a href="{{ pagination.href.next }}" aria-label="{{ sitestrings.next_page }}">&gt;</a>
+			</div>
+		</li>
+	    <li>
+			<div>
+				<a href="{{ pagination.href.last }}" aria-label="{{ sitestrings.last_page }}">&gt;&gt;</a>
+			</div>
+		</li>
+		{% endif %}
+	</ul>
+	{% endif %}
+</div>

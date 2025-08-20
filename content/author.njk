@@ -1,0 +1,24 @@
+---
+layout: base.njk
+sitemapPriority: 1
+permalink: /author/{{ tag.tagName | slugify }}/{% if tag.pageNumber %}{{ tag.pageNumber }}/{% endif %}
+pagination:
+  data: collections.authorPagination
+  size: 1
+  alias: tag
+eleventyComputed:
+  title: "{% if siteauthors[tag.tagName] %}{{ siteauthors[tag.tagName].fullName }}{% else %}{{ tag.tagName }}{% endif %}"
+  author: "{{ tag.tagName }}"
+  excerpt: "{% if siteauthors[tag.tagName] %}{{ siteauthors[tag.tagName].bio }}{% else %}{{ sitestrings.posts_by }} {{ tag.tagName }}{% endif %}"
+tags: authorcard
+---
+
+{# Note that pagination size is determined by the collection itself (edit author.js) #}
+{# Note that the permalink prefix (/author/) is determined by the collection itself #}
+{% set posts = tag.items %}
+{% set pagination = tag %}
+{% if siteconfig.features.authorCard and siteauthors[author] %}{% set authorCard = siteauthors[author] %}{% endif %}
+{% if authorCard %}
+{% include "authorcard.njk" %}
+{% endif %}
+{% include "postlist.njk" %}

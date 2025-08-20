@@ -1,0 +1,6 @@
+{
+    "layout": "page.njk",
+    "tags": ["pages"],
+    "permalink": "/{{ title | slugify }}/",
+    "sitemapPriority": 0.9
+}

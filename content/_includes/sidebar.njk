@@ -1,0 +1,40 @@
+<div id="sidebar-contents" class="sidebar grid grid-cols-1 gap-4 content-between relative">
+    <svg class="sidebar-close" role="button" onclick="slideLeftSidebar()" aria-label="{{ sitestrings.close_sidebar_menu }}" viewBox="{{ inlinesvg.close.viewBox }}" xmlns="http://www.w3.org/2000/svg">
+        <title>Close</title>
+        <path d="{{ inlinesvg.close.path }}" />
+    </svg>
+    <div class="sitehero">
+        <a href="/" aria-label="{{ siteelements.menuHome }}">
+            <img alt="{{ siteconfig.imageAlt }}" src="{{ siteconfig.image }}" loading="eager"/>
+        </a>
+        <div class="sitetitle">
+            <a href="/" aria-label="{{ siteelements.menuHome }}">{{ siteconfig.title }}</a>
+        </div>
+        <div class="sitedesc">
+            {{ siteconfig.description }}
+        </div>
+    </div>
+    {% if siteconfig.features.sitesocial == "above" %}
+        {% include "sitesocial.njk" %}
+    {% endif %}
+    <div class="menu">
+        <ul>
+            <li class="navitem {{ page.url | isHomeLink('/') }}">
+                <a href="/" aria-label="{{ siteelements.menuHome }}">{{ siteelements.menuHome }}</a>
+            </li>
+            {% for name, link in siteelements.menuItems %}
+            <li class="navitem {{ page.url | isActiveLink(link) }}">
+                <a href="{{ link }}" aria-label="{{ name }}">{{ name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% if siteconfig.features.sitesocial == "below" %}
+        {% include "sitesocial.njk" %}
+    {% endif %}
+    <div class="privacy-policy">
+        {% if siteconfig.features.privacyPolicy == "sidebar" %}
+        <a href="{{ siteelements.privacyPolicy.url }}" aria-label="{{ siteelements.privacyPolicy.name }}">{{ siteelements.privacyPolicy.name }}</a>
+        {% endif %}
+    </div>
+</div>

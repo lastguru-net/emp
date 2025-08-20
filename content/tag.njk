@@ -1,0 +1,18 @@
+---
+layout: base.njk
+sitemapPriority: 1
+permalink: /{{ tag.tagName }}/{% if tag.pageNumber %}{{ tag.pageNumber }}/{% endif %}
+pagination:
+  data: collections.tagPagination
+  size: 1
+  alias: tag
+eleventyComputed:
+  title: "{% if sitestrings[tag.tagName] %}{{ sitestrings[tag.tagName] | capitalize }}{% else %}{{ tag.tagName | capitalize }}{% endif %}"
+  excerpt: "{{ sitestrings.posts_tagged }} {% if sitestrings[tag.tagName] %}{{ sitestrings[tag.tagName] | capitalize }}{% else %}{{ tag.tagName | capitalize }}{% endif %}"
+---
+
+{# Note that pagination size is determined by the collection itself (edit tag.js) #}
+{# Note that the permalink prefix (/) is determined by the collection itself #}
+{% set posts = tag.items %}
+{% set pagination = tag %}
+{% include "postlist.njk" %}

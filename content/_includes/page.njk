@@ -1,0 +1,14 @@
+---
+layout: base.njk
+---
+
+<div class="content post">
+  	<h1>{{ title }}</h1>
+	{% if image %}
+	<img class="postimage" src="{{ image }}" alt="{{ imageAlt }}" />
+	{% endif %}
+	<div class="incontent">
+  		{{ content | safe }}
+	</div>
+  	{% if siteconfig.features.sharer %}{% include "social.njk" %}{% endif %}
+</div>

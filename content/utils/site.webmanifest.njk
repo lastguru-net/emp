@@ -1,0 +1,19 @@
+---
+eleventyExcludeFromCollections: true
+permalink: /site.webmanifest
+---
+{
+    "name": "{{ siteconfig.title }}",
+    "theme_color": "#000000",
+    "background_color": "#000000",
+    "display": "standalone",
+    "icons": [
+    {% for iconsize in siteconfig.webmanifestSizes %}
+        {
+            "src": "{% imageTransform siteconfig.favicon, iconsize, 'png' %}",
+            "sizes": "{{ iconsize }}x{{ iconsize }}",
+            "type": "image/png"
+        }{% if not loop.last %},{% endif %}
+    {% endfor %}
+    ]
+}

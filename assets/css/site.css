@@ -1,0 +1,782 @@
+@import "tailwindcss";
+@import "./theme.css";
+@import "./prism-okaidia.css";
+@source "./safelist.txt";
+
+/* Site CSS structure (TOC)
+   1) Utilities
+   2) Base elements (images, placeholders)
+   3) Sidebar (layout, menu, social, privacy)
+   4) Mobile top bar
+   5) Content area shell
+   6) Content typography/components (tables, lists, code)
+   7) Social/share components
+   8) Additions & Prev/Next
+   9) Post properties
+   10) Post list (incl. thumbnails, responsive tweaks)
+   11) Pagination
+   12) Footer
+   13) Author card
+   14) Miscellaneous
+   15) Print
+*/
+
+@utility h-dvh {
+    height: 100vh;
+    @supports (height: 100dvh) {
+        height: 100dvh;
+    }
+}
+
+@utility max-h-dvh {
+    max-height: 100vh;
+    @supports (max-height: 100dvh) {
+        max-height: 100dvh;
+    }
+}
+
+/* Add: largest viewport height utility to avoid gaps on viewport changes */
+@utility h-lvh {
+    height: 100vh;
+    @supports (height: 100lvh) {
+        height: 100lvh;
+    }
+}
+
+.h-screen {
+    @apply overflow-x-hidden overflow-y-hidden;
+    @apply h-dvh;
+}
+
+/* Images */
+
+img {
+    @apply block mx-auto h-auto;
+    @apply rounded-lg shadow-lg;
+}
+
+img.siteheader {
+    @apply rounded-t-none;
+    @apply -mt-4;
+}
+
+/* Left sidebar */
+
+#sidebar {
+    @apply fixed top-0 left-0 z-30;
+    @apply w-sidebar bg-sidebar;
+    @apply h-lvh;
+    @apply transition-transform sm:transition-none translate-x-0;
+    @apply overflow-visible; /* allow bleed pseudo to extend */
+    @apply flex flex-col;
+}
+
+#sidebar.is-closed {
+    @apply -translate-x-sidebar sm:translate-x-0;
+}
+
+/* Bleed the sidebar background above and below viewport */
+#sidebar::before {
+    @apply fixed left-0 w-sidebar bg-sidebar pointer-events-none;
+    @apply top-[-25vh] h-[150vh];
+    content: "";
+}
+
+.sidebar {
+    @apply px-2 h-dvh overflow-hidden;
+    @apply tracking-wider text-center font-header;
+}
+
+.sidebar svg.sidebar-close {
+    @apply sm:hidden;
+    @apply absolute top-2 right-2 w-8 h-8;
+    @apply rounded-md border-1 border-accent;
+}
+
+.sidebar .sitehero {
+    @apply pt-8;
+}
+
+.sidebar .sitehero img {
+    @apply max-w-56 max-h-48 object-cover;
+}
+
+.sidebar .sitetitle {
+    @apply font-semibold text-2xl;
+    @apply text-white hover:text-accent;
+    @apply pt-6;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.sidebar .sitetitle a {
+    @apply mx-auto;
+}
+
+.sidebar .sitedesc {
+    @apply font-normal;
+    @apply text-gray-400;
+    @apply pt-3;
+}
+
+.sidebar .navitem {
+    @apply text-base/10 font-medium uppercase;
+    @apply text-gray-400 hover:text-accent;
+    @apply px-1;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.sidebar .navitem.active {
+    @apply text-white hover:text-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.menu ul {
+    @apply list-none;
+    @apply pl-0;
+}
+
+.menu a {
+    @apply block;
+    @apply no-underline;
+}
+
+/* NOTE: The menu indicator uses intentional “magic numbers” to create an effect
+    beside the active/hovered item. These offsets are tuned to the current line-height
+    and spacing. Do not change without revisiting the visual effect (values
+    like -right-29, -top-90, etc. are expected here). */
+.menu ul > li:last-child > a {
+    @apply -mr-[3px] max-w-[calc(100%-3px)];
+}
+.menu ul > li:last-child::after {
+    @apply invisible relative pointer-events-none;
+    @apply bg-accent;
+    @apply border-solid border-r-2 border-r-accent;
+    @apply w-[3px] -right-29;
+    @apply transition-[top] duration-500;
+    content: "";
+}
+
+.menu ul > li.active:nth-last-child(9) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(9):hover ~ li:last-child::after {
+    @apply visible -top-90;
+}
+.menu ul > li.active:nth-last-child(8) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(8):hover ~ li:last-child::after {
+    @apply visible -top-80;
+}
+.menu ul > li.active:nth-last-child(7) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(7):hover ~ li:last-child::after {
+    @apply visible -top-70;
+}
+.menu ul > li.active:nth-last-child(6) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(6):hover ~ li:last-child::after {
+    @apply visible -top-60;
+}
+.menu ul > li.active:nth-last-child(5) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(5):hover ~ li:last-child::after {
+    @apply visible -top-50;
+}
+.menu ul > li.active:nth-last-child(4) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(4):hover ~ li:last-child::after {
+    @apply visible -top-40;
+}
+.menu ul > li.active:nth-last-child(3) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(3):hover ~ li:last-child::after {
+    @apply visible -top-30;
+}
+.menu ul > li.active:nth-last-child(2) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(2):hover ~ li:last-child::after {
+    @apply visible -top-20;
+}
+.menu ul > li.active:nth-last-child(1):last-child::after,
+.menu ul > li.navitem:nth-last-child(1):last-child:hover::after {
+    @apply visible -top-10;
+}
+
+.menu > * {
+    @apply transition-transform duration-400;
+}
+
+.sidebar .sitesocial {
+    @apply gap-5 mx-auto;
+}
+
+.sidebar .sitesocial a {
+    @apply w-5 h-5;
+}
+
+.sidebar svg {
+    @apply fill-gray-400 hover:fill-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.sidebar .privacy-policy {
+    @apply text-sm font-normal;
+    @apply py-2;
+}
+.sidebar .privacy-policy a {
+    @apply text-gray-400 hover:text-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
+/* Mobile top bar */
+
+.top-bar {
+    @apply sm:hidden;
+    @apply border-accent border-b-1 shadow-lg;
+    @apply bg-white;
+    @apply top-0 h-12 z-10;
+    @apply transition-transform duration-200 ease-in;
+}
+
+.top-bar svg {
+    @apply block align-middle h-12 leading-12 ml-3 pt-4 pb-3;
+}
+
+.top-bar a {
+    @apply align-middle text-center leading-12;
+    @apply text-2xl font-semibold font-header hover:no-underline;
+    @apply hover:text-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.top-bar.hide {
+    @apply -translate-y-12;
+}
+
+/* Content area */
+
+#right-area {
+    @apply flex flex-col;
+    @apply overflow-x-hidden overflow-y-auto;
+    @apply sm:ml-sidebar; /* sit beside the fixed sidebar on desktop */
+}
+
+.max-w-content {
+    @apply flex-1;
+}
+
+main {
+    @apply min-w-0;
+}
+
+.content {
+    @apply my-4 mx-8 lg:mx-24;
+    @apply leading-relaxed tracking-wider;
+}
+
+.content .postimage {
+    @apply mb-6;
+}
+
+.content .incontent {
+    @apply text-gray-700;
+    @apply font-body font-normal;
+}
+
+.content h1 {
+    @apply text-gray-900;
+    @apply text-3xl font-bold font-header;
+    @apply py-6;
+}
+
+.content h2 {
+    @apply text-2xl font-semibold font-header;
+    @apply pt-6;
+}
+
+.content h3 {
+    @apply text-xl font-medium font-header;
+    @apply pt-4;
+}
+
+.content h4 {
+    @apply text-lg font-medium font-header;
+    @apply pt-4;
+}
+
+.content p {
+    @apply py-2;
+    @apply font-normal text-base;
+}
+
+.content p strong {
+    @apply font-bold;
+}
+
+.content a {
+    @apply text-accent;
+    @apply underline hover:no-underline;
+}
+
+.content blockquote {
+    @apply border-l-4 border-accent;
+    @apply py-4;
+}
+
+.content blockquote > p {
+    @apply pl-4 py-2;
+}
+
+.content ol {
+    @apply list-decimal leading-8;
+    @apply pl-10;
+}
+
+.content ul {
+    @apply list-disc leading-8;
+    @apply pl-10;
+}
+
+.content li {
+    @apply marker:text-accent;
+    @apply text-base;
+    @apply py-0.5;
+}
+
+.content li ol,
+.content li ul {
+    @apply pl-5;
+}
+
+.content ul.contains-task-list {
+    @apply list-none;
+    @apply pl-5;
+}
+
+.content input.task-list-item-checkbox {
+    @apply appearance-none inline-grid place-content-center;
+    @apply w-4 h-4;
+    @apply bg-gray-100 checked:bg-accent;
+    @apply border-accent rounded-sm border-2;
+    @apply before:text-white before:-mb-0.5;
+    @apply before:content-['\00a0'] checked:before:content-['\2713'];
+}
+
+dt {
+    @apply font-bold;
+}
+
+dd {
+    @apply pl-5 pb-2;
+}
+
+.content table {
+    @apply table-auto w-full my-2;
+    @apply border-b-1 border-accent;
+}
+
+.content table thead tr {
+    @apply leading-10;
+    @apply border-b-1 border-accent;
+}
+
+/* Content table styles */
+/* Intentionally left blank for future zebra-striping adjustments on even rows. */
+.content table tbody tr:nth-child(even) {
+}
+/* Zebra striping uses odd rows for now; even rows may be styled later. */
+.content table tbody tr:nth-child(odd) {
+    @apply bg-gray-100;
+}
+
+.content img {
+    @apply max-w-full;
+}
+
+.content hr {
+    @apply text-accent;
+}
+.content .footnotes p {
+    @apply py-0;
+}
+
+.content :not(pre) > code:not([class*="language-"]) {
+    @apply border-1 border-accent rounded-sm;
+    @apply p-0.25;
+}
+
+/* Social links for content */
+
+svg.twitter {
+    fill: #1da1f2;
+}
+
+svg.twitter_x {
+    fill: black;
+}
+
+svg.facebook {
+    fill: #4267b2;
+}
+
+svg.linkedin {
+    fill: #0072b1;
+}
+
+svg.bluesky {
+    fill: #0a7aff;
+}
+
+svg.threads {
+    fill: black;
+}
+
+.social svg {
+    @apply h-5 px-2;
+    @apply hover:fill-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.social span {
+    @apply text-sm;
+}
+
+.social {
+    @apply mt-8 mb-4;
+}
+
+.social a {
+    @apply relative;
+}
+
+.social a:hover::before {
+    @apply absolute block -top-8 -left-36 w-54;
+    @apply p-2.5;
+    @apply text-gray-700 bg-gray-100;
+    @apply text-center text-xs font-semibold;
+    @apply border-1 border-solid border-accent rounded-md;
+    @apply -translate-y-1/2;
+    content: attr(aria-label);
+}
+
+.social a.link:active::before {
+    @apply -top-8;
+    content: attr(data-copied);
+}
+
+/* Additions and Previous - Next block */
+
+.postbreak {
+    @apply block w-full h-1;
+    @apply border-solid border-b-1 border-accent;
+
+}
+
+.additions {
+    @apply mt-6 w-full;
+}
+
+.additions a {
+    @apply no-underline hover:no-underline;
+}
+
+.additions div {
+    @apply text-gray-700 bg-gray-100;
+    @apply border-solid border-1 border-accent rounded-lg;
+    @apply h-22 px-2;
+    @apply overflow-hidden;
+    @apply no-underline hover:no-underline;
+}
+
+.prevnextprev {
+    @apply text-left;
+}
+
+.prevnextnext {
+    @apply text-right;
+}
+
+.prevnextyes {
+    @apply hover:bg-accent;
+    @apply hover:text-gray-100;
+    @apply cursor-pointer;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.prevnextno {
+    @apply cursor-not-allowed;
+}
+
+.prevnexttitle {
+    @apply block my-1 px-2;
+    @apply text-xs font-semibold;
+}
+
+.prevnextlink {
+    @apply text-base font-medium;
+}
+
+/* Post properties */
+
+.postproperties {
+    @apply text-gray-500 fill-gray-500;
+    @apply font-header text-sm font-normal;
+    @apply pb-4;
+}
+
+.postproperties svg {
+    @apply w-5 h-5 mr-1;
+}
+
+.postproperties .posttag,
+.postproperties .postauthor {
+    @apply border-solid border-1 border-accent rounded-sm;
+    @apply -my-0.25;
+}
+
+.postproperties .posttag a,
+.postproperties .postauthor a {
+    @apply bg-accent/10 hover:bg-accent;
+    @apply text-gray-500 fill-gray-500 hover:text-gray-100 hover:fill-gray-100;
+    @apply no-underline;
+    @apply px-1;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.readingtime {
+    @apply relative cursor-default;
+}
+
+.readingtime:hover::before {
+    @apply absolute block -bottom-10 w-25;
+    @apply p-0.75;
+    @apply text-gray-700 bg-gray-100;
+    @apply text-center text-xs font-semibold;
+    @apply border-1 border-solid border-accent rounded-md;
+    @apply -translate-y-1/2;
+    content: attr(data-words);
+}
+
+/* Post list */
+
+.postlist {
+    @apply my-4 mx-4 lg:mx-20;
+    @apply leading-relaxed tracking-wider;
+    @apply font-normal;
+}
+
+.postlist .postlistitem {
+    @apply px-4;
+    @apply border-b-1 border-accent;
+    @apply hover:bg-gray-100;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.postlist h1 {
+    @apply text-gray-900;
+    @apply text-center text-3xl font-bold font-header;
+    @apply py-6;
+}
+
+.postlist .postlistheading {
+    @apply py-4;
+}
+
+.postlist .postlistheading a {
+    @apply text-gray-900 hover:text-accent;
+    @apply text-2xl font-semibold font-header hover:no-underline;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.postlist .postexcerpt {
+    @apply text-gray-700;
+    @apply font-body font-normal text-base;
+    @apply pb-4;
+}
+
+/* Post list thumbnails (responsive)
+   - Mobile: full-width, stacked above excerpt (w-full h-50)
+   - sm: stacked above excerpt, medium size and centered (sm:w-48 sm:h-28 sm:mx-auto)
+   - md+: side-by-side row with compact image; right variant enlarged at md
+*/
+.postlist .postthumb {
+	@apply w-full h-50;
+	@apply sm:w-56 sm:h-32 sm:mx-auto;
+	@apply md:w-32 md:h-20 md:mx-0;
+	@apply object-cover rounded-md;
+	@apply self-start mb-4;
+	@apply md:flex-none;
+	@apply transition-shadow duration-200 ease-in;
+}
+
+/* Clickable thumbnail wrapper */
+.postlist .postthumblink {
+	@apply block rounded-md;
+}
+
+/* Hover/focus effect: stronger shadow + accent-colored ring (simulates colored shadow) */
+.postlist a.postthumblink:hover .postthumb,
+.postlist a.postthumblink:focus-visible .postthumb {
+	@apply shadow-xl ring-1 ring-accent;
+}
+
+.postlist .thumb-right .postthumb {
+	@apply md:w-40 md:h-24;
+}
+/* Keep items aligned so postproperties sits at the bottom on wider rows. */
+.postlist .postlistrow {
+	@apply items-stretch;
+}
+.postlist .postlistside {
+	@apply min-w-0;
+	@apply md:flex-1 md:flex md:flex-col;
+}
+.postlist .postlistside .postexcerpt {
+	@apply md:flex-1;
+}
+
+/* Collection pagination */
+
+.postpagination {
+    @apply mt-2 mx-4 lg:mx-20 pb-8;
+}
+
+ul.pagination {
+    @apply list-none;
+}
+
+ul.pagination li {
+    @apply mr-1.5;
+}
+
+ul.pagination div {
+    @apply border-solid border-1 border-accent rounded-full;
+    @apply bg-gray-100 hover:bg-accent;
+    @apply hover:text-gray-100;
+    @apply text-center leading-relaxed;
+    @apply w-8 h-8;
+    @apply transition-colors duration-200 ease-in;
+}
+
+ul.pagination div.active {
+    @apply bg-gray-400;
+    @apply text-accent;
+}
+
+ul.pagination div a {
+    @apply block;
+    @apply font-body font-normal text-lg;
+    @apply hover:no-underline;
+    @apply pt-[1.5px];
+}
+
+/* Footer */
+
+.footer {
+    @apply bg-sidebar;
+    @apply w-full;
+    @apply py-2 px-4 mt-auto;
+}
+
+.footer .footer-content {
+    @apply flex flex-wrap items-center justify-center gap-2;
+    @apply text-gray-400 font-header font-normal text-sm;
+}
+
+.footer .footer-copyright {
+    @apply text-gray-400;
+}
+
+.footer .footer-copyright a {
+    @apply no-underline;
+    @apply hover:text-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.footer .footer-privacy-policy {
+    @apply text-gray-400 hover:text-accent;
+    @apply no-underline;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.footer .footer-privacy-sep {
+    @apply px-2;
+}
+
+/* Author card */
+.authorcard {
+	@apply bg-gray-100 text-gray-700;
+	@apply border-solid border-1 border-accent rounded-lg;
+	@apply p-4 my-4 mx-4 lg:mx-20;
+}
+
+.authorcard .authorcard-row {
+	@apply flex flex-col sm:flex-row items-start sm:items-center gap-4;
+}
+
+.authorcard .authorcard-main {
+	@apply flex-1 min-w-0;
+}
+
+.authorcard .authorcard-photo {
+	@apply w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32;
+	@apply rounded-full object-cover;
+	@apply ring-1 ring-accent;
+}
+
+.authorcard .authorcard-name {
+	@apply font-header text-xl font-semibold text-gray-900;
+}
+
+.authorcard .authorcard-bio {
+	@apply mt-1;
+    @apply font-body text-base leading-relaxed;
+}
+
+.authorcard .authorcard-link {
+	@apply inline-flex items-center gap-2 align-middle;
+	@apply font-header text-gray-500 hover:text-accent;
+	@apply hover:no-underline;
+	@apply transition-colors duration-200 ease-in;
+}
+
+.authorcard .authorcard-infoitem svg {
+	@apply h-4 w-4 flex-none;
+	@apply fill-gray-500;
+	@apply transition-colors duration-200 ease-in;
+}
+
+.authorcard .authorcard-link:hover svg {
+	@apply fill-accent;
+}
+
+.authorcard .authorsocial {
+	@apply flex items-center flex-wrap gap-2 mt-3;
+}
+
+.authorcard .authorsocial svg {
+	@apply h-5 w-5;
+	@apply fill-gray-500 hover:fill-accent;
+	@apply transition-colors duration-200 ease-in;
+}
+
+/* Miscellaneous */
+
+::placeholder {
+    @apply text-gray-700;
+}
+
+:-ms-input-placeholder {
+    @apply text-gray-700;
+}
+
+/* Print media style: Hide navigation and social elements, flatten grid layout, and remove borders for cleaner print output. */
+
+@media print {
+    #sidebar #sidebar-contents,
+    #right-area #top-bar,
+    main .content .social,
+    main .content .additions {
+        @apply hidden;
+    }
+
+    .grid {
+        @apply block;
+    }
+
+    main .content,
+    main .block.border-b-1 {
+        @apply border-b-0;
+    }
+}

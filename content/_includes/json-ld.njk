@@ -1,0 +1,223 @@
+{% if siteconfig.features.json_ld %}
+{# Generate a description for the page #}
+{% if excerpt %}{% set description = excerpt %}
+{% elseif page and title and not posts %}{% set cp = collections.all | getCollectionItem(page) %}{% set description = cp.templateContent | safe | striptags | truncate(150, false, "…") %}
+{% else %}{% set description = siteconfig.description | truncate(150, false, "…") %}
+{% endif %}
+
+{# Context detection via tags #}
+{% set isPost = tags and ('posts' in tags) %}
+{% set isAuthorPage = tags and ('authorcard' in tags) %}
+{% set pageUrl = page.url | absoluteUrl %}
+{% set image_src = image or siteconfig.openGraphDefaultImage %}
+{% set isProfilePage = (not isPost and not isAuthorPage and profilePage) %}
+{# Detect events: any tag included in sitetags.events #}
+{% set isEvent = false %}
+{% if tags %}
+  {% for evtag in sitetags.events %}
+    {% if evtag in tags %}{% set isEvent = true %}{% endif %}
+  {% endfor %}
+{% endif %}
+
+{# Unified author derivation (for both posts and author pages) #}
+{% set activeAuthorId = author or siteconfig.author %}
+{% set activeAuthorData = siteauthors[activeAuthorId] %}
+{% set activeAuthorDisplayName = activeAuthorData.fullName if (activeAuthorData and activeAuthorData.fullName) else activeAuthorId %}
+{# Fallback author image (siteconfig.image when no author photo) #}
+{% set authorImage = activeAuthorData.photo if (activeAuthorData and activeAuthorData.photo) else siteconfig.image %}
+{% set authorPageUrl = ('/author/' ~ (activeAuthorId | slugify) ~ '/') | absoluteUrl %}
+
+{# Generate keywords from tags #}
+{% if isPost %}
+	{% set keywords = [] %}
+	{% for t in tags %}
+		{% if t not in sitetags.notag %}
+			{% set kw = sitestrings[t] or t %}
+			{% set keywords = keywords.concat([kw]) %}
+		{% endif %}
+	{% endfor %}
+{% endif %}
+
+{# sameAs builder from active author context #}
+{% set sameAs = [activeAuthorData.website] if (activeAuthorData and activeAuthorData.website) else [] %}
+{% set social = activeAuthorData.social if (activeAuthorData and activeAuthorData.social) else {} %}
+{% for key, value in social %}
+  {% set cfg = socialconfig[key] %}
+  {% set sameAs = sameAs.concat([cfg.prefix ~ value]) %}
+{% endfor %}
+
+{# publisher sameAs from siteelements.social #}
+{% set publisherSameAs = [] %}
+{% for key, value in siteelements.social %}
+  {% set cfg = socialconfig[key] %}
+  {% set publisherSameAs = publisherSameAs.concat([cfg.prefix ~ value]) %}
+{% endfor %}
+
+{# Resolve publisher display name and image #}
+{% set publisherName = siteauthors[siteconfig.author].fullName if (siteauthors[siteconfig.author] and siteauthors[siteconfig.author].fullName) else siteconfig.author %}
+{% set publisherData = siteauthors[siteconfig.author] %}
+{% set publisherImage = publisherData.photo if (publisherData and publisherData.photo) else siteconfig.image %}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "{{ siteconfig.url }}#website",
+      "name": "{{ siteconfig.title }}",
+      "url": "{{ siteconfig.url }}",
+      "inLanguage": "{{ siteconfig.lang }}",
+      "description": "{{ siteconfig.description }}",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{{ siteconfig.url }}{% imageTransform siteconfig.image, 1200, 'webp' %}"
+      },
+      "publisher": {
+        "@type": "{{ siteconfig.authorType }}",
+        "name": "{{ publisherName }}",
+        "url": "{{ siteconfig.url }}",
+        {% if publisherData and publisherData.bio %}"description": "{{ publisherData.bio }}",{% endif %}
+        {% if publisherData and publisherData.email %}"email": "{{ publisherData.email }}",{% endif %}
+        {% if publisherSameAs and (publisherSameAs | length) %}"sameAs": {{ publisherSameAs | dump | safe }},{% endif %}
+        "{{ 'image' if siteconfig.authorType == 'Person' else 'logo' }}": {
+          "@type": "ImageObject",
+          "url": "{{ siteconfig.url }}{% imageTransform publisherImage, 1200, 'webp' %}"
+        }
+      }
+    },
+    {% if isEvent %}
+    {
+      "@type": "Event",
+      "@id": "{{ pageUrl }}#event",
+      "name": "{{ title }}",
+      "url": "{{ pageUrl }}",
+      "isPartOf": { "@id": "{{ siteconfig.url }}#website" },
+      "inLanguage": "{{ siteconfig.lang }}",
+      "description": "{{ excerpt if excerpt else description }}",
+      "image": [
+        "{{ siteconfig.url }}{% imageTransform image_src, 1200, 'webp' %}"
+      ],
+      "startDate": "{{ page.date | isoDateTime }}",
+      {% if place %}"location": {
+        "@type": "Place",
+        "name": "{{ place }}"{% if address %},
+        "address": "{{ address }}"{% endif %}
+      },{% endif %}
+      "organizer": {
+        "@type": "{{ siteconfig.authorType }}",
+        "name": "{{ publisherName }}",
+        "url": "{{ siteconfig.url }}",
+        {% if publisherData and publisherData.bio %}"description": "{{ publisherData.bio }}",{% endif %}
+        {% if publisherData and publisherData.email %}"email": "{{ publisherData.email }}",{% endif %}
+        {% if publisherSameAs and (publisherSameAs | length) %}"sameAs": {{ publisherSameAs | dump | safe }},{% endif %}
+        "{{ 'image' if siteconfig.authorType == 'Person' else 'logo' }}": {
+          "@type": "ImageObject",
+          "url": "{{ siteconfig.url }}{% imageTransform publisherImage, 1200, 'webp' %}"
+        }
+      }
+    }
+    {% elseif isPost %}
+    {
+      "@type": "BlogPosting",
+      "@id": "{{ pageUrl }}#blogposting",
+      "headline": "{% if title %}{{ title }} - {% endif %}{{ siteconfig.title }}",
+      "url": "{{ pageUrl }}",
+      "isPartOf": { "@id": "{{ siteconfig.url }}#website" },
+      "mainEntityOfPage": "{{ pageUrl }}",
+      "inLanguage": "{{ siteconfig.lang }}",
+      "description": "{{ description }}",
+      "image": [
+        "{{ siteconfig.url }}{% imageTransform image_src, 1200, 'webp' %}"
+      ],
+      "datePublished": "{{ page.date | isoDateTime }}",
+      {% if updated %}"dateModified": "{{ updated | isoDateTime }}",{% endif %}
+      "keywords": {{ keywords | dump | safe }},
+      "author": {
+        "@type": "Person",
+        "name": "{{ activeAuthorDisplayName }}",
+        "url": "{{ authorPageUrl }}",
+        {% if activeAuthorData and activeAuthorData.bio %}"description": "{{ activeAuthorData.bio }}",{% endif %}
+        {% if activeAuthorData and activeAuthorData.email %}"email": "{{ activeAuthorData.email }}",{% endif %}
+        {% if sameAs and (sameAs | length) %}"sameAs": {{ sameAs | dump | safe }},{% endif %}
+        "image": {
+          "@type": "ImageObject",
+          "url": "{{ siteconfig.url }}{% imageTransform authorImage, 1200, 'webp' %}"
+        }
+      },
+      "publisher": {
+        "@type": "{{ siteconfig.authorType }}",
+        "name": "{{ publisherName }}",
+        "url": "{{ siteconfig.url }}",
+        {% if publisherData and publisherData.bio %}"description": "{{ publisherData.bio }}",{% endif %}
+        {% if publisherData and publisherData.email %}"email": "{{ publisherData.email }}",{% endif %}
+        {% if publisherSameAs and (publisherSameAs | length) %}"sameAs": {{ publisherSameAs | dump | safe }},{% endif %}
+        "{{ 'image' if siteconfig.authorType == 'Person' else 'logo' }}": {
+          "@type": "ImageObject",
+          "url": "{{ siteconfig.url }}{% imageTransform publisherImage, 1200, 'webp' %}"
+        }
+      }
+    }
+    {% elseif isAuthorPage %}
+    {
+      "@type": "ProfilePage",
+      "@id": "{{ pageUrl }}#profilepage",
+      "name": "{% if title %}{{ title }} - {% endif %}{{ siteconfig.title }}",
+      "url": "{{ pageUrl }}",
+      "isPartOf": { "@id": "{{ siteconfig.url }}#website" },
+      "mainEntity": { "@id": "{{ pageUrl }}#author" },
+      "inLanguage": "{{ siteconfig.lang }}",
+      "description": "{{ description }}"
+    },
+    {
+      "@type": "Person",
+      "@id": "{{ pageUrl }}#author",
+      "name": "{{ activeAuthorDisplayName }}",
+      "url": "{{ pageUrl }}",
+      {% if activeAuthorData and activeAuthorData.bio %}"description": "{{ activeAuthorData.bio }}",{% endif %}
+      {% if activeAuthorData and activeAuthorData.email %}"email": "{{ activeAuthorData.email }}",{% endif %}
+      {% if sameAs and (sameAs | length) %}"sameAs": {{ sameAs | dump | safe }},{% endif %}
+      "image": {
+        "@type": "ImageObject",
+        "url": "{{ siteconfig.url }}{% imageTransform authorImage, 1200, 'webp' %}"
+      }
+    }
+    {% elseif isProfilePage %}
+    {
+      "@type": "ProfilePage",
+      "@id": "{{ pageUrl }}#profilepage",
+      "name": "{% if title %}{{ title }} - {% endif %}{{ siteconfig.title }}",
+      "url": "{{ pageUrl }}",
+      "isPartOf": { "@id": "{{ siteconfig.url }}#website" },
+      "mainEntity": { "@id": "{{ pageUrl }}#profile" },
+      "inLanguage": "{{ siteconfig.lang }}",
+      "description": "{{ description }}"
+    },
+    {
+      "@type": "{{ siteconfig.authorType }}",
+      "@id": "{{ pageUrl }}#profile",
+      "name": "{{ publisherName }}",
+      "url": "{{ siteconfig.url }}",
+      {% if publisherData and publisherData.bio %}"description": "{{ publisherData.bio }}",{% endif %}
+      {% if publisherData and publisherData.email %}"email": "{{ publisherData.email }}",{% endif %}
+      {% if publisherSameAs and (publisherSameAs | length) %}"sameAs": {{ publisherSameAs | dump | safe }},{% endif %}
+      "{{ 'image' if siteconfig.authorType == 'Person' else 'logo' }}": {
+        "@type": "ImageObject",
+        "url": "{{ siteconfig.url }}{% imageTransform publisherImage, 1200, 'webp' %}"
+      }
+    }
+    {% else %}
+    {
+      "@type": "WebPage",
+      "@id": "{{ pageUrl }}#webpage",
+      "name": "{% if title %}{{ title }} - {% endif %}{{ siteconfig.title }}",
+      "url": "{{ pageUrl }}",
+      "isPartOf": { "@id": "{{ siteconfig.url }}#website" },
+      "inLanguage": "{{ siteconfig.lang }}",
+      "description": "{{ description }}"
+    }
+    {% endif %}
+  ]
+}
+</script>
+{% endif %}
