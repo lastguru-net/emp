@@ -1,33 +1,33 @@
 export default {
     // Main website title (displayed in the sidebar and page title)
-    title: "Domnīca Profectus",
+    title: "Eleventy Markdown Prime",
 
     // Base site URL for generating absolute URLs (used throughout the site)
-    url: process.env.URL || "https://profectus.lv",
+    url: process.env.URL || "https://emp-starter.lastguru.dev",
 
     // Sidebar profile image (relative path from the site root)
-    image: "/images/profectus-logo-wt.png",
+    image: "/images/logo.png",
     // Alt text for the sidebar profile image (for accessibility)
-    imageAlt: "Domnīca Profectus",
+    imageAlt: "",
 
     // Header image for the landing page (relative path from the site root)
-    header: "",
+    header: "/images/header.jpeg",
     // Alt text for the header image (for accessibility)
     headerAlt: "",
 
     // Author name (used in meta tags and JSON-LD structured data)
-    author: "Domnīca Profectus",
+    author: "lastguru",
     // Author type ("Person" or "Organization", used in JSON-LD)
-    authorType: "Organization",
+    authorType: "Person",
 
     // Short site description (displayed below the sidebar image and used in meta tags)
-    description: "Stiprinām demokrātiju un pilsonisko sabiedrību Latvijā un veicinām tās ilgtspēju",
+    description: "A minimalistic text-focused Eleventy theme",
 
     // OpenGraph locale (used for social sharing metadata)
-    locale: "lv_LV",
+    locale: "en_US",
 
     // Default language for HTML lang and post properties
-    lang: "lv",
+    lang: "en",
  
     // Google Fonts configuration for typography
     // - 'swap': controls 'font-display: swap' behavior
@@ -51,14 +51,14 @@ export default {
     },
 
     // Default OpenGraph image (used if no image is specified in page frontmatter)
-    openGraphDefaultImage: "/images/profectus-logo-wt.png",
+    openGraphDefaultImage: "/images/logo.png",
 
     // Favicon and icon configuration
     // - 'favicon': main favicon path
     // - 'faviconSizes': sizes for PNG favicons
     // - 'appleiconSizes': sizes for Apple Touch icons
     // - 'webmanifestSizes': sizes for Webmanifest icons
-    favicon: "images/profectus-favicon.png",
+    favicon: "/images/favicon.png",
     faviconSizes: [16, 32, 64],
     appleiconSizes: [180],
     webmanifestSizes: [192, 512],
@@ -70,7 +70,7 @@ export default {
         // Facebook Pixel ID
 //        fbPixel: "",
         // Google Analytics Tag ID
-        googleTag: "UA-16574330-6",
+//        googleTag: "",
     },
 
     // Feature toggles and layout options
@@ -96,7 +96,7 @@ export default {
         // Top bar behavior: false (none), 'static' (always visible), or 'dynamic' (shows/hides on scroll)
         topbar: "dynamic",
         // Location of the Privacy Policy link: 'footer', 'sidebar', or false (none)
-        privacyPolicy: false,
+        privacyPolicy: "sidebar",
         // Display footer information (e.g., copyright, author)
         footer: true,
         // Location of the site social block relative to the sidebar main menu: false, 'below', or 'above'

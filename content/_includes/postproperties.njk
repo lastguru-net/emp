@@ -17,11 +17,12 @@
 	</div>
 	{% endif %}
 	{% if post.data.place %}
-	<div class="flex flex-none">
+	<div class="flex flex-none{% if post.data.address %} placetip{% endif %}" {% if post.data.address %}data-address="{{ post.data.address }}"{% endif %}>
 		<svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.map.viewBox }}">
 			<path d="{{ inlinesvg.map.path }}" />
 		</svg>
 		{{ post.data.place }}
+		<span></span>
 	</div>
 	{% endif %}
 	{% for posttag in post.data.tags %}

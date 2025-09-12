@@ -5,7 +5,7 @@
 {% elseif page and title and not posts %}{% set cp = collections.all | getCollectionItem(page) %}{% set description = cp.templateContent | safe | striptags | truncate(150, false, "…") %}
 {% else %}{% set description = siteconfig.description | truncate(150, false, "…") %}
 {% endif %}
-<meta name="author" content="{% if author %}{% if siteauthors[author] %}{{ siteauthors[author].fullName }}{% else %}{{ author }}{% endif %}{% else %}{{ siteconfig.author }}{% endif %}">
+<meta name="author" content="{% if author %}{{ siteauthors[author].fullName if siteauthors[author] else author }}{% else %}{{ siteauthors[siteconfig.author].fullName if siteauthors[siteconfig.author] else siteconfig.author }}{% endif %}">
 <meta name="description" content="{{ description }}">
 {% if image %}{% set image_src = image %}{% else %}{% set image_src = siteconfig.openGraphDefaultImage %}{% endif %}
 {% include "opengraph.njk" %}

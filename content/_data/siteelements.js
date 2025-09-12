@@ -1,36 +1,34 @@
 export default {
     // Label for the home menu link (mandatory)
-    menuHome: "Uz sākumu",
+    menuHome: "Home",
     // Additional menu items (key: label, value: URL)
     menuItems: {
-        "Raksti": "/raksti/",
-        "Notikumi": "/notikumi/",
-        "Par mums": "/par-mums/",
-        "Ziedo!": "/ziedo/"
+        "Events": "/events/",
+        "About us": "/about-us/",
     },
 
     // Social media profiles for the site (the object must be present, but profiles are optional)
     social: {
         // GitHub username
-//        github: "",
+        github: "lastguru-net",
         // LinkedIn username
-//        linkedin: "",
+        linkedin: "lastguru",
         // Twitter/X username
-        twitter_x: "ProfectusLV",
+        twitter_x: "lastguru_net",
         // YouTube channel/user
-//        youtube: "",
+//        youtube: "-",
         // Facebook page name
-//        fbPage: "",
+//        fbPage: "-",
         // Facebook username
-        fbProfile: "ProfectusLV",
+//        fbProfile: "-",
         // Mastodon profile URL
-//        mastodon: "",
+        mastodon: "https://toot.lv/@lastguru",
         // Bluesky profile URL
-//        bluesky: "",
+        bluesky: "https://bsky.app/profile/lastguru.net",
         // Instagram username
-//        instagram: "",
+//        instagram: "-",
         // Threads username
-//        threads: "",
+        threads: "lastguru_net",
     },
 
     // Privacy Policy link configuration (displayed in the footer or sidebar)
@@ -45,8 +43,8 @@ export default {
         // Copyright year (default is current year)
         year: "",
         // Copyright link (optional)
-        link: "",
+        link: "https://emp-starter.lastguru.dev",
         // Copyright text (optional)
-        text: "",
+        text: "test",
     },
 };

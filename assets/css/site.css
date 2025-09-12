@@ -224,7 +224,7 @@ img.siteheader {
 .top-bar {
     @apply sm:hidden;
     @apply border-accent border-b-1 shadow-lg;
-    @apply bg-white;
+    @apply bg-rightarea;
     @apply top-0 h-12 z-10;
     @apply transition-transform duration-200 ease-in;
 }
@@ -250,6 +250,7 @@ img.siteheader {
     @apply flex flex-col;
     @apply overflow-x-hidden overflow-y-auto;
     @apply sm:ml-sidebar; /* sit beside the fixed sidebar on desktop */
+    @apply bg-rightarea;
 }
 
 .max-w-content {
@@ -546,6 +547,21 @@ svg.threads {
     @apply border-1 border-solid border-accent rounded-md;
     @apply -translate-y-1/2;
     content: attr(data-words);
+}
+
+/* Address tooltip on place */
+.placetip {
+    @apply relative cursor-default;
+}
+
+.placetip:hover::before {
+    @apply absolute block -bottom-10 w-75;
+    @apply p-0.75;
+    @apply text-gray-700 bg-gray-100;
+    @apply text-center text-xs font-semibold;
+    @apply border-1 border-solid border-accent rounded-md;
+    @apply -translate-y-1/2 -translate-x-1/10;
+    content: attr(data-address);
 }
 
 /* Post list */

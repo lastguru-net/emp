@@ -2,13 +2,33 @@
 eleventyExcludeFromCollections: true
 layout: base.njk
 permalink: /404.html
-title: Ooooops
+title: Page Not Found
 meta:
   robots:
     value: noindex
 ---
 
 <div class="content page pt-4 font-body font-normal">
-    This is not the page you're looking for. Move along... Move along...<br /><br />
-    <img src="/images/404.png" alt="This is not the page you're looking for. Move along... Move along..." />
+    <div class="flex items-center justify-center py-20 min-h-[40vh] text-center max-w-2xl mx-auto">
+        <!-- add error-code to the labelled set so AT hears "Error 404" first -->
+        <div class="bg-gray-100 border border-accent rounded-lg p-8 shadow-sm" role="region" aria-labelledby="error-code error-title" aria-describedby="error-desc">
+            <!-- Visible visual code is decorative; provide a single SR label instead -->
+            <span id="error-code" class="sr-only">Error 404</span>
+            <div class="text-6xl font-bold text-gray-900 mb-4 font-mono" aria-hidden="true">
+                4<span class="text-accent inline-flex items-center">
+                    <svg class="fill-current h-12 w-12 inline-block align-middle" viewBox="{{ inlinesvg.gear.viewBox }}" xmlns="http://www.w3.org/2000/svg">
+                        <path d="{{ inlinesvg.gear.path }}" />
+                    </svg>
+                </span>4
+            </div>
+            
+            <h1 id="error-title" class="text-xl font-bold font-header text-gray-900 mb-3">
+                This is not the page you're looking for
+            </h1>
+            
+            <p id="error-desc" class="text-gray-500 mb-0 italic">
+                Move along... Move along...
+            </p>
+        </div>
+    </div>
 </div>

@@ -1,10 +1,10 @@
 # Eleventy Markdown Prime starter repository by lastguru
 
-A minimalistic Eleventy starter repository for a text-based blog site, loosely based on [Eleventy Chirpy Blog Template](https://github.com/muenzpraeger/eleventy-chirpy-blog-template), inspired by [Chirpy Jekyll Theme](https://github.com/cotes2020/jekyll-theme-chirpy). It has been upgraded to Eleventy 3, significantly reworked and restructured, but keeping it simple and visually similar. Some features are new, some are reimplemented, and some more features will be reintroduced later. More cleanup and reworking is still needed.
+Eleventy Markdown Prime is a minimalistic, opinionated starter for text‑first blogs built with Eleventy 3 and Tailwind CSS 4. It is loosely based on [Eleventy Chirpy Blog Template](https://github.com/muenzpraeger/eleventy-chirpy-blog-template), inspired by the popular [Chirpy Jekyll Theme](https://github.com/cotes2020/jekyll-theme-chirpy), keeping a familiar look while significantly reworking and restructuring the implementation. It strives to be fast, accessible, and easy to customize, while remaining simple and visually similar. Some features are new, some are reimplemented, and additional ones will be reintroduced over time.
 
 ## [Current live demo](https://emp-starter.lastguru.dev)
 
-![Sample screenshot](https://emp-starter.lastguru.dev/images/sample.png)
+![Sample screenshot](/images/sample.png)
 
 ## Current features
 
@@ -22,7 +22,8 @@ A minimalistic Eleventy starter repository for a text-based blog site, loosely b
 - Can be easily localized
 - Convenient configuration with many options
 - Automatic responsive image optimization (generating AVIF and WEBP with different sizes)
-- SEO optimization, OpenGraph, JSON-LD
+- Comprehensive JSON-LD structured data support
+- SEO optimization, OpenGraph and Twitter Cards
 - Special pages: Error 404, robots.txt, sitemap.xml
 - Progressive Web Apps (PWA) support
 

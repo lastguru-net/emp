@@ -7,11 +7,11 @@
             </span>
             {% if copyright.link %}
             <a href="{{ copyright.link }}" class="footer-copyright-author">
-                {{ siteconfig.author }}
+                {{ siteauthors[siteconfig.author].fullName if siteauthors[siteconfig.author] else siteconfig.author }}
             </a>
             {% else %}
             <span class="footer-copyright-author">
-                {{ siteconfig.author }}
+                {{ siteauthors[siteconfig.author].fullName if siteauthors[siteconfig.author] else siteconfig.author }}
             </span>
             {% endif %}
             <span class="footer-copyright-text">
