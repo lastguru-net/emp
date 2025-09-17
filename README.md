@@ -4,7 +4,7 @@ Eleventy Markdown Prime is a minimalistic, opinionated starter for text‑first 
 
 ## [Current live demo](https://emp-starter.lastguru.dev)
 
-![Sample screenshot](/images/sample.png)
+![Sample screenshot](/content/images/sample.png)
 
 ## Current features
 
