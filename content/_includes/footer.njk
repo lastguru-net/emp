@@ -17,12 +17,30 @@
             <span class="footer-copyright-text">
                 {{ copyright.text }}
             </span>
-            {% if siteconfig.features.privacyPolicy == "footer" and siteelements.privacyPolicy %}
+        </div>
+        {% if siteconfig.features.privacyPolicy == "footer" %}
+        <div class="footer-privacy">
             <span class="footer-privacy-sep">&middot;</span>
             <a href="{{ siteelements.privacyPolicy.url }}" class="footer-privacy-policy" aria-label="{{ siteelements.privacyPolicy.name }}">
                 {{ siteelements.privacyPolicy.name }}
             </a>
+        </div>
+        {% endif %}
+        {% if siteconfig.features.poweredBy %}
+        <div class="footer-poweredby">
+            <span class="footer-poweredby-prefix">
+                {{ siteelements.poweredBy.text }}&nbsp;
+            </span>
+            {% if siteelements.poweredBy.url %}
+            <a href="{{ siteelements.poweredBy.url }}" class="footer-poweredby-link" aria-label="{{ siteelements.poweredBy.name }}">
+                {{ siteelements.poweredBy.name }}
+            </a>
+            {% else %}
+            <span class="footer-poweredby-text">
+                {{ siteelements.poweredBy.name }}
+            </span>
             {% endif %}
         </div>
+        {% endif %}
     </div>
 </footer>

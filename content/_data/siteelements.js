@@ -38,6 +38,15 @@ export default {
         url: "/privacy-policy/",
     },
 
+    // Powered-by configuration (displayed in footer when enabled)
+    // - text: prefix shown before the link (e.g. "Powered by")
+    // - name: link label (e.g. "Eleventy Minimal Pages")
+    poweredBy: {
+        text: "Powered by",
+        name: "Eleventy Minimal Pages",
+        url: "https://github.com/lastguru-net/emp",
+    },
+
     // Copyright configuration (used in the footer)
     copyright: {
         // Copyright year (default is current year)

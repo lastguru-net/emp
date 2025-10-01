@@ -682,25 +682,17 @@ ul.pagination div a {
 .footer {
     @apply bg-sidebar;
     @apply w-full;
-    @apply py-2 px-4 mt-auto;
+    @apply py-2 mt-auto;
 }
 
 .footer .footer-content {
-    @apply flex flex-wrap items-center justify-center gap-2;
+    /* keep centered on small screens, allow space-between on md+ so a right-aligned block can sit at the end */
+    @apply flex flex-wrap items-center justify-center md:justify-between gap-2;
     @apply text-gray-400 font-header font-normal text-sm;
+    @apply px-8 lg:px-24;
 }
 
-.footer .footer-copyright {
-    @apply text-gray-400;
-}
-
-.footer .footer-copyright a {
-    @apply no-underline;
-    @apply hover:text-accent;
-    @apply transition-colors duration-200 ease-in;
-}
-
-.footer .footer-privacy-policy {
+.footer a {
     @apply text-gray-400 hover:text-accent;
     @apply no-underline;
     @apply transition-colors duration-200 ease-in;
@@ -708,6 +700,16 @@ ul.pagination div a {
 
 .footer .footer-privacy-sep {
     @apply px-2;
+}
+
+.footer .footer-privacy {
+    @apply w-full text-center md:w-auto md:text-left;
+    @apply text-gray-400 font-header font-normal text-sm;
+}
+
+.footer .footer-poweredby {
+    @apply w-full text-center md:w-auto md:text-right md:ml-auto;
+    @apply text-gray-400 font-header font-normal text-sm;
 }
 
 /* Author card */

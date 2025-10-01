@@ -25,7 +25,6 @@ export default {
 
     // OpenGraph locale (used for social sharing metadata)
     locale: "en_US",
-
     // Default language for HTML lang and post properties
     lang: "en",
  
@@ -105,5 +104,7 @@ export default {
         postlistThumbnail: "right",
         // Show author business card on author listing pages
         authorCard: true,
+        // Toggle for showing "Powered by" text/link in the footer
+        poweredBy: true,
     }
 };
