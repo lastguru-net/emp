@@ -21,17 +21,17 @@
 {% endfor %}
 {% if siteconfig.webmanifestSizes %}<link rel="manifest" href="/site.webmanifest" crossorigin="use-credentials">{% endif %}
 <link rel="canonical" href="{{ page.url | absoluteUrl }}" />
-{% if siteconfig.features.sitemap %}<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">{% endif %}
+{% if siteelements.features.sitemap %}<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">{% endif %}
 {% if siteconfig.pixels.fbPixel %}<link rel="preconnect" href="https://connect.facebook.net">{% endif %}
 {% if siteconfig.pixels.googleTag %}<link rel="preconnect" href="https://www.googletagmanager.com">{% endif %}
-{% if siteconfig.fonts %}
+{% if siteelements.fonts %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family={{ siteconfig.fonts.body.family }}:ital,wght@{{ siteconfig.fonts.body.weights }}&family={{ siteconfig.fonts.header.family }}:ital,wght@{{ siteconfig.fonts.header.weights }}{% if siteconfig.fonts.swap %}&display=swap{% endif %}" as="style">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ siteconfig.fonts.body.family }}:ital,wght@{{ siteconfig.fonts.body.weights }}&family={{ siteconfig.fonts.header.family }}:ital,wght@{{ siteconfig.fonts.header.weights }}{% if siteconfig.fonts.swap %}&display=swap{% endif %}">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family={{ siteelements.fonts.body.family }}:ital,wght@{{ siteelements.fonts.body.weights }}&family={{ siteelements.fonts.header.family }}:ital,wght@{{ siteelements.fonts.header.weights }}{% if siteelements.fonts.swap %}&display=swap{% endif %}" as="style">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ siteelements.fonts.body.family }}:ital,wght@{{ siteelements.fonts.body.weights }}&family={{ siteelements.fonts.header.family }}:ital,wght@{{ siteelements.fonts.header.weights }}{% if siteelements.fonts.swap %}&display=swap{% endif %}">
 {% endif %}
 <link rel="stylesheet" href="{{ '/assets/css/site-build.css' | addHash }}">
-{% if siteconfig.features.js %}<script src="{{ '/assets/js/min.js' | addHash }}" type="module"></script>{% endif %}
+{% if siteelements.features.js %}<script src="{{ '/assets/js/min.js' | addHash }}" type="module"></script>{% endif %}
 {% if siteconfig.pixels.googleTag %}
 {% include "google-tag.njk" %}
 {% endif %}

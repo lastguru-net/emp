@@ -10,5 +10,5 @@ layout: base.njk
 	<div class="incontent">
   		{{ content | safe }}
 	</div>
-  	{% if siteconfig.features.sharer %}{% include "social.njk" %}{% endif %}
+  	{% if siteelements.features.sharer %}{% include "social.njk" %}{% endif %}
 </div>

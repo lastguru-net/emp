@@ -4,7 +4,7 @@ layout: base.njk
 
 <div class="content post">
   	<h1>{{ title }}</h1>
-	{% if siteconfig.features.postproperties %}
+	{% if siteelements.features.postproperties %}
 	{% set post = collections.posts | getCollectionItem(page) %}
 	{% include "postproperties.njk" %}
 	{% endif %}
@@ -14,8 +14,8 @@ layout: base.njk
 	<div class="incontent">
   		{{ content | safe }}
 	</div>
-  	{% if siteconfig.features.sharer %}{% include "social.njk" %}{% endif %}
-	{% if siteconfig.features.prevnext %}
+  	{% if siteelements.features.sharer %}{% include "social.njk" %}{% endif %}
+	{% if siteelements.features.prevnext %}
 	<div class="postbreak"></div>
 	<div class="additions flex flex-col md:flex-row gap-3">
 		{% set previousPost = collections.posts | getPreviousCollectionItem(page) %}

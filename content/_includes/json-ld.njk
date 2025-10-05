@@ -1,4 +1,4 @@
-{% if siteconfig.features.json_ld %}
+{% if siteelements.features.json_ld %}
 {# Generate a description for the page #}
 {% if excerpt %}{% set description = excerpt %}
 {% elseif page and title and not posts %}{% set cp = collections.all | getCollectionItem(page) %}{% set description = cp.templateContent | safe | striptags | truncate(150, false, "…") %}

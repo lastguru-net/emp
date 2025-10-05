@@ -5,15 +5,15 @@
         {% include "json-ld.njk" %}
     </head>
     <body>
-    {% if siteconfig.features.base == "primitive" %}
+    {% if siteelements.features.base == "primitive" %}
         {{ content | safe }}
     {% else %}
         <div id="sidebar" class="is-closed">
             {% include "sidebar.njk" %}
         </div>
         <div id="right-area" class="h-screen">
-            {% if siteconfig.features.topbar %}
-            <div {% if siteconfig.features.topbar == "dynamic" %}id="top-bar"{% endif %} class="top-bar">
+            {% if siteelements.features.topbar %}
+            <div {% if siteelements.features.topbar == "dynamic" %}id="top-bar"{% endif %} class="top-bar">
                 {% include "topbar.njk" %}
             </div>
             {% endif %}
@@ -22,7 +22,7 @@
                     {{ content | safe }}
                 </main>
             </div>
-            {% if siteconfig.features.footer %}
+            {% if siteelements.features.footer %}
                 {% include "footer.njk" %}
             {% endif %}
         </div>

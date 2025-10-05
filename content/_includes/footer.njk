@@ -18,7 +18,7 @@
                 {{ copyright.text }}
             </span>
         </div>
-        {% if siteconfig.features.privacyPolicy == "footer" %}
+        {% if siteelements.features.privacyPolicy == "footer" %}
         <div class="footer-privacy">
             <span class="footer-privacy-sep">&middot;</span>
             <a href="{{ siteelements.privacyPolicy.url }}" class="footer-privacy-policy" aria-label="{{ siteelements.privacyPolicy.name }}">
@@ -26,10 +26,10 @@
             </a>
         </div>
         {% endif %}
-        {% if siteconfig.features.poweredBy %}
+        {% if siteelements.features.poweredBy %}
         <div class="footer-poweredby">
             <span class="footer-poweredby-prefix">
-                {{ siteelements.poweredBy.text }}&nbsp;
+                {{ siteelements.poweredBy.text }}
             </span>
             {% if siteelements.poweredBy.url %}
             <a href="{{ siteelements.poweredBy.url }}" class="footer-poweredby-link" aria-label="{{ siteelements.poweredBy.name }}">

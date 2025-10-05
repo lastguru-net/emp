@@ -1,4 +1,4 @@
-export default {
+{
 	lastguru: {
 		// Author's full name (mandatory)
 		fullName: "Dmitry Golubev",
@@ -22,4 +22,4 @@ export default {
 			threads: "lastguru_net"
 		}
 	}
-};
+}

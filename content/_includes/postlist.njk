@@ -1,28 +1,28 @@
 <div class="postlist">
-	{% if siteconfig.header and siteheader %}
-	<img class="siteheader" src="{{ siteconfig.header }}" alt="{{ siteconfig.headerAlt }}" />
+	{% if siteelements.header and siteheader %}
+	<img class="siteheader" src="{{ siteelements.header }}" alt="{{ siteelements.headerAlt }}" />
 	{% endif %}
 	{% if title and not authorCard %}<h1>{{ title }}</h1>{% endif %}
 	{% for post in posts %}
-	<div class="postlistitem {% if siteconfig.features.postlistThumbnail == 'right' %}thumb-right{% endif %}">
+	<div class="postlistitem {% if siteelements.features.postlistThumbnail == 'right' %}thumb-right{% endif %}">
 		<div class="postlistheading">
 			<a href="{{ post.url | url }}" aria-label="{{ post.data.title }}">{{ post.data.title }}</a>
 		</div>
-		{% if siteconfig.features.postlistThumbnail and post.data.image %}
-			<div class="postlistrow flex flex-col items-start gap-3 md:flex-row md:items-stretch md:gap-4 {% if siteconfig.features.postlistThumbnail == 'right' %}md:flex-row-reverse{% endif %}">
+		{% if siteelements.features.postlistThumbnail and post.data.image %}
+			<div class="postlistrow flex flex-col items-start gap-3 md:flex-row md:items-stretch md:gap-4 {% if siteelements.features.postlistThumbnail == 'right' %}md:flex-row-reverse{% endif %}">
 				<a class="postthumblink" href="{{ post.url | url }}" aria-label="{{ post.data.title }}">
 					<img class="postthumb" src="{{ post.data.image }}" alt="{{ post.data.title }}" />
 				</a>
 				<div class="postlistside">
 					<div class="postexcerpt">{% if post.data.excerpt %}{{ post.data.excerpt }}{% else %}{% excerpt post %}{% endif %}</div>
-					{% if siteconfig.features.postproperties %}
+					{% if siteelements.features.postproperties %}
 					{% include "postproperties.njk" %}
 					{% endif %}
 				</div>
 			</div>
 		{% else %}
 			<div class="postexcerpt">{% if post.data.excerpt %}{{ post.data.excerpt }}{% else %}{% excerpt post %}{% endif %}</div>
-			{% if siteconfig.features.postproperties %}
+			{% if siteelements.features.postproperties %}
 			{% include "postproperties.njk" %}
 			{% endif %}
 		{% endif %}

@@ -7,14 +7,12 @@
         <a href="/" aria-label="{{ siteelements.menuHome }}">
             <img alt="{{ siteconfig.imageAlt }}" src="{{ siteconfig.image }}" loading="eager"/>
         </a>
-        <div class="sitetitle">
-            <a href="/" aria-label="{{ siteelements.menuHome }}">{{ siteconfig.title }}</a>
-        </div>
+        <a class="sitetitle" href="/" aria-label="{{ siteelements.menuHome }}">{{ siteconfig.title }}</a>
         <div class="sitedesc">
             {{ siteconfig.description }}
         </div>
     </div>
-    {% if siteconfig.features.sitesocial == "above" %}
+    {% if siteelements.features.sitesocial == "above" %}
         {% include "sitesocial.njk" %}
     {% endif %}
     <div class="menu">
@@ -29,11 +27,11 @@
             {% endfor %}
         </ul>
     </div>
-    {% if siteconfig.features.sitesocial == "below" %}
+    {% if siteelements.features.sitesocial == "below" %}
         {% include "sitesocial.njk" %}
     {% endif %}
     <div class="privacy-policy">
-        {% if siteconfig.features.privacyPolicy == "sidebar" %}
+        {% if siteelements.features.privacyPolicy == "sidebar" %}
         <a href="{{ siteelements.privacyPolicy.url }}" aria-label="{{ siteelements.privacyPolicy.name }}">{{ siteelements.privacyPolicy.name }}</a>
         {% endif %}
     </div>

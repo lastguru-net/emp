@@ -1,0 +1,121 @@
+{
+    // Feature toggles and layout options
+    features: {
+        // Display post properties (e.g., author, date) on posts
+        postproperties: true,
+        // Include description in OpenGraph and Twitter meta tags
+        og_description: true,
+        // Generate and include JSON-LD structured data
+        json_ld: true,
+        // Generate a sitemap.xml file
+        sitemap: true,
+        // Include local JavaScript bundle
+        js: true,
+        // Enable social sharing buttons on posts/pages
+        sharer: true,
+        // Enable previous/next post navigation
+        prevnext: true,
+        // Base layout: 'regular' (with sidebar) or 'primitive' (minimal layout)
+        base: "regular",
+        // Index page type: 'postlist' (list of posts) or 'singlepost' (single post)
+        index: "postlist",
+        // Top bar behavior: false (none), 'static' (always visible), or 'dynamic' (shows/hides on scroll)
+        topbar: "dynamic",
+        // Location of the Privacy Policy link: 'footer', 'sidebar', or false (none)
+        privacyPolicy: "sidebar",
+        // Display footer information (e.g., copyright, author)
+        footer: true,
+        // Location of the site social block relative to the sidebar main menu: false, 'below', or 'above'
+        sitesocial: "below",
+        // Postlist thumbnail: false | 'left' | 'right'
+        postlistThumbnail: "right",
+        // Show author business card on author listing pages
+        authorCard: true,
+        // Toggle for showing "Powered by" text/link in the footer
+        poweredBy: true
+    },
+
+    // Google Fonts configuration for typography
+    // - 'swap': controls 'font-display: swap' behavior
+    //   - false by default to avoid flash unstyled text (FOUT)
+    //   - if flash of invisible text (FOIT) is more disturbing, enable it
+    // - 'body' and 'header': specify font families and weights
+    // 
+    // Every weight and style used anywhere must be defined here:
+    // - weights starting with "0," are non-italic
+    // - weights starting with "1," are italic
+    fonts: {
+        swap: false,
+        body: {
+            family: "Montserrat",
+            weights: "0,400;0,700;1,400;1,700"
+        },
+        header: {
+            family: "Titillium+Web",
+            weights: "0,400;0,500;0,600;0,700"
+        }
+    },
+
+    // Label for the home menu link (mandatory)
+    menuHome: "Home",
+    // Additional menu items (key: label, value: URL)
+    menuItems: {
+        "Events": "/events/",
+        "About us": "/about-us/",
+    },
+
+    // Header image for the landing page (relative path from the site root)
+    header: "/images/header.jpeg",
+    // Alt text for the header image (for accessibility)
+    headerAlt: "",
+
+    // Social media profiles for the site (the object must be present, but profiles are optional)
+    social: {
+        // GitHub username
+        github: "lastguru-net",
+        // LinkedIn username
+        linkedin: "lastguru",
+        // Twitter/X username
+        twitter_x: "lastguru_net",
+        // YouTube channel/user
+//        youtube: "",
+        // Facebook page name
+//        fbPage: "",
+        // Facebook username
+//        fbProfile: "",
+        // Mastodon profile URL
+        mastodon: "https://toot.lv/@lastguru",
+        // Bluesky profile URL
+        bluesky: "https://bsky.app/profile/lastguru.net",
+        // Instagram username
+//        instagram: "",
+        // Threads username
+        threads: "lastguru_net",
+    },
+
+    // Privacy Policy link configuration (displayed in the footer or sidebar)
+    // Set features.privacyPolicy to 'none' if not used (can be removed then)
+    privacyPolicy: {
+        name: "Privacy Policy",
+        url: "/privacy-policy/",
+    },
+
+    // Powered-by configuration (displayed in footer when enabled)
+    // - text: prefix shown before the link (e.g. "Powered by")
+    // - name: link label (e.g. "Eleventy Minimal Pages")
+    poweredBy: {
+        text: "Powered by",
+        name: "Eleventy Minimal Pages",
+        url: "https://github.com/lastguru-net/emp",
+    },
+
+    // Copyright configuration (used in the footer)
+    copyright: {
+        // Copyright year (default is current year)
+        year: "",
+        // Copyright link (optional)
+        link: "https://emp-starter.lastguru.dev",
+        // Copyright text (optional)
+        text: "test",
+    }
+}

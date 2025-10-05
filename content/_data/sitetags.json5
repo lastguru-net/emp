@@ -1,4 +1,4 @@
-export default {
+{
     // Hide post reading time in post properties
     notime: [
         "events"
@@ -13,4 +13,4 @@ export default {
     events: [
         "events"
     ]
-};
+}

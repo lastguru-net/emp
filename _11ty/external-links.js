@@ -1,6 +1,5 @@
 // Transformer to ensure that non-relative links open in a new window
 // and have for SEO reasons `rel="noopener"` set.
-
 import { parse } from "node-html-parser";
 import siteconfig from "../content/_data/siteconfig.js";
 

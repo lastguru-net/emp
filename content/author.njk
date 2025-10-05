@@ -17,7 +17,7 @@ tags: authorcard
 {# Note that the permalink prefix (/author/) is determined by the collection itself #}
 {% set posts = tag.items %}
 {% set pagination = tag %}
-{% if siteconfig.features.authorCard and siteauthors[author] %}{% set authorCard = siteauthors[author] %}{% endif %}
+{% if siteelements.features.authorCard and siteauthors[author] %}{% set authorCard = siteauthors[author] %}{% endif %}
 {% if authorCard %}
 {% include "authorcard.njk" %}
 {% endif %}

@@ -4,7 +4,7 @@
 <meta property="og:type" content="{% if isPost %}article{% elseif isAuthorPage %}profile{% else %}website{% endif %}">
 <meta property="og:site_name" content="{{ siteconfig.title }}">
 <meta property="og:title" content="{% if title %}{{ title }} - {% endif %}{{ siteconfig.title }}">
-{% if siteconfig.features.og_description %}<meta property="og:description" content="{{ description }}">{% endif %}
+{% if siteelements.features.og_description %}<meta property="og:description" content="{{ description }}">{% endif %}
 <meta property="og:image" content="{{ siteconfig.url }}{% imageTransform image_src, 1200, 'webp' %}">
 <meta property="og:locale" content="{{ siteconfig.locale }}" />
 {% if isAuthorPage and author %}

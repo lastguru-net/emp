@@ -102,14 +102,11 @@ img.siteheader {
 }
 
 .sidebar .sitetitle {
+    @apply block mx-auto;
     @apply font-semibold text-2xl;
     @apply text-white hover:text-accent;
     @apply pt-6;
     @apply transition-colors duration-200 ease-in;
-}
-
-.sidebar .sitetitle a {
-    @apply mx-auto;
 }
 
 .sidebar .sitedesc {

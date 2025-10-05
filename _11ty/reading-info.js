@@ -1,5 +1,5 @@
-import siteconfig from "../content/_data/siteconfig.js";
 import { Duration } from "luxon";
+import siteconfig from "../content/_data/siteconfig.js";
 
 export default eleventyConfig => {
     // Extract reading time

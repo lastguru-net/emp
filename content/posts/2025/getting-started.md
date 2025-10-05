@@ -34,14 +34,14 @@ To build your website, you need your own copy of the EMP starter repository. Thi
    git clone <your-repo-url>
    cd <your-repo>
    ```
-   Alternatively, you can edit files directly in your repository using GitHub's web interface. Simply navigate to the file you want to edit, click the pencil icon, make your changes, and commit them.
+5. Alternatively, you can edit files directly in your repository using GitHub's web interface. Simply navigate to the file you want to edit, click the pencil icon, make your changes, and commit them.
 
 ### Fork vs Template: Which Should You Choose?
 
 - **Use this template**: Creates a new repository in your GitHub account with no connection to the original. Best if you want a clean start and don’t plan to sync updates from the EMP repository.
 - **Fork**: Creates a copy of the repository in your GitHub account, keeping the full history and a link to the original (upstream). Ideal if you want to pull future updates from EMP or contribute back.
 
-> **Note**: If you use the template, your repository will not be linked to the original EMP repository. This ensures a clean setup but means you cannot easily sync updates. If syncing updates is important, choose the fork option instead.
+> **Note**: Choosing “Use this template” gives you a one‑time snapshot with no upstream link or shared commit history. Clean, independent, lightweight: only your future commits. You will not see later fixes, features, security tweaks, or structural changes added to EMP, however; adopting them later means comparing files manually and selective copying. A “Fork” keeps full history plus a live upstream reference, so new changes remain visible and can be merged or rebased. The more you alter core layouts, config files, build scripts, data structures, or directory organization, the harder upstream changes become to apply. Past a certain depth of customization, meaningful syncing can turn fragile, extremely time‑consuming, or effectively impossible. To mitigate it, significant structural changes that may benefit others should be pushed upstream. Template favors ownership and independence; fork favors ongoing co-evolution and traceability.
 
 ### Keeping Your Repository Updated
 
@@ -67,32 +67,32 @@ The EMP template will continue to receive new features and improvements. Keeping
 
 Running the site locally is optional. If you prefer, you can skip this step and deploy your site directly from the repository. See the [Deploying to Cloudflare Pages](#deploying-to-cloudflare-pages) section for details.
 
-If you want to preview and edit your site locally, follow these steps:
+If you want to preview and edit your site locally, follow these steps.
 
 ### Prerequisites
 
 1. Install **Git**: [Download Git](https://git-scm.com/downloads).
-2. Install **Node.js** (LTS version) and npm:
+2. Install **Node.js** ("Current" version) and npm:
    - Visit the [Node.js Download Page](https://nodejs.org/en/download/), which provides both prebuilt packages and instructions for setting up a version manager (e.g., nvm).
    - Using a version manager is recommended as it makes it easier to update Node.js in the future.
-
-Verify installation:
-```
-node -v
-npm -v
-```
+3. Verify installation:
+   ```
+   node -v
+   npm -v
+   ```
 
 ### Running the Site Locally
 
-1. Install dependencies:
+1. Go to the repository folder.
+2. Install dependencies:
    ```
    npm install
    ```
-2. Start the development server:
+3. Start the development server:
    ```
    npm run dev
    ```
-3. Open the URL shown in the terminal (usually `http://localhost:8080`) to preview your site.
+4. Open the URL shown in the terminal (usually `http://localhost:8080`) to preview your site.
 
 For more detailed guides on setting up Node.js and npm, check:
 - [Beginner's Guide to Node.js](https://nodejs.dev/en/learn/)
@@ -123,7 +123,7 @@ The EMP theme has a modular design. At first glance, you’ll notice the distinc
      - Includes a title, date, and optional image. Additional properties like location, author, and tags can be added.
      - Below each post, share buttons and navigation buttons for newer/older posts are available.
    - **Page**: Special content like "About Us." Pages are not listed among blog posts and do not include dates, post properties, or navigation buttons. They are typically linked directly in the main menu or from other posts or pages.
-4. **Footer**: Optional footer with copyright information and privacy policy link.
+4. **Footer**: Optional footer with copyright information, privacy policy link and "Powered by" link.
 
 ## File Structure
 
@@ -133,7 +133,7 @@ Now that we understand the site’s main components, let’s explore the file st
 - **/_11ty**: Contains custom components that enhance Eleventy. Scripts for tasks like image transformation, link transformation, and excerpt generation are located here. Modifications are rarely needed.
 - **/assets**: Stores shared files for your site. You can modify or add files here. Visitors can access these files via direct links.
   - **css**: Contains CSS files. The `site.css` file is processed by Tailwind CSS to generate `site-build.css`.
-  - **js**: Contains JavaScript files. The `index.js` file is processed by Rollup to generate `min.js`.
+  - **js**: Contains JavaScript files. The `index.js` file is processed by esbuild to generate `min.js`.
 - **/content**: Contains all site content.
   - **_data**: Stores site configuration (see below).
   - **_includes**: Contains template files for HTML output.
@@ -153,27 +153,30 @@ In addition to the file structure described earlier, the following configuration
 
 ### `/content/_data/siteconfig.js`
 
-This file contains the main configuration settings for your site. It defines global properties such as the site title, URL, sidebar images, fonts, and feature toggles. There are comments for every setting in the file itself. Key sections include:
+This file contains the essential configuration settings for your site. It defines global properties such as the site title, URL and main images. There are comments for every setting in the file itself. Key sections include:
 
 - **Site Metadata**: Title, description, author, and locale settings.
-- **Images**: Paths for the sidebar profile image, header image, favicon, and OpenGraph default image.
-- **Fonts**: Google Fonts configuration for body and header typography.
+- **Images**: Paths for the sidebar profile image, favicon, and OpenGraph default image.
+- **Pixels**: Analytics and tracking pixels.
+
+This file is the starting point for setting up your site.
+
+### `/content/_data/siteelements.json5`
+
+This file contains configuration for site-specific elements such as menu items, fonts, social media links, header and footer settings. Key sections include:
+
 - **Features**: Toggles for enabling/disabling features like post properties, JSON-LD structured data, sitemap generation, and social sharing buttons.
-
-This file is essential for setting up the overall structure and behavior of your site.
-
-### `/content/_data/siteelements.js`
-
-This file contains configuration for site-specific elements such as menu items, social media links, and footer settings. Key sections include:
-
+- **Fonts**: Google Fonts configuration for body and header typography that can be later used in `theme.css`.
 - **Menu**: Labels and URLs for the home link and additional menu items.
+- **Header**: Header image for the landing page.
 - **Social Links**: Links to social media profiles (e.g., GitHub, LinkedIn, Mastodon). Also used for share attribution (e.g., X “via”).
 - **Privacy Policy**: Configuration for the privacy policy link.
+- **Powered by**: Powered by text and link.
 - **Copyright**: Settings for copyright year, link, and text.
 
-Modify this file to customize visible navigation and site identity.
+Modify this file to customize visible elements, navigation and site identity.
 
-### `/content/_data/sitestrings.js`
+### `/content/_data/sitestrings.json5`
 
 This file defines text strings used throughout the site. It allows you to customize or translate common UI elements such as:
 
@@ -182,7 +185,7 @@ This file defines text strings used throughout the site. It allows you to custom
 
 You can add your own keys and reference them in templates. Use it to adapt the site’s language and tone.
 
-### `/content/_data/sitetags.js`
+### `/content/_data/sitetags.json5`
 
 This file manages tag-related configurations for posts. It includes:
 
@@ -192,7 +195,7 @@ This file manages tag-related configurations for posts. It includes:
 
 This file helps control how tags are presented and used across the site.
 
-### `/content/_data/siteauthors.js`
+### `/content/_data/siteauthors.json5`
 
 This file defines per‑author metadata used to render the author business card on author pages. Each top‑level key is the author identifier used in your post header variables (`author: "name"`). If an author has no entry here, the business card is not displayed. The card can show the author’s name, profile image, bio, and links to a website and social media.
 
@@ -206,6 +209,7 @@ This file defines the core theme styles for your site, including fonts, colors, 
 
 Notes:
 
+- Any font used here **must** exist in visitors' browsers. Unless browser default built-in fonts are used (usually a bad idea, as it is impossible to guarantee consistency across devices), the fonts must be included in the `head.njk`. EMP supports loading Google Fonts, and it is the recommended option in most cases. The names of the fonts specified in both places must match exactly.
 - The mobile top bar and the right content area use `--color-rightarea` by default.
 - The site footer uses the sidebar background color (`--color-sidebar`), so it will follow changes you make to the sidebar background.
 
@@ -261,26 +265,21 @@ Cloudflare Pages is a beginner-friendly platform that automates this process, al
 
 This means you don’t need to manually upload files or configure servers — Cloudflare Pages handles everything for you.
 
-### Prerequisites
+### Steps to Deploy
 
 1. Ensure you have a Cloudflare account. If not, create one at [Cloudflare](https://www.cloudflare.com/). It is free.
 2. Push your project to a Git repository (GitHub or GitLab).
-
-### Steps to Deploy
-
-1. **Create a new project**:
+3. **Create a new project**:
    - Log in to your Cloudflare account and navigate to the **Workers and Pages** section.
    - Click **Create**, select **Pages**, and connect your Git repository.
-
-2. **Configure build settings**:
+4. **Configure build settings**:
    - In the **Build settings** section, set:
      - **Framework preset**: Eleventy
      - **Build command**: `npm run build`
      - **Output directory**: `_site`
    - Add an environment variable:
      - **NODE_ENV**: `production` (enables features, such as minification and caching)
-
-3. **Start Deployment**:
+5. **Start Deployment**:
    - Click **Save and Deploy**. Cloudflare Pages will build and deploy your site.
    - Once the deployment is complete, you will receive a unique URL for your site.
 

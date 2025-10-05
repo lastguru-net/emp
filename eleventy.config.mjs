@@ -1,5 +1,4 @@
-import { URL } from "url";
-import siteconfig from "./content/_data/siteconfig.js";
+import JSON5 from "json5";
 import markdownIt from "markdown-it";
 import markdownItAnchor from "markdown-it-anchor";
 import markdownItDeflist from "markdown-it-deflist";
@@ -14,7 +13,7 @@ import syntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import embedEverything from "eleventy-plugin-embed-everything";
 import excerpt from "./_11ty/excerpt.js";
 import readingInfo from "./_11ty/reading-info.js";
-import css from "./_11ty/css.js";
+import filters from "./_11ty/filters.js";
 import dates from "./_11ty/dates.js";
 import hash from "./_11ty/hash.js";
 import externalLinks from "./_11ty/external-links.js";
@@ -24,6 +23,9 @@ import tagPagination from "./_11ty/tag.js";
 import authorPagination from "./_11ty/author.js";
 
 export default eleventyConfig => {
+    // Add support for JSON5 data files
+  	eleventyConfig.addDataExtension("json5", (contents) => JSON5.parse(contents));
+
     // Set Markdown library
     eleventyConfig.setLibrary(
         "md",
@@ -44,12 +46,6 @@ export default eleventyConfig => {
         .use(markdownItTasklists)
     );
 
-    // Syntax highlighting plugin
-    eleventyConfig.addPlugin(syntaxHighlight);
-
-    // Embed common media formats
-    eleventyConfig.addPlugin(embedEverything);
-
     // Define passthrough for assets
     eleventyConfig.addPassthroughCopy("assets");
     eleventyConfig.addPassthroughCopy({"content/images" : "images"});
@@ -69,19 +65,14 @@ export default eleventyConfig => {
         "png"
     ]);
 
-    // Set absolute url
-    eleventyConfig.addNunjucksFilter("absoluteUrl", (path) => {
-        return new URL(path, siteconfig.url).toString();
-    });
+    // Custom filters for various tasks
+    eleventyConfig.addPlugin(filters);
 
     // Generate excerpt from first paragraph
     eleventyConfig.addPlugin(excerpt);
 
     // Extract reading time and word count
     eleventyConfig.addPlugin(readingInfo);
-
-    // Return page link CSS classes
-    eleventyConfig.addPlugin(css);
 
     // Getting and formatting dates
     eleventyConfig.addPlugin(dates);
@@ -97,6 +88,12 @@ export default eleventyConfig => {
 
     // Minifying HTML
     eleventyConfig.addPlugin(htmlMinify);
+
+    // Syntax highlighting plugin
+    eleventyConfig.addPlugin(syntaxHighlight);
+
+    // Embed common media formats
+    eleventyConfig.addPlugin(embedEverything);
 
     // Double pagination for tags and authors
     eleventyConfig.addPlugin(tagPagination);
