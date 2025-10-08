@@ -165,7 +165,7 @@ This file is the starting point for setting up your site.
 
 This file contains configuration for site-specific elements such as menu items, fonts, social media links, header and footer settings. Key sections include:
 
-- **Features**: Toggles for enabling/disabling features like post properties, JSON-LD structured data, sitemap generation, and social sharing buttons.
+- **Features**: Toggles for enabling/disabling features like post properties, JSON-LD structured data, sitemap generation, feed generation and social sharing buttons.
 - **Fonts**: Google Fonts configuration for body and header typography that can be later used in `theme.css`.
 - **Menu**: Labels and URLs for the home link and additional menu items.
 - **Header**: Header image for the landing page.

@@ -1,6 +1,12 @@
 <div class="postlist">
 	{% if siteelements.header and siteheader %}
-	<img class="siteheader" src="{{ siteelements.header }}" alt="{{ siteelements.headerAlt }}" />
+		{% if siteelements.headerLink %}
+			<a class="siteheaderlink" href="{{ siteelements.headerLink }}">
+				<img class="siteheader" src="{{ siteelements.header }}" alt="{{ siteelements.headerAlt }}" />
+			</a>
+		{% else %}
+			<img class="siteheader" src="{{ siteelements.header }}" alt="{{ siteelements.headerAlt }}" />
+		{% endif %}
 	{% endif %}
 	{% if title and not authorCard %}<h1>{{ title }}</h1>{% endif %}
 	{% for post in posts %}
@@ -14,14 +20,14 @@
 					<img class="postthumb" src="{{ post.data.image }}" alt="{{ post.data.title }}" />
 				</a>
 				<div class="postlistside">
-					<div class="postexcerpt">{% if post.data.excerpt %}{{ post.data.excerpt }}{% else %}{% excerpt post %}{% endif %}</div>
+					<div class="postexcerpt">{% if post.data.excerpt %}{{ post.data.excerpt }}{% else %}{% getExcerpt post %}{% endif %}</div>
 					{% if siteelements.features.postproperties %}
 					{% include "postproperties.njk" %}
 					{% endif %}
 				</div>
 			</div>
 		{% else %}
-			<div class="postexcerpt">{% if post.data.excerpt %}{{ post.data.excerpt }}{% else %}{% excerpt post %}{% endif %}</div>
+			<div class="postexcerpt">{% if post.data.excerpt %}{{ post.data.excerpt }}{% else %}{% getExcerpt post %}{% endif %}</div>
 			{% if siteelements.features.postproperties %}
 			{% include "postproperties.njk" %}
 			{% endif %}

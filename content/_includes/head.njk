@@ -1,10 +1,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% if title %}{{ title }} - {% endif %}{{ siteconfig.title }}</title>
-{% if excerpt %}{% set description = excerpt | truncate(150, false, "…") %}
-{% elseif page and title and not posts %}{% set cp = collections.all | getCollectionItem(page) %}{% set description = cp.templateContent | safe | striptags | truncate(150, false, "…") %}
-{% else %}{% set description = siteconfig.description | truncate(150, false, "…") %}
-{% endif %}
+{% set description -%}{% getShortDescription %}{%- endset %}
 <meta name="author" content="{% if author %}{{ siteauthors[author].fullName if siteauthors[author] else author }}{% else %}{{ siteauthors[siteconfig.author].fullName if siteauthors[siteconfig.author] else siteconfig.author }}{% endif %}">
 <meta name="description" content="{{ description }}">
 {% if image %}{% set image_src = image %}{% else %}{% set image_src = siteconfig.openGraphDefaultImage %}{% endif %}
@@ -22,6 +19,9 @@
 {% if siteconfig.webmanifestSizes %}<link rel="manifest" href="/site.webmanifest" crossorigin="use-credentials">{% endif %}
 <link rel="canonical" href="{{ page.url | absoluteUrl }}" />
 {% if siteelements.features.sitemap %}<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">{% endif %}
+{% if siteelements.features.rssFeed %}<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="{{ '/rss.xml' | absoluteUrl }}">{% endif %}
+{% if siteelements.features.atomFeed %}<link rel="alternate" type="application/atom+xml" title="Atom Feed" href="{{ '/atom.xml' | absoluteUrl }}">{% endif %}
+{% if siteelements.features.jsonFeed %}<link rel="alternate" type="application/feed+json" title="JSON Feed" href="{{ '/feed.json' | absoluteUrl }}">{% endif %}
 {% if siteconfig.pixels.fbPixel %}<link rel="preconnect" href="https://connect.facebook.net">{% endif %}
 {% if siteconfig.pixels.googleTag %}<link rel="preconnect" href="https://www.googletagmanager.com">{% endif %}
 {% if siteelements.fonts %}

@@ -1,9 +1,6 @@
 {% if siteelements.features.json_ld %}
 {# Generate a description for the page #}
-{% if excerpt %}{% set description = excerpt %}
-{% elseif page and title and not posts %}{% set cp = collections.all | getCollectionItem(page) %}{% set description = cp.templateContent | safe | striptags | truncate(150, false, "…") %}
-{% else %}{% set description = siteconfig.description | truncate(150, false, "…") %}
-{% endif %}
+{% set description -%}{% getShortDescription %}{%- endset %}
 
 {# Context detection via tags #}
 {% set isPost = tags and ('posts' in tags) %}
@@ -85,16 +82,16 @@
           "url": "{{ siteconfig.url }}{% imageTransform publisherImage, 1200, 'webp' %}"
         }
       }
-    },
+    }
     {% if isEvent %}
-    {
+    ,{
       "@type": "Event",
       "@id": "{{ pageUrl }}#event",
       "name": "{{ title }}",
       "url": "{{ pageUrl }}",
       "isPartOf": { "@id": "{{ siteconfig.url }}#website" },
       "inLanguage": "{{ siteconfig.lang }}",
-      "description": "{{ excerpt if excerpt else description }}",
+      "description": "{{ description }}",
       "image": [
         "{{ siteconfig.url }}{% imageTransform image_src, 1200, 'webp' %}"
       ],
@@ -118,7 +115,7 @@
       }
     }
     {% elseif isPost %}
-    {
+    ,{
       "@type": "BlogPosting",
       "@id": "{{ pageUrl }}#blogposting",
       "headline": "{% if title %}{{ title }} - {% endif %}{{ siteconfig.title }}",
@@ -159,7 +156,7 @@
       }
     }
     {% elseif isAuthorPage %}
-    {
+    ,{
       "@type": "ProfilePage",
       "@id": "{{ pageUrl }}#profilepage",
       "name": "{% if title %}{{ title }} - {% endif %}{{ siteconfig.title }}",
@@ -183,7 +180,7 @@
       }
     }
     {% elseif isProfilePage %}
-    {
+    ,{
       "@type": "ProfilePage",
       "@id": "{{ pageUrl }}#profilepage",
       "name": "{% if title %}{{ title }} - {% endif %}{{ siteconfig.title }}",
@@ -207,7 +204,7 @@
       }
     }
     {% else %}
-    {
+    ,{
       "@type": "WebPage",
       "@id": "{{ pageUrl }}#webpage",
       "name": "{% if title %}{{ title }} - {% endif %}{{ siteconfig.title }}",

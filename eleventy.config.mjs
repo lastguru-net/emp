@@ -5,20 +5,18 @@ import markdownItDeflist from "markdown-it-deflist";
 import { full as markdownItEmoji} from "markdown-it-emoji";
 import markdownItFootnote from "markdown-it-footnote";
 import markdownItMark from "markdown-it-mark";
-import markdownItPrism from "markdown-it-prism";
 import markdownItSub from "markdown-it-sub";
 import markdownItSup from "markdown-it-sup";
 import markdownItTasklists from "markdown-it-task-lists";
 import syntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import embedEverything from "eleventy-plugin-embed-everything";
-import excerpt from "./_11ty/excerpt.js";
-import readingInfo from "./_11ty/reading-info.js";
+import getExcerpt from "./_11ty/excerpt.js";
 import filters from "./_11ty/filters.js";
 import dates from "./_11ty/dates.js";
 import hash from "./_11ty/hash.js";
 import externalLinks from "./_11ty/external-links.js";
 import imageTransform from "./_11ty/image-transform.js";
-import htmlMinify from "./_11ty/html-minify.js";
+import minify from "./_11ty/minify.js";
 import tagPagination from "./_11ty/tag.js";
 import authorPagination from "./_11ty/author.js";
 
@@ -40,7 +38,6 @@ export default eleventyConfig => {
         .use(markdownItEmoji)
         .use(markdownItFootnote)
         .use(markdownItMark)
-        .use(markdownItPrism)
         .use(markdownItSub)
         .use(markdownItSup)
         .use(markdownItTasklists)
@@ -69,10 +66,7 @@ export default eleventyConfig => {
     eleventyConfig.addPlugin(filters);
 
     // Generate excerpt from first paragraph
-    eleventyConfig.addPlugin(excerpt);
-
-    // Extract reading time and word count
-    eleventyConfig.addPlugin(readingInfo);
+    eleventyConfig.addPlugin(getExcerpt);
 
     // Getting and formatting dates
     eleventyConfig.addPlugin(dates);
@@ -87,7 +81,7 @@ export default eleventyConfig => {
     eleventyConfig.addPlugin(imageTransform);
 
     // Minifying HTML
-    eleventyConfig.addPlugin(htmlMinify);
+    eleventyConfig.addPlugin(minify);
 
     // Syntax highlighting plugin
     eleventyConfig.addPlugin(syntaxHighlight);

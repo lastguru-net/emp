@@ -1,0 +1,73 @@
+---
+eleventyExcludeFromCollections: true
+permalink: /atom.xml
+eleventyImport:
+  collections: ["posts"]
+---
+<?xml version="1.0" encoding="utf-8"?>
+{% set items = collections.posts if collections.posts else [] %}
+{% if not items %}
+  {% set items = [] %}
+  {% for it in collections.all %}
+    {% if it.data.tags and ('posts' in it.data.tags) %}{% set items = items.concat([it]) %}{% endif %}
+  {% endfor %}
+{% endif %}
+{% set items = items | reverse %}
+{% set publisherName = siteauthors[siteconfig.author].fullName if (siteauthors[siteconfig.author] and siteauthors[siteconfig.author].fullName) else siteconfig.author %}
+{% set publisherData = siteauthors[siteconfig.author] %}
+{% set publisherEmail = publisherData.email if (publisherData and publisherData.email) else false %}
+{% set publisherWebsite = publisherData.website if (publisherData and publisherData.website) else false %}
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ siteconfig.title }}</title>
+  <subtitle>{{ siteconfig.description }}</subtitle>
+  <link href="{{ siteconfig.url }}" />
+  <link href="{{ '/atom.xml' | absoluteUrl }}" rel="self" />
+  <link rel="alternate" type="text/html" href="{{ siteconfig.url }}" />
+  <id>{{ siteconfig.url }}/</id>
+  <icon>{{ siteconfig.url }}{% imageTransform siteconfig.favicon, 64, 'png' %}</icon>
+  <logo>{{ siteconfig.url }}{% imageTransform siteconfig.image, 512, 'png' %}</logo>
+  <author>
+    <name>{{ publisherName }}</name>{% if publisherEmail %}
+    <email>{{ publisherEmail }}</email>{% endif %}{% if publisherWebsite %}
+    <uri>{{ publisherWebsite }}</uri>{% endif %}
+  </author>
+  {% if items and items[0] %}<updated>{{ items[0].date | isoDateTime }}</updated>{% endif %}
+  {% for item in items %}
+  {% set fallbackExcerpt -%}{% getExcerpt item %}{%- endset %}
+  {% set itemUrl = item.url | absoluteUrl %}
+  {% set itemExcerpt = item.data.excerpt or fallbackExcerpt %}
+  {% set activeAuthorId = item.data.author or siteconfig.author %}
+  {% set activeAuthorData = siteauthors[activeAuthorId] %}
+  {% set activeAuthorDisplayName = activeAuthorData.fullName if (activeAuthorData and activeAuthorData.fullName) else activeAuthorId %}
+  {% set authorPageUrl = ('/author/' ~ (activeAuthorId | slugify) ~ '/') | absoluteUrl %}
+  {% set itemKeywords = [] %}
+  {% if item.data.tags %}
+    {% for t in item.data.tags %}
+      {% if t not in sitetags.notag %}
+        {% set kw = sitestrings[t] or t %}
+        {% set itemKeywords = itemKeywords.concat([kw]) %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  <entry>
+    <title>{{ item.data.title }}</title>
+    <link rel="alternate" href="{{ itemUrl }}" />
+    <id>{{ itemUrl }}</id>
+    <updated>{{ item.date | isoDateTime }}</updated>
+    <author>
+      <name>{{ activeAuthorDisplayName }}</name>{% if activeAuthorData and activeAuthorData.email %}
+      <email>{{ activeAuthorData.email }}</email>{% endif %}
+      <uri>{{ authorPageUrl }}</uri>
+    </author>
+    {% if itemKeywords | length %}
+      {% for kw in itemKeywords %}
+    <category term="{{ kw }}" />
+      {% endfor %}
+    {% endif %}
+      <summary type="html">{{ itemExcerpt | escape }}</summary>
+    {% if siteelements.features.feedFullContent %}
+      <content type="html">{{ item.templateContent | minifyFeedHtml | escape }}</content>
+    {% endif %}
+  </entry>
+  {% endfor %}
+</feed>

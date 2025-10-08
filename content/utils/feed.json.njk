@@ -1,0 +1,77 @@
+---
+eleventyExcludeFromCollections: true
+permalink: /feed.json
+eleventyImport:
+  collections: ["posts"]
+---
+{
+  {% set items = collections.posts if collections.posts else [] %}
+  {% if not items %}
+    {% set items = [] %}
+    {% for it in collections.all %}
+      {% if it.data.tags and ('posts' in it.data.tags) %}{% set items = items.concat([it]) %}{% endif %}
+    {% endfor %}
+  {% endif %}
+  {% set items = items | reverse %}
+  {% set publisherName = siteauthors[siteconfig.author].fullName if (siteauthors[siteconfig.author] and siteauthors[siteconfig.author].fullName) else siteconfig.author %}
+  {% set publisherData = siteauthors[siteconfig.author] %}
+  {% set publisherEmail = publisherData.email if (publisherData and publisherData.email) else false %}
+  {% set publisherWebsite = publisherData.website if (publisherData and publisherData.website) else false %}
+  "version": "https://jsonfeed.org/version/1.1",
+  "title": "{{ siteconfig.title | jsonEscape | safe }}",
+  "home_page_url": "{{ siteconfig.url }}",
+  "feed_url": "{{ ("/feed.json" | absoluteUrl) }}",
+  "description": "{{ siteconfig.description | jsonEscape | safe }}",
+  "language": "{{ siteconfig.lang }}",
+  "icon": "{{ siteconfig.url }}{% imageTransform siteconfig.image, 512, 'png' %}",
+  "favicon": "{{ siteconfig.url }}{% imageTransform siteconfig.favicon, 64, 'png' %}",
+  "authors": [
+    {
+      "name": "{{ publisherName | jsonEscape | safe }}"{% if publisherWebsite %},
+      "url": "{{ publisherWebsite }}"{% endif %}
+    }
+  ],
+  "items": [
+    {% for item in items %}
+    {% set fallbackExcerpt -%}{% getExcerpt item %}{%- endset %}
+    {% set itemUrl = item.url | absoluteUrl %}
+    {% set itemExcerpt = item.data.excerpt or fallbackExcerpt %}
+    {% set activeAuthorId = item.data.author or siteconfig.author %}
+    {% set activeAuthorData = siteauthors[activeAuthorId] %}
+    {% set activeAuthorDisplayName = activeAuthorData.fullName if (activeAuthorData and activeAuthorData.fullName) else activeAuthorId %}
+    {% set authorPageUrl = ('/author/' ~ (activeAuthorId | slugify) ~ '/') | absoluteUrl %}
+    {% set itemKeywords = [] %}
+    {% if item.data.tags %}
+      {% for t in item.data.tags %}
+        {% if t not in sitetags.notag %}
+          {% set kw = sitestrings[t] or t %}
+          {% set itemKeywords = itemKeywords.concat([kw]) %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    {% set itemImageSrc = item.data.image or siteconfig.openGraphDefaultImage %}
+    {
+      "id": "{{ itemUrl }}",
+      "url": "{{ itemUrl }}",
+      "title": "{{ (item.data.title or "") | jsonEscape | safe }}",
+      {% if siteelements.features.feedFullContent %}
+      "content_html": "{{ item.templateContent | minifyFeedHtml | jsonEscape | safe }}",
+      {% else %}
+      "content_html": "{{ itemExcerpt | jsonEscape | safe }}",
+      {% endif %}
+      "summary": "{{ itemExcerpt | jsonEscape | safe }}",
+      "image": "{{ siteconfig.url }}{% imageTransform itemImageSrc, 1200, 'webp' %}",
+      "tags": [{% set comma = joiner() %}{% for tag in itemKeywords -%}
+        {{ comma() }} "{{ tag | jsonEscape | safe }}"
+      {%- endfor %}],
+      "date_published": "{{ (item.date | isoDateTime) }}"{% if activeAuthorDisplayName %},
+      "authors": [
+        {
+          "name": "{{ activeAuthorDisplayName | jsonEscape | safe }}",
+          "url": "{{ authorPageUrl }}"
+        }
+      ]{% endif %}
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}

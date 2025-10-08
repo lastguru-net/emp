@@ -36,4 +36,12 @@ export default eleventyConfig => {
     eleventyConfig.addShortcode("year", function () {
         return new Date().getFullYear();
     });
+
+    eleventyConfig.addNunjucksFilter("rssDate", function (date) {
+        if (!(date instanceof Date)) {
+            date = new Date(date);
+        }
+        const dt = DateTime.fromISO(date.toISOString());
+        return dt.toRFC2822();
+    });
 };

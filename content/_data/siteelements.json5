@@ -9,6 +9,14 @@
         json_ld: true,
         // Generate a sitemap.xml file
         sitemap: true,
+        // Generate RSS feed
+        rssFeed: true,
+        // Generate Atom feed
+        atomFeed: true,
+        // Generate JSON feed
+        jsonFeed: true,
+        // Feed content mode: false = excerpts (default), true = full content
+        feedFullContent: true,
         // Include local JavaScript bundle
         js: true,
         // Enable social sharing buttons on posts/pages
@@ -68,6 +76,8 @@
     header: "/images/header.jpeg",
     // Alt text for the header image (for accessibility)
     headerAlt: "",
+    // Link for the header image (optional; no link by default)
+    headerLink: "",
 
     // Social media profiles for the site (the object must be present, but profiles are optional)
     social: {

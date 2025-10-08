@@ -29,6 +29,7 @@ Eleventy Markdown Prime is a minimalistic, opinionated starter for text‑first 
 - Automatic responsive image optimization (generating AVIF and WEBP with different sizes)
 - Comprehensive JSON-LD structured data support
 - SEO optimization, OpenGraph and Twitter Cards
+- RSS, Atom and JSON feeds
 - Special pages: Error 404, robots.txt, sitemap.xml
 - Progressive Web Apps (PWA) support
 
