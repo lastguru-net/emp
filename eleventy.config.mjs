@@ -19,6 +19,7 @@ import imageTransform from "./_11ty/image-transform.js";
 import minify from "./_11ty/minify.js";
 import tagPagination from "./_11ty/tag.js";
 import authorPagination from "./_11ty/author.js";
+import googleFonts from "eleventy-google-fonts";
 
 export default eleventyConfig => {
     // Add support for JSON5 data files
@@ -92,6 +93,9 @@ export default eleventyConfig => {
     // Double pagination for tags and authors
     eleventyConfig.addPlugin(tagPagination);
     eleventyConfig.addPlugin(authorPagination);
+
+    // Google Fonts plugin
+    eleventyConfig.addPlugin(googleFonts);
 
     return {
         dir: {

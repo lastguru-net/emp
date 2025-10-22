@@ -9,7 +9,7 @@ layout: base.njk
 	{% include "postproperties.njk" %}
 	{% endif %}
 	{% if image %}
-	<img class="postimage" src="{{ image }}" alt="{{ imageAlt }}" />
+	<img class="postimage" src="{{ image }}" alt="{{ imageAlt }}" fetchpriority="high" />
 	{% endif %}
 	<div class="incontent">
   		{{ content | safe }}

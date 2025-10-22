@@ -2,10 +2,10 @@
 	{% if siteelements.header and siteheader %}
 		{% if siteelements.headerLink %}
 			<a class="siteheaderlink" href="{{ siteelements.headerLink }}">
-				<img class="siteheader" src="{{ siteelements.header }}" alt="{{ siteelements.headerAlt }}" />
+				<img class="siteheader" src="{{ siteelements.header }}" alt="{{ siteelements.headerAlt }}" fetchpriority="high" />
 			</a>
 		{% else %}
-			<img class="siteheader" src="{{ siteelements.header }}" alt="{{ siteelements.headerAlt }}" />
+			<img class="siteheader" src="{{ siteelements.header }}" alt="{{ siteelements.headerAlt }}" fetchpriority="high" />
 		{% endif %}
 	{% endif %}
 	{% if title and not authorCard %}<h1>{{ title }}</h1>{% endif %}
@@ -17,7 +17,7 @@
 		{% if siteelements.features.postlistThumbnail and post.data.image %}
 			<div class="postlistrow flex flex-col items-start gap-3 md:flex-row md:items-stretch md:gap-4 {% if siteelements.features.postlistThumbnail == 'right' %}md:flex-row-reverse{% endif %}">
 				<a class="postthumblink" href="{{ post.url | url }}" aria-label="{{ post.data.title }}">
-					<img class="postthumb" src="{{ post.data.image }}" alt="{{ post.data.title }}" />
+					<img class="postthumb" src="{{ post.data.image }}" alt="{{ post.data.title }}" eleventy:widths="160,320,480,640" />
 				</a>
 				<div class="postlistside">
 					<div class="postexcerpt">{% if post.data.excerpt %}{{ post.data.excerpt }}{% else %}{% getExcerpt post %}{% endif %}</div>

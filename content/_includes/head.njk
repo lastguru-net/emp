@@ -25,13 +25,18 @@
 {% if siteconfig.pixels.fbPixel %}<link rel="preconnect" href="https://connect.facebook.net">{% endif %}
 {% if siteconfig.pixels.googleTag %}<link rel="preconnect" href="https://www.googletagmanager.com">{% endif %}
 {% if siteelements.fonts %}
+{% if siteelements.fonts.local == "none" %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family={{ siteelements.fonts.body.family }}:ital,wght@{{ siteelements.fonts.body.weights }}&family={{ siteelements.fonts.header.family }}:ital,wght@{{ siteelements.fonts.header.weights }}{% if siteelements.fonts.swap %}&display=swap{% endif %}" as="style">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ siteelements.fonts.body.family }}:ital,wght@{{ siteelements.fonts.body.weights }}&family={{ siteelements.fonts.header.family }}:ital,wght@{{ siteelements.fonts.header.weights }}{% if siteelements.fonts.swap %}&display=swap{% endif %}">
+{% elseif siteelements.fonts.local == "css" %}
+{% eleventyGoogleFonts 'https://fonts.googleapis.com/css2?family=' ~ siteelements.fonts.body.family ~ ':ital,wght@' ~ siteelements.fonts.body.weights ~ '&family=' ~ siteelements.fonts.header.family ~ ':ital,wght@' ~ siteelements.fonts.header.weights ~ ('&display=swap' if siteelements.fonts.swap else '') %}
 {% endif %}
+{% endif %}
+<link rel="preload" href="{{ '/assets/css/site-build.css' | addHash }}" as="style">
 <link rel="stylesheet" href="{{ '/assets/css/site-build.css' | addHash }}">
-{% if siteelements.features.js %}<script src="{{ '/assets/js/min.js' | addHash }}" type="module"></script>{% endif %}
+{% if siteelements.features.js %}<script defer src="{{ '/assets/js/min.js' | addHash }}" type="module"></script>{% endif %}
 {% if siteconfig.pixels.googleTag %}
 {% include "google-tag.njk" %}
 {% endif %}
