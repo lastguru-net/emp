@@ -4,6 +4,7 @@
 {% set description -%}{% getShortDescription %}{%- endset %}
 <meta name="author" content="{% if author %}{{ siteauthors[author].fullName if siteauthors[author] else author }}{% else %}{{ siteauthors[siteconfig.author].fullName if siteauthors[siteconfig.author] else siteconfig.author }}{% endif %}">
 <meta name="description" content="{{ description }}">
+{% if siteelements.features.generator %}<meta name="generator" content="Eleventy">{% endif %}
 {% if image %}{% set image_src = image %}{% else %}{% set image_src = siteconfig.openGraphDefaultImage %}{% endif %}
 {% include "opengraph.njk" %}
 {% include "twittercard.njk" %}
@@ -31,6 +32,7 @@
 <link rel="preload" href="https://fonts.googleapis.com/css2?family={{ siteelements.fonts.body.family }}:ital,wght@{{ siteelements.fonts.body.weights }}&family={{ siteelements.fonts.header.family }}:ital,wght@{{ siteelements.fonts.header.weights }}{% if siteelements.fonts.swap %}&display=swap{% endif %}" as="style">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ siteelements.fonts.body.family }}:ital,wght@{{ siteelements.fonts.body.weights }}&family={{ siteelements.fonts.header.family }}:ital,wght@{{ siteelements.fonts.header.weights }}{% if siteelements.fonts.swap %}&display=swap{% endif %}">
 {% elseif siteelements.fonts.local == "css" %}
+<link rel="preconnect" href="https://fonts.gstatic.com">
 {% eleventyGoogleFonts 'https://fonts.googleapis.com/css2?family=' ~ siteelements.fonts.body.family ~ ':ital,wght@' ~ siteelements.fonts.body.weights ~ '&family=' ~ siteelements.fonts.header.family ~ ':ital,wght@' ~ siteelements.fonts.header.weights ~ ('&display=swap' if siteelements.fonts.swap else '') %}
 {% endif %}
 {% endif %}

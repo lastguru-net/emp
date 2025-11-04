@@ -23,13 +23,13 @@ const imageTransformParams = {
     // formats: ["auto"],
 
     // optional, output image widths
-    widths: [1280, 960, 640, 320, "auto"],
+    widths: [2560, 1920, 1600, 1280, 960, 640, 320, "auto"],
 
     // optional, attributes assigned on <img> override these values.
     defaultAttributes: {
         loading: "lazy",
         decoding: "async",
-        sizes: "auto",
+        sizes: "100vw",
     }
 };
 

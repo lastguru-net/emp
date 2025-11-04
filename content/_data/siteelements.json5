@@ -40,7 +40,9 @@
         // Show author business card on author listing pages
         authorCard: true,
         // Toggle for showing "Powered by" text/link in the footer
-        poweredBy: true
+        poweredBy: true,
+        // Include generator meta tag
+        generator: true
     },
 
     // Google Fonts configuration for typography
