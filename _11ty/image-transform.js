@@ -23,14 +23,34 @@ const imageTransformParams = {
     // formats: ["auto"],
 
     // optional, output image widths
-    widths: [2560, 1920, 1600, 1280, 960, 640, 320, "auto"],
+    widths: [2560, 1920, 1600, 1280, 960, 640, "auto"],
 
     // optional, attributes assigned on <img> override these values.
     defaultAttributes: {
         loading: "lazy",
         decoding: "async",
         sizes: "100vw",
-    }
+    },
+
+    // sharp options
+    sharpJpegOptions: {
+        quality: 82,
+        mozjpeg: true
+    },
+    sharpPngOptions: {
+        compressionLevel: 7,
+        adaptiveFiltering: true
+    },
+    sharpWebpOptions: {
+        quality: 80,
+        alphaQuality: 90,
+        effort: 5,
+        smartSubsample: true
+    },
+    sharpAvifOptions: {
+        quality: 50,
+        effort: 4
+    },
 };
 
 const imageTransform = async (src, width, format) => {
@@ -44,7 +64,25 @@ const imageTransform = async (src, width, format) => {
             return `${name}-${id}-${width}w.${format}`;
         },
         formats: [format],
-        widths: [width]
+        widths: [width],
+        sharpJpegOptions: {
+            quality: 82,
+            mozjpeg: true
+        },
+        sharpPngOptions: {
+            compressionLevel: 7,
+            adaptiveFiltering: true
+        },
+        sharpWebpOptions: {
+            quality: 80,
+            alphaQuality: 90,
+            effort: 5,
+            smartSubsample: true
+        },
+        sharpAvifOptions: {
+            quality: 50,
+            effort: 4
+        },
     };
 
     const metadata = await Image(path.join("content", src), options);

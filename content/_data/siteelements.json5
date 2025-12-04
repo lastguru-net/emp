@@ -42,7 +42,9 @@
         // Toggle for showing "Powered by" text/link in the footer
         poweredBy: true,
         // Include generator meta tag
-        generator: true
+        generator: true,
+        // Sitehero image style: 'square', 'rounded'
+        siteheroStyle: "rounded",
     },
 
     // Google Fonts configuration for typography

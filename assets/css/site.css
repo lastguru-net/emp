@@ -89,16 +89,23 @@ img.siteheader {
 
 .sidebar svg.sidebar-close {
     @apply sm:hidden;
-    @apply absolute top-2 right-2 w-8 h-8;
+    @apply absolute top-2 right-2 w-6 h-6;
     @apply rounded-md border-1 border-accent;
 }
 
 .sidebar .sitehero {
-    @apply pt-8;
+    @apply pt-6;
 }
 
 .sidebar .sitehero img {
-    @apply max-w-56 max-h-48 object-cover;
+    @apply max-w-56 max-h-48;
+    @apply object-cover shadow-none;
+}
+
+.sidebar .sitehero.sitehero-rounded img {
+    @apply max-w-48;
+    @apply rounded-full;
+	@apply ring-1 ring-accent;
 }
 
 .sidebar .sitetitle {
@@ -112,7 +119,7 @@ img.siteheader {
 .sidebar .sitedesc {
     @apply font-normal;
     @apply text-gray-400;
-    @apply pt-3;
+    @apply pt-2;
 }
 
 .sidebar .navitem {
@@ -735,7 +742,7 @@ ul.pagination div a {
 }
 
 .authorcard .authorcard-bio {
-	@apply mt-1;
+	@apply mt-2;
     @apply font-body text-base leading-relaxed;
 }
 
@@ -757,7 +764,7 @@ ul.pagination div a {
 }
 
 .authorcard .authorsocial {
-	@apply flex items-center flex-wrap gap-2 mt-3;
+	@apply flex items-center flex-wrap gap-2 mt-2;
 }
 
 .authorcard .authorsocial svg {
