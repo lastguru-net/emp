@@ -205,7 +205,7 @@ This file defines per‑author metadata used to render the author business card 
 This file defines the core theme styles for your site, including fonts, colors, and layout spacing. It uses CSS custom properties (variables) to ensure flexibility and consistency across the site. Key sections include:
 
 - **Fonts**: Defines the primary fonts for the body and headers using the `--font-body` and `--font-header` variables.
-- **Colors**: Sets the sidebar background color (`--color-sidebar`), the accent color (`--color-accent`) used for highlights and links, and the content background (`--color-rightarea`).
+- **Colors**: Defines the palette for backgrounds, text, and common UI states, plus the accent color (`--color-accent`) used on interactive highlights and hovers.
 - **Spacing**: Configures the maximum width for content (`--spacing-content`) and the width of the sidebar (`--spacing-sidebar`).
 
 Notes:

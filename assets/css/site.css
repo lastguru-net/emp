@@ -64,7 +64,7 @@ img.siteheader {
 
 #sidebar {
     @apply fixed top-0 left-0 z-30;
-    @apply w-sidebar bg-sidebar;
+    @apply w-sidebar bg-sidebar-bg;
     @apply h-lvh;
     @apply transition-transform sm:transition-none translate-x-0;
     @apply overflow-visible; /* allow bleed pseudo to extend */
@@ -77,7 +77,7 @@ img.siteheader {
 
 /* Bleed the sidebar background above and below viewport */
 #sidebar::before {
-    @apply fixed left-0 w-sidebar bg-sidebar pointer-events-none;
+    @apply fixed left-0 w-sidebar bg-sidebar-bg pointer-events-none;
     @apply top-[-25vh] h-[150vh];
     content: "";
 }
@@ -111,27 +111,26 @@ img.siteheader {
 .sidebar .sitetitle {
     @apply block mx-auto;
     @apply font-semibold text-2xl;
-    @apply text-white hover:text-accent;
+    @apply text-sidebar-highlight hover:text-accent;
     @apply pt-6;
     @apply transition-colors duration-200 ease-in;
 }
 
 .sidebar .sitedesc {
     @apply font-normal;
-    @apply text-gray-400;
+    @apply text-sidebar-text;
     @apply pt-2;
 }
 
 .sidebar .navitem {
     @apply text-base/10 font-medium uppercase;
-    @apply text-gray-400 hover:text-accent;
+    @apply text-sidebar-text hover:text-accent;
     @apply px-1;
     @apply transition-colors duration-200 ease-in;
 }
 
 .sidebar .navitem.active {
-    @apply text-white hover:text-accent;
-    @apply transition-colors duration-200 ease-in;
+    @apply text-sidebar-highlight hover:text-accent;
 }
 
 .menu ul {
@@ -197,10 +196,6 @@ img.siteheader {
     @apply visible -top-10;
 }
 
-.menu > * {
-    @apply transition-transform duration-400;
-}
-
 .sidebar .sitesocial {
     @apply gap-5 mx-auto;
 }
@@ -210,7 +205,7 @@ img.siteheader {
 }
 
 .sidebar svg {
-    @apply fill-gray-400 hover:fill-accent;
+    @apply fill-sidebar-text hover:fill-accent;
     @apply transition-colors duration-200 ease-in;
 }
 
@@ -219,7 +214,7 @@ img.siteheader {
     @apply py-2;
 }
 .sidebar .privacy-policy a {
-    @apply text-gray-400 hover:text-accent;
+    @apply text-sidebar-text hover:text-accent;
     @apply transition-colors duration-200 ease-in;
 }
 
@@ -228,7 +223,7 @@ img.siteheader {
 .top-bar {
     @apply sm:hidden;
     @apply border-accent border-b-1 shadow-lg;
-    @apply bg-rightarea;
+    @apply bg-topbar-bg;
     @apply top-0 h-12 z-10;
     @apply transition-transform duration-200 ease-in;
 }
@@ -254,7 +249,7 @@ img.siteheader {
     @apply flex flex-col;
     @apply overflow-x-hidden overflow-y-auto;
     @apply sm:ml-sidebar; /* sit beside the fixed sidebar on desktop */
-    @apply bg-rightarea;
+    @apply bg-rightarea-bg;
 }
 
 .max-w-content {
@@ -275,12 +270,12 @@ main {
 }
 
 .content .incontent {
-    @apply text-gray-700;
+    @apply text-rightarea-text;
     @apply font-body font-normal;
 }
 
 .content h1 {
-    @apply text-gray-900;
+    @apply text-rightarea-title;
     @apply text-3xl font-bold font-header;
     @apply py-6;
 }
@@ -311,7 +306,8 @@ main {
 
 .content a {
     @apply text-accent;
-    @apply underline hover:no-underline;
+    @apply underline decoration-accent hover:decoration-transparent;
+    @apply transition-[text-decoration-color] duration-200 ease-in;
 }
 
 .content blockquote {
@@ -352,9 +348,9 @@ main {
 .content input.task-list-item-checkbox {
     @apply appearance-none inline-grid place-content-center;
     @apply w-4 h-4;
-    @apply bg-gray-100 checked:bg-accent;
+    @apply bg-rightarea-altbg checked:bg-accent;
     @apply border-accent rounded-sm border-2;
-    @apply before:text-white before:-mb-0.5;
+    @apply before:text-rightarea-altbg before:-mb-0.5;
     @apply before:content-['\00a0'] checked:before:content-['\2713'];
 }
 
@@ -382,7 +378,7 @@ dd {
 }
 /* Zebra striping uses odd rows for now; even rows may be styled later. */
 .content table tbody tr:nth-child(odd) {
-    @apply bg-gray-100;
+    @apply bg-rightarea-altbg;
 }
 
 .content img {
@@ -448,7 +444,7 @@ svg.threads {
 .social a:hover::before {
     @apply absolute block -top-8 -left-36 w-54;
     @apply p-2.5;
-    @apply text-gray-700 bg-gray-100;
+    @apply text-rightarea-text bg-rightarea-altbg;
     @apply text-center text-xs font-semibold;
     @apply border-1 border-solid border-accent rounded-md;
     @apply -translate-y-1/2;
@@ -477,7 +473,7 @@ svg.threads {
 }
 
 .additions div {
-    @apply text-gray-700 bg-gray-100;
+    @apply text-rightarea-text bg-rightarea-altbg;
     @apply border-solid border-1 border-accent rounded-lg;
     @apply h-22 px-2;
     @apply overflow-hidden;
@@ -494,7 +490,7 @@ svg.threads {
 
 .prevnextyes {
     @apply hover:bg-accent;
-    @apply hover:text-gray-100;
+    @apply hover:text-rightarea-altbg;
     @apply cursor-pointer;
     @apply transition-colors duration-200 ease-in;
 }
@@ -515,7 +511,7 @@ svg.threads {
 /* Post properties */
 
 .postproperties {
-    @apply text-gray-500 fill-gray-500;
+    @apply text-rightarea-postproperties fill-rightarea-postproperties;
     @apply font-header text-sm font-normal;
     @apply pb-4;
 }
@@ -533,7 +529,7 @@ svg.threads {
 .postproperties .posttag a,
 .postproperties .postauthor a {
     @apply bg-accent/10 hover:bg-accent;
-    @apply text-gray-500 fill-gray-500 hover:text-gray-100 hover:fill-gray-100;
+    @apply text-rightarea-postproperties fill-rightarea-postproperties hover:text-rightarea-altbg hover:fill-rightarea-altbg;
     @apply no-underline;
     @apply px-1;
     @apply transition-colors duration-200 ease-in;
@@ -546,7 +542,7 @@ svg.threads {
 .readingtime:hover::before {
     @apply absolute block -bottom-10 w-25;
     @apply p-0.75;
-    @apply text-gray-700 bg-gray-100;
+    @apply text-rightarea-text bg-rightarea-altbg;
     @apply text-center text-xs font-semibold;
     @apply border-1 border-solid border-accent rounded-md;
     @apply -translate-y-1/2;
@@ -561,7 +557,7 @@ svg.threads {
 .placetip:hover::before {
     @apply absolute block -bottom-10 w-75;
     @apply p-0.75;
-    @apply text-gray-700 bg-gray-100;
+    @apply text-rightarea-text bg-rightarea-altbg;
     @apply text-center text-xs font-semibold;
     @apply border-1 border-solid border-accent rounded-md;
     @apply -translate-y-1/2 -translate-x-1/10;
@@ -579,16 +575,15 @@ svg.threads {
 .postlist .postlistitem {
     @apply px-4;
     @apply border-b-1 border-accent;
-    @apply hover:bg-gray-100;
+    @apply hover:bg-rightarea-altbg;
     @apply transition-colors duration-200 ease-in;
 }
 
 .postlist .postlistitem.pinned {
     @apply pl-3;
     @apply border-l-4 border-accent;
-}
-.postlist .postlistitem.pinned:hover {
-    @apply shadow-md bg-accent/10 transition-all duration-200 ease-in;
+    @apply hover:shadow-md hover:bg-accent/10;
+    @apply transition-all duration-200 ease-in;
 }
 
 .postlist .pinned-badge {
@@ -599,7 +594,7 @@ svg.threads {
 }
 
 .postlist h1 {
-    @apply text-gray-900;
+    @apply text-rightarea-title;
     @apply text-center text-3xl font-bold font-header;
     @apply py-6;
 }
@@ -609,13 +604,13 @@ svg.threads {
 }
 
 .postlist .postlistheading a {
-    @apply text-gray-900 hover:text-accent;
+    @apply text-rightarea-title hover:text-accent;
     @apply text-2xl font-semibold font-header hover:no-underline;
     @apply transition-colors duration-200 ease-in;
 }
 
 .postlist .postexcerpt {
-    @apply text-gray-700;
+    @apply text-rightarea-text;
     @apply font-body font-normal text-base;
     @apply pb-4;
 }
@@ -677,15 +672,15 @@ ul.pagination li {
 
 ul.pagination div {
     @apply border-solid border-1 border-accent rounded-full;
-    @apply bg-gray-100 hover:bg-accent;
-    @apply hover:text-gray-100;
+    @apply bg-rightarea-altbg hover:bg-accent;
+    @apply hover:text-rightarea-altbg;
     @apply text-center leading-relaxed;
     @apply w-8 h-8;
     @apply transition-colors duration-200 ease-in;
 }
 
 ul.pagination div.active {
-    @apply bg-gray-400;
+    @apply bg-rightarea-pagination;
     @apply text-accent;
 }
 
@@ -699,7 +694,7 @@ ul.pagination div a {
 /* Footer */
 
 .footer {
-    @apply bg-sidebar;
+    @apply bg-footer-bg;
     @apply w-full;
     @apply py-2 mt-auto;
 }
@@ -707,12 +702,12 @@ ul.pagination div a {
 .footer .footer-content {
     /* keep centered on small screens, allow space-between on md+ so a right-aligned block can sit at the end */
     @apply flex flex-wrap items-center justify-center md:justify-between gap-2;
-    @apply text-gray-400 font-header font-normal text-sm;
+    @apply text-footer-text font-header font-normal text-sm;
     @apply px-8 lg:px-24;
 }
 
 .footer a {
-    @apply text-gray-400 hover:text-accent;
+    @apply text-footer-text hover:text-accent;
     @apply no-underline;
     @apply transition-colors duration-200 ease-in;
 }
@@ -723,17 +718,17 @@ ul.pagination div a {
 
 .footer .footer-privacy {
     @apply w-full text-center md:w-auto md:text-left;
-    @apply text-gray-400 font-header font-normal text-sm;
+    @apply text-footer-text font-header font-normal text-sm;
 }
 
 .footer .footer-poweredby {
     @apply w-full text-center md:w-auto md:text-right md:ml-auto;
-    @apply text-gray-400 font-header font-normal text-sm;
+    @apply text-footer-text font-header font-normal text-sm;
 }
 
 /* Author card */
 .authorcard {
-	@apply bg-gray-100 text-gray-700;
+	@apply bg-rightarea-altbg text-rightarea-text;
 	@apply border-solid border-1 border-accent rounded-lg;
 	@apply p-4 my-4 mx-4 lg:mx-20;
 }
@@ -753,7 +748,7 @@ ul.pagination div a {
 }
 
 .authorcard .authorcard-name {
-	@apply font-header text-xl font-semibold text-gray-900;
+	@apply font-header text-xl font-semibold text-rightarea-title;
 }
 
 .authorcard .authorcard-bio {
@@ -763,14 +758,14 @@ ul.pagination div a {
 
 .authorcard .authorcard-link {
 	@apply inline-flex items-center gap-2 align-middle;
-	@apply font-header text-gray-500 hover:text-accent;
+	@apply font-header text-rightarea-authorlinks hover:text-accent;
 	@apply hover:no-underline;
 	@apply transition-colors duration-200 ease-in;
 }
 
 .authorcard .authorcard-infoitem svg {
 	@apply h-4 w-4 flex-none;
-	@apply fill-gray-500;
+	@apply fill-rightarea-authorlinks;
 	@apply transition-colors duration-200 ease-in;
 }
 
@@ -784,18 +779,18 @@ ul.pagination div a {
 
 .authorcard .authorsocial svg {
 	@apply h-5 w-5;
-	@apply fill-gray-500 hover:fill-accent;
+	@apply fill-rightarea-authorlinks hover:fill-accent;
 	@apply transition-colors duration-200 ease-in;
 }
 
 /* Miscellaneous */
 
 ::placeholder {
-    @apply text-gray-700;
+    @apply text-rightarea-text;
 }
 
 :-ms-input-placeholder {
-    @apply text-gray-700;
+    @apply text-rightarea-text;
 }
 
 /* Print media style: Hide navigation and social elements, flatten grid layout, and remove borders for cleaner print output. */

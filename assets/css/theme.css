@@ -1,9 +1,26 @@
 @theme {
     --font-body: Montserrat, Verdana, Geneva, ui-sans-serif, sans-serif, system-ui;
     --font-header: "Titillium Web", Verdana, Geneva, ui-sans-serif, sans-serif, system-ui;
-    --color-sidebar: #222222;
+
     --color-accent: #a300a3;
-    --color-rightarea: #ffffff;
+
+    --color-sidebar-bg: #222222;
+    --color-sidebar-text: var(--color-gray-400);
+    --color-sidebar-highlight: var(--color-white);
+
+    --color-topbar-bg: var(--color-white);
+
+    --color-footer-bg: var(--color-sidebar-bg);
+    --color-footer-text: var(--color-sidebar-text);
+
+    --color-rightarea-bg: var(--color-white);
+    --color-rightarea-altbg: var(--color-gray-100);
+    --color-rightarea-pagination: var(--color-gray-400);
+    --color-rightarea-authorlinks: var(--color-gray-500);
+    --color-rightarea-postproperties: var(--color-gray-500);
+    --color-rightarea-text: var(--color-gray-700);
+    --color-rightarea-title: var(--color-gray-900);
+
     --spacing-content: 72rem;
     --spacing-sidebar: 15rem;
 }
