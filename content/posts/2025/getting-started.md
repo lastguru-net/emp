@@ -192,6 +192,7 @@ This file manages tag-related configurations for posts. It includes:
 - **notime**: Tags that hide post reading time in post properties (e.g., "events").
 - **notag**: Tags that are hidden in post properties (e.g., "article," "posts").
 - **events**: Tags that trigger Event JSON‑LD instead of BlogPosting.
+- **icons**: Overrides for the standard tag icon in post properties.
 
 This file helps control how tags are presented and used across the site.
 

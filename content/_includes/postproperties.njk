@@ -27,11 +27,13 @@
 	{% endif %}
 	{% for posttag in post.data.tags %}
 	{% if posttag not in sitetags.notag %}
-	{% if sitestrings[posttag] %}{% set posttagtext = sitestrings[posttag] %}{% else %}{% set posttagtext = posttag %}{% endif %}
+	{% set posttagtext = sitestrings[posttag] or posttag %}
+	{% set tagIconKey = (sitetags.icons and sitetags.icons[posttag]) or "hashtag" %}
+	{% set tagIcon = inlinesvg[tagIconKey] %}
 	<div class="posttag flex flex-none">
 		<a href="/{{ posttag }}/" class="inline-flex" aria-label="{{ sitestrings.posts_tagged }} {{ posttagtext | capitalize }}">
-			<svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.hashtag.viewBox }}">
-				<path d="{{ inlinesvg.hashtag.path }}" />
+			<svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ tagIcon.viewBox }}">
+				<path d="{{ tagIcon.path }}" />
 			</svg>
 			{{ posttagtext | capitalize }}
 			<span></span>

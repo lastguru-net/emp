@@ -16,5 +16,6 @@
     last_page: "Last page",
     about_me: "About me",
     open_sidebar_menu: "Open sidebar menu",
-    close_sidebar_menu: "Close sidebar menu"
+    close_sidebar_menu: "Close sidebar menu",
+    pinned_badge: "Pinned"
 }

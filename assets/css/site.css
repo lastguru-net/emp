@@ -583,6 +583,21 @@ svg.threads {
     @apply transition-colors duration-200 ease-in;
 }
 
+.postlist .postlistitem.pinned {
+    @apply pl-3;
+    @apply border-l-4 border-accent;
+}
+.postlist .postlistitem.pinned:hover {
+    @apply shadow-md bg-accent/10 transition-all duration-200 ease-in;
+}
+
+.postlist .pinned-badge {
+    @apply text-accent;
+}
+.postlist .pinned-badge .pin-icon {
+    @apply w-4 h-4 fill-current;
+}
+
 .postlist h1 {
     @apply text-gray-900;
     @apply text-center text-3xl font-bold font-header;

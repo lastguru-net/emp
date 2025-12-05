@@ -20,7 +20,7 @@ Eleventy Markdown Prime is a minimalistic, opinionated starter for text‑first 
 - Can be used for a text-based (Markdown) blog or simple page
 - Logo, site name and main menu are placed on the left sidebar
 - Social network links on the sidebar
-- Automatic post list (index), tag and author pages with pagination
+- Automatic post list (index), tag and author pages with pagination and post pinning
 - Optional post thumbnails in post lists
 - Author business cards on author pages (photo, bio, links)
 - Footer component with copyright/privacy information

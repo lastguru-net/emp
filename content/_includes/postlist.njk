@@ -10,9 +10,20 @@
 	{% endif %}
 	{% if title and not authorCard %}<h1>{{ title }}</h1>{% endif %}
 	{% for post in posts %}
-	<div class="postlistitem {% if siteelements.features.postlistThumbnail == 'right' %}thumb-right{% endif %}">
+	{% set isPinned = post.data.tags and "pinned" in post.data.tags %}
+	<div class="postlistitem {% if isPinned %}pinned{% endif %} {% if siteelements.features.postlistThumbnail == 'right' %}thumb-right{% endif %}">
 		<div class="postlistheading">
-			<a href="{{ post.url | url }}" aria-label="{{ post.data.title }}">{{ post.data.title }}</a>
+			<a href="{{ post.url | url }}" aria-label="{{ post.data.title }}">
+				{% if isPinned %}
+					<span class="pinned-badge inline-flex items-center">
+						<svg class="pin-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.pin.viewBox }}">
+							<path d="{{ inlinesvg.pin.path }}" />
+						</svg>
+						<span class="sr-only">{{ sitestrings.pinned_badge }}</span>
+					</span>
+				{% endif %}
+				{{ post.data.title }}
+			</a>
 		</div>
 		{% if siteelements.features.postlistThumbnail and post.data.image %}
 			<div class="postlistrow flex flex-col items-start gap-3 md:flex-row md:items-stretch md:gap-4 {% if siteelements.features.postlistThumbnail == 'right' %}md:flex-row-reverse{% endif %}">

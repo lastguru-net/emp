@@ -12,5 +12,9 @@
     // Generate Event JSON-LD for these posts, instead of BlogPosting
     events: [
         "events"
-    ]
+    ],
+    // Tag-specific icons (fallback: hashtag)
+    icons: {
+        pinned: "pin"
+    }
 }

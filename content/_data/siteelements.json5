@@ -44,7 +44,7 @@
         // Include generator meta tag
         generator: true,
         // Sitehero image style: 'square', 'rounded'
-        siteheroStyle: "rounded",
+        siteheroStyle: "square",
     },
 
     // Google Fonts configuration for typography
