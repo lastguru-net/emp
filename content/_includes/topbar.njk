@@ -1,10 +1,18 @@
 <div class="max-w-content">
     <div id="mobile-top-bar" class="flex col-span-2">
-        <svg viewBox="0 0 100 80" onclick="slideLeftSidebar()" aria-label="{{ sitestrings.open_sidebar_menu }}">
+        <svg viewBox="0 0 60 80" onclick="slideLeftSidebar()" aria-label="{{ sitestrings[siteconfig.lang].open_sidebar_menu }}">
             <rect width="60" height="7"></rect>
             <rect y="30" width="60" height="7"></rect>
             <rect y="60" width="60" height="7"></rect>
         </svg>
         <a href="/" class="grow inline" aria-label="{{ siteelements.menuHome }}">{{ siteconfig.title }}</a>
+        {% if siteelements.features.colorMode != "light" and siteelements.features.colorMode != "dark" %}
+        <svg viewBox="{{ inlinesvg.lightMode.viewBox }}" onclick="toggleDarkLightMode(false)" aria-label="{{ sitestrings[siteconfig.lang].color_mode }}" class="lighttoggle">
+            <path d="{{ inlinesvg.lightMode.path }}"></path>
+        </svg>
+        <svg viewBox="{{ inlinesvg.darkMode.viewBox }}" onclick="toggleDarkLightMode(false)" aria-label="{{ sitestrings[siteconfig.lang].color_mode }}" class="darktoggle">
+            <path d="{{ inlinesvg.darkMode.path }}"></path>
+        </svg>
+        {% endif %}
     </div>
 </div>

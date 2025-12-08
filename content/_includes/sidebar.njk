@@ -1,5 +1,5 @@
 <div id="sidebar-contents" class="sidebar grid grid-cols-1 gap-4 content-between relative">
-    <svg class="sidebar-close" role="button" onclick="slideLeftSidebar()" aria-label="{{ sitestrings.close_sidebar_menu }}" viewBox="{{ inlinesvg.close.viewBox }}" xmlns="http://www.w3.org/2000/svg">
+    <svg class="sidebar-close" role="button" onclick="slideLeftSidebar()" aria-label="{{ sitestrings[siteconfig.lang].close_sidebar_menu }}" viewBox="{{ inlinesvg.close.viewBox }}" xmlns="http://www.w3.org/2000/svg">
         <title>Close</title>
         <path d="{{ inlinesvg.close.path }}" />
     </svg>
@@ -30,9 +30,19 @@
     {% if siteelements.features.sitesocial == "below" %}
         {% include "sitesocial.njk" %}
     {% endif %}
-    <div class="privacy-policy">
+    <div class="privacy-policy flex items-center justify-center gap-6">
         {% if siteelements.features.privacyPolicy == "sidebar" %}
         <a href="{{ siteelements.privacyPolicy.url }}" aria-label="{{ siteelements.privacyPolicy.name }}">{{ siteelements.privacyPolicy.name }}</a>
+        {% endif %}
+        {% if siteelements.features.colorMode != "light" and siteelements.features.colorMode != "dark" %}
+        <div id="sidebar-color-toggle" class="sidebar-colormode hidden sm:inline-flex items-center gap-2">
+            <svg viewBox="{{ inlinesvg.lightMode.viewBox }}" onclick="toggleDarkLightMode(false)" aria-label="{{ sitestrings[siteconfig.lang].color_mode }}" class="lighttoggle">
+                <path d="{{ inlinesvg.lightMode.path }}" />
+            </svg>
+            <svg viewBox="{{ inlinesvg.darkMode.viewBox }}" onclick="toggleDarkLightMode(false)" aria-label="{{ sitestrings[siteconfig.lang].color_mode }}" class="darktoggle">
+                <path d="{{ inlinesvg.darkMode.path }}" />
+            </svg>
+        </div>
         {% endif %}
     </div>
 </div>

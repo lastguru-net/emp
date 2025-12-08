@@ -19,7 +19,7 @@
 {% if authorUrl %}<meta property="article:author" content="{{ authorUrl }}">{% endif %}
 {% for t in tags %}
 {% if t not in sitetags.notag %}
-<meta property="article:tag" content="{% if sitestrings[t] %}{{ sitestrings[t] | capitalize }}{% else %}{{ t | capitalize }}{% endif %}">
+<meta property="article:tag" content="{% if sitestrings[siteconfig.lang][t] %}{{ sitestrings[siteconfig.lang][t] | capitalize }}{% else %}{{ t | capitalize }}{% endif %}">
 {% endif %}
 {% endfor %}
 {% endif %}

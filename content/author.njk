@@ -9,7 +9,7 @@ pagination:
 eleventyComputed:
   title: "{% if siteauthors[tag.tagName] %}{{ siteauthors[tag.tagName].fullName }}{% else %}{{ tag.tagName }}{% endif %}"
   author: "{{ tag.tagName }}"
-  excerpt: "{% if siteauthors[tag.tagName] %}{{ siteauthors[tag.tagName].bio }}{% else %}{{ sitestrings.posts_by }} {{ tag.tagName }}{% endif %}"
+  excerpt: "{% if siteauthors[tag.tagName] %}{{ siteauthors[tag.tagName].bio }}{% else %}{{ sitestrings[siteconfig.lang].posts_by }} {{ tag.tagName }}{% endif %}"
 tags: authorcard
 ---
 

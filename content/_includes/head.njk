@@ -1,5 +1,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% if siteelements.features.colorMode == "light" %}{% set colorScheme = "light" %}
+{% elseif siteelements.features.colorMode == "dark" %}{% set colorScheme = "dark" %}
+{% elseif siteelements.features.colorMode == "light-dark" %}{% set colorScheme = "light dark" %}
+{% elseif siteelements.features.colorMode == "dark-light" %}{% set colorScheme = "dark light" %}
+{% else %}{% set colorScheme = "dark light" %}{% endif %}
+<meta name="color-scheme" content="{{ colorScheme }}">
 <title>{% if title %}{{ title }} - {% endif %}{{ siteconfig.title }}</title>
 {% set description -%}{% getShortDescription %}{%- endset %}
 <meta name="author" content="{% if author %}{{ siteauthors[author].fullName if siteauthors[author] else author }}{% else %}{{ siteauthors[siteconfig.author].fullName if siteauthors[siteconfig.author] else siteconfig.author }}{% endif %}">
@@ -38,6 +44,9 @@
 {% endif %}
 <link rel="preload" href="{{ '/assets/css/site-build.css' | addHash }}" as="style">
 <link rel="stylesheet" href="{{ '/assets/css/site-build.css' | addHash }}">
+{% if siteelements.features.colorMode != "light" and siteelements.features.colorMode != "dark" %}
+{% include "colormode-js.njk" %}
+{% endif %}
 {% if siteelements.features.js %}<script defer src="{{ '/assets/js/min.js' | addHash }}" type="module"></script>{% endif %}
 {% if siteconfig.pixels.googleTag %}
 {% include "google-tag.njk" %}

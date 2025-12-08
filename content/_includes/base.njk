@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ siteconfig.lang }}">
+<html lang="{{ siteconfig.lang }}" class="{% if siteelements.features.colorMode == 'light' %}light{% else %}dark{% endif %}">
     <head>
         {% include "head.njk" %}
         {% include "json-ld.njk" %}

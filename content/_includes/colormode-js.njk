@@ -1,0 +1,28 @@
+<!-- Toggle dark/light mode. Inline JS to avoid any theme flicker on page load. -->
+<script>
+const root = document.documentElement;
+const setTheme = (theme) => {
+    root.classList.toggle("dark", theme === "dark");
+    root.classList.toggle("light", theme === "light");
+    localStorage.theme = theme;
+};
+
+function toggleDarkLightMode(isInit) {
+    if (!("theme" in localStorage)) {
+        {% if siteelements.features.colorMode == "auto" %}
+        const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+        {% else %}
+        const prefersLight = {{ "true" if siteelements.features.colorMode == "light-dark" else "false" }};
+        {% endif %}
+        setTheme(prefersLight ? "light" : "dark");
+        return;
+    }
+
+    if (isInit) {
+        setTheme(localStorage.theme === "light" ? "light" : "dark");
+    } else {
+        setTheme(localStorage.theme === "light" ? "dark" : "light");
+    }
+};
+toggleDarkLightMode(true);
+</script>

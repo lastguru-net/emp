@@ -29,7 +29,7 @@
 	{% set keywords = [] %}
 	{% for t in tags %}
 		{% if t not in sitetags.notag %}
-			{% set kw = sitestrings[t] or t %}
+			{% set kw = sitestrings[siteconfig.lang][t] or t %}
 			{% set keywords = keywords.concat([kw]) %}
 		{% endif %}
 	{% endfor %}

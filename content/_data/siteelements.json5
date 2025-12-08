@@ -23,6 +23,9 @@
         sharer: true,
         // Enable previous/next post navigation
         prevnext: true,
+        // Color mode: 'light', 'light-dark', 'dark', 'dark-light', or 'auto' (follows system preference)
+        // Note that only 'light' and 'dark' can work without client-side JavaScript
+        colorMode: "auto",
         // Base layout: 'regular' (with sidebar) or 'primitive' (minimal layout)
         base: "regular",
         // Index page type: 'postlist' (list of posts) or 'singlepost' (single post)

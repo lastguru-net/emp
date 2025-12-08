@@ -183,7 +183,7 @@ This file defines text strings used throughout the site. It allows you to custom
 - **Labels**: Words like "Share," "Older," "Newer," and "Events."
 - **Tooltips**: Text for actions like "Copy page link to clipboard" and "Copied."
 
-You can add your own keys and reference them in templates. Use it to adapt the site’s language and tone.
+You can add your own keys and reference them in templates. Use it to adapt the site’s language and tone. Note that multiple langiages can be defined there. The language is selected by the `lang` option in the `siteconfig.js`.
 
 ### `/content/_data/sitetags.json5`
 

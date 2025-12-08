@@ -3,6 +3,8 @@
 @import "./prism-okaidia.css";
 @source "./safelist.txt";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Site CSS structure (TOC)
    1) Utilities
    2) Base elements (images, placeholders)
@@ -218,24 +220,45 @@ img.siteheader {
     @apply transition-colors duration-200 ease-in;
 }
 
-/* Mobile top bar */
+/* Sidebar color toggle (desktop only; mobile already has topbar) */
+.sidebar .sidebar-colormode {
+    @apply hidden sm:inline-flex sm:items-center sm:gap-2;
+}
+.sidebar .sidebar-colormode svg {
+    @apply block w-4.5 h-4.5;
+    @apply fill-sidebar-text hover:fill-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+.light #sidebar-color-toggle .lighttoggle,
+.dark #sidebar-color-toggle .darktoggle {
+    @apply hidden;
+}
+
+ /* Mobile top bar */
 
 .top-bar {
     @apply sm:hidden;
     @apply border-accent border-b-1 shadow-lg;
-    @apply bg-topbar-bg;
+    @apply bg-topbar-bg dark:bg-topbar-bg-dark;
     @apply top-0 h-12 z-10;
     @apply transition-transform duration-200 ease-in;
 }
 
 .top-bar svg {
-    @apply block align-middle h-12 leading-12 ml-3 pt-4 pb-3;
+    @apply block align-middle h-12 leading-12 px-3 pt-4 pb-3;
+    @apply fill-topbar-fg dark:fill-topbar-fg-dark hover:fill-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.light .top-bar svg.lighttoggle,
+.dark .top-bar svg.darktoggle {
+    @apply hidden;
 }
 
 .top-bar a {
     @apply align-middle text-center leading-12;
     @apply text-2xl font-semibold font-header hover:no-underline;
-    @apply hover:text-accent;
+    @apply text-topbar-fg dark:text-topbar-fg-dark hover:text-accent;
     @apply transition-colors duration-200 ease-in;
 }
 
@@ -249,7 +272,7 @@ img.siteheader {
     @apply flex flex-col;
     @apply overflow-x-hidden overflow-y-auto;
     @apply sm:ml-sidebar; /* sit beside the fixed sidebar on desktop */
-    @apply bg-rightarea-bg;
+    @apply bg-rightarea-bg dark:bg-rightarea-bg-dark;
 }
 
 .max-w-content {
@@ -270,12 +293,12 @@ main {
 }
 
 .content .incontent {
-    @apply text-rightarea-text;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
     @apply font-body font-normal;
 }
 
 .content h1 {
-    @apply text-rightarea-title;
+    @apply text-rightarea-title dark:text-rightarea-title-dark;
     @apply text-3xl font-bold font-header;
     @apply py-6;
 }
@@ -305,7 +328,7 @@ main {
 }
 
 .content a {
-    @apply text-accent;
+    @apply hover:text-accent;
     @apply underline decoration-accent hover:decoration-transparent;
     @apply transition-[text-decoration-color] duration-200 ease-in;
 }
@@ -348,9 +371,9 @@ main {
 .content input.task-list-item-checkbox {
     @apply appearance-none inline-grid place-content-center;
     @apply w-4 h-4;
-    @apply bg-rightarea-altbg checked:bg-accent;
+    @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark checked:bg-accent;
     @apply border-accent rounded-sm border-2;
-    @apply before:text-rightarea-altbg before:-mb-0.5;
+    @apply before:text-rightarea-altbg before:dark:text-rightarea-altbg-dark before:-mb-0.5;
     @apply before:content-['\00a0'] checked:before:content-['\2713'];
 }
 
@@ -378,7 +401,7 @@ dd {
 }
 /* Zebra striping uses odd rows for now; even rows may be styled later. */
 .content table tbody tr:nth-child(odd) {
-    @apply bg-rightarea-altbg;
+    @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
 }
 
 .content img {
@@ -423,14 +446,19 @@ svg.threads {
     fill: black;
 }
 
+svg.share {
+    @apply fill-rightarea-text;
+}
+
 .social svg {
     @apply h-5 px-2;
-    @apply hover:fill-accent;
+    @apply dark:fill-rightarea-text-dark hover:fill-accent;
     @apply transition-colors duration-200 ease-in;
 }
 
 .social span {
     @apply text-sm;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
 }
 
 .social {
@@ -444,7 +472,7 @@ svg.threads {
 .social a:hover::before {
     @apply absolute block -top-8 -left-36 w-54;
     @apply p-2.5;
-    @apply text-rightarea-text bg-rightarea-altbg;
+    @apply text-rightarea-text dark:text-rightarea-text-dark bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
     @apply text-center text-xs font-semibold;
     @apply border-1 border-solid border-accent rounded-md;
     @apply -translate-y-1/2;
@@ -473,7 +501,7 @@ svg.threads {
 }
 
 .additions div {
-    @apply text-rightarea-text bg-rightarea-altbg;
+    @apply text-rightarea-text dark:text-rightarea-text-dark bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
     @apply border-solid border-1 border-accent rounded-lg;
     @apply h-22 px-2;
     @apply overflow-hidden;
@@ -490,7 +518,7 @@ svg.threads {
 
 .prevnextyes {
     @apply hover:bg-accent;
-    @apply hover:text-rightarea-altbg;
+    @apply hover:text-rightarea-altbg dark:hover:text-rightarea-altbg-dark;
     @apply cursor-pointer;
     @apply transition-colors duration-200 ease-in;
 }
@@ -511,7 +539,7 @@ svg.threads {
 /* Post properties */
 
 .postproperties {
-    @apply text-rightarea-postproperties fill-rightarea-postproperties;
+    @apply text-rightarea-postproperties dark:text-rightarea-postproperties-dark fill-rightarea-postproperties dark:fill-rightarea-postproperties-dark;
     @apply font-header text-sm font-normal;
     @apply pb-4;
 }
@@ -529,7 +557,8 @@ svg.threads {
 .postproperties .posttag a,
 .postproperties .postauthor a {
     @apply bg-accent/10 hover:bg-accent;
-    @apply text-rightarea-postproperties fill-rightarea-postproperties hover:text-rightarea-altbg hover:fill-rightarea-altbg;
+    @apply text-rightarea-postproperties dark:text-rightarea-postproperties-dark fill-rightarea-postproperties dark:fill-rightarea-postproperties-dark;
+    @apply hover:text-rightarea-altbg dark:hover:text-rightarea-altbg-dark hover:fill-rightarea-altbg dark:hover:fill-rightarea-altbg-dark;
     @apply no-underline;
     @apply px-1;
     @apply transition-colors duration-200 ease-in;
@@ -542,7 +571,7 @@ svg.threads {
 .readingtime:hover::before {
     @apply absolute block -bottom-10 w-25;
     @apply p-0.75;
-    @apply text-rightarea-text bg-rightarea-altbg;
+    @apply text-rightarea-text dark:text-rightarea-text-dark bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
     @apply text-center text-xs font-semibold;
     @apply border-1 border-solid border-accent rounded-md;
     @apply -translate-y-1/2;
@@ -557,7 +586,7 @@ svg.threads {
 .placetip:hover::before {
     @apply absolute block -bottom-10 w-75;
     @apply p-0.75;
-    @apply text-rightarea-text bg-rightarea-altbg;
+    @apply text-rightarea-text dark:text-rightarea-text-dark bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
     @apply text-center text-xs font-semibold;
     @apply border-1 border-solid border-accent rounded-md;
     @apply -translate-y-1/2 -translate-x-1/10;
@@ -575,7 +604,7 @@ svg.threads {
 .postlist .postlistitem {
     @apply px-4;
     @apply border-b-1 border-accent;
-    @apply hover:bg-rightarea-altbg;
+    @apply hover:bg-rightarea-altbg dark:hover:bg-rightarea-altbg-dark;
     @apply transition-colors duration-200 ease-in;
 }
 
@@ -594,7 +623,7 @@ svg.threads {
 }
 
 .postlist h1 {
-    @apply text-rightarea-title;
+    @apply text-rightarea-title dark:text-rightarea-title-dark;
     @apply text-center text-3xl font-bold font-header;
     @apply py-6;
 }
@@ -604,13 +633,13 @@ svg.threads {
 }
 
 .postlist .postlistheading a {
-    @apply text-rightarea-title hover:text-accent;
+    @apply text-rightarea-title dark:text-rightarea-title-dark hover:text-accent;
     @apply text-2xl font-semibold font-header hover:no-underline;
     @apply transition-colors duration-200 ease-in;
 }
 
 .postlist .postexcerpt {
-    @apply text-rightarea-text;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
     @apply font-body font-normal text-base;
     @apply pb-4;
 }
@@ -672,8 +701,8 @@ ul.pagination li {
 
 ul.pagination div {
     @apply border-solid border-1 border-accent rounded-full;
-    @apply bg-rightarea-altbg hover:bg-accent;
-    @apply hover:text-rightarea-altbg;
+    @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark hover:bg-accent;
+    @apply hover:text-rightarea-altbg dark:hover:text-rightarea-altbg-dark;
     @apply text-center leading-relaxed;
     @apply w-8 h-8;
     @apply transition-colors duration-200 ease-in;
@@ -728,7 +757,7 @@ ul.pagination div a {
 
 /* Author card */
 .authorcard {
-	@apply bg-rightarea-altbg text-rightarea-text;
+	@apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark text-rightarea-text dark:text-rightarea-text-dark;
 	@apply border-solid border-1 border-accent rounded-lg;
 	@apply p-4 my-4 mx-4 lg:mx-20;
 }
@@ -748,7 +777,7 @@ ul.pagination div a {
 }
 
 .authorcard .authorcard-name {
-	@apply font-header text-xl font-semibold text-rightarea-title;
+	@apply font-header text-xl font-semibold text-rightarea-title dark:text-rightarea-title-dark;
 }
 
 .authorcard .authorcard-bio {
@@ -758,14 +787,14 @@ ul.pagination div a {
 
 .authorcard .authorcard-link {
 	@apply inline-flex items-center gap-2 align-middle;
-	@apply font-header text-rightarea-authorlinks hover:text-accent;
+	@apply font-header text-rightarea-authorlinks dark:text-rightarea-authorlinks-dark hover:text-accent;
 	@apply hover:no-underline;
 	@apply transition-colors duration-200 ease-in;
 }
 
 .authorcard .authorcard-infoitem svg {
 	@apply h-4 w-4 flex-none;
-	@apply fill-rightarea-authorlinks;
+	@apply fill-rightarea-authorlinks dark:fill-rightarea-authorlinks-dark;
 	@apply transition-colors duration-200 ease-in;
 }
 
@@ -779,18 +808,18 @@ ul.pagination div a {
 
 .authorcard .authorsocial svg {
 	@apply h-5 w-5;
-	@apply fill-rightarea-authorlinks hover:fill-accent;
+	@apply fill-rightarea-authorlinks dark:fill-rightarea-authorlinks-dark hover:fill-accent;
 	@apply transition-colors duration-200 ease-in;
 }
 
 /* Miscellaneous */
 
 ::placeholder {
-    @apply text-rightarea-text;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
 }
 
 :-ms-input-placeholder {
-    @apply text-rightarea-text;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
 }
 
 /* Print media style: Hide navigation and social elements, flatten grid layout, and remove borders for cleaner print output. */
