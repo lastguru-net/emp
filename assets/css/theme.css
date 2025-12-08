@@ -4,6 +4,8 @@
 
     --color-accent: #a300a3;
     --color-neutral-150: oklch(94.6% 0 0);
+    --color-border: var(--color-accent);
+    --color-border-dark: var(--color-accent);
 
     --color-sidebar-bg: #222222;
     --color-sidebar-text: var(--color-gray-400);

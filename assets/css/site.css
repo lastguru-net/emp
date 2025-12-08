@@ -92,7 +92,7 @@ img.siteheader {
 .sidebar svg.sidebar-close {
     @apply sm:hidden;
     @apply absolute top-2 right-2 w-6 h-6;
-    @apply rounded-md border-1 border-accent;
+    @apply rounded-md border-1 border-border dark:border-border-dark;
 }
 
 .sidebar .sitehero {
@@ -238,7 +238,7 @@ img.siteheader {
 
 .top-bar {
     @apply sm:hidden;
-    @apply border-accent border-b-1 shadow-lg;
+    @apply border-border dark:border-border-dark border-b-1 shadow-lg;
     @apply bg-topbar-bg dark:bg-topbar-bg-dark;
     @apply top-0 h-12 z-10;
     @apply transition-transform duration-200 ease-in;
@@ -416,7 +416,7 @@ dd {
 }
 
 .content :not(pre) > code:not([class*="language-"]) {
-    @apply border-1 border-accent rounded-sm;
+    @apply border-1 border-border dark:border-border-dark rounded-sm;
     @apply p-0.25;
 }
 
@@ -474,7 +474,7 @@ svg.share {
     @apply p-2.5;
     @apply text-rightarea-text dark:text-rightarea-text-dark bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
     @apply text-center text-xs font-semibold;
-    @apply border-1 border-solid border-accent rounded-md;
+    @apply border-1 border-solid border-border dark:border-border-dark rounded-md;
     @apply -translate-y-1/2;
     content: attr(aria-label);
 }
@@ -488,7 +488,7 @@ svg.share {
 
 .postbreak {
     @apply block w-full h-1;
-    @apply border-solid border-b-1 border-accent;
+    @apply border-solid border-b-1 border-border dark:border-border-dark;
 
 }
 
@@ -502,7 +502,7 @@ svg.share {
 
 .additions div {
     @apply text-rightarea-text dark:text-rightarea-text-dark bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
-    @apply border-solid border-1 border-accent rounded-lg;
+    @apply border-solid border-1 border-border dark:border-border-dark rounded-lg;
     @apply h-22 px-2;
     @apply overflow-hidden;
     @apply no-underline hover:no-underline;
@@ -550,7 +550,8 @@ svg.share {
 
 .postproperties .posttag,
 .postproperties .postauthor {
-    @apply border-solid border-1 border-accent rounded-sm;
+    @apply border-solid border-1 border-border dark:border-border-dark rounded-sm;
+    @apply hover:border-accent dark:hover:border-accent;
     @apply -my-0.25;
 }
 
@@ -558,7 +559,7 @@ svg.share {
 .postproperties .postauthor a {
     @apply bg-accent/10 hover:bg-accent;
     @apply text-rightarea-postproperties dark:text-rightarea-postproperties-dark fill-rightarea-postproperties dark:fill-rightarea-postproperties-dark;
-    @apply hover:text-rightarea-altbg dark:hover:text-rightarea-altbg-dark hover:fill-rightarea-altbg dark:hover:fill-rightarea-altbg-dark;
+    @apply hover:text-rightarea-altbg dark:hover:text-rightarea-title-dark hover:fill-rightarea-altbg dark:hover:fill-rightarea-title-dark;
     @apply no-underline;
     @apply px-1;
     @apply transition-colors duration-200 ease-in;
@@ -573,7 +574,7 @@ svg.share {
     @apply p-0.75;
     @apply text-rightarea-text dark:text-rightarea-text-dark bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
     @apply text-center text-xs font-semibold;
-    @apply border-1 border-solid border-accent rounded-md;
+    @apply border-1 border-solid border-border dark:border-border-dark rounded-md;
     @apply -translate-y-1/2;
     content: attr(data-words);
 }
@@ -588,7 +589,7 @@ svg.share {
     @apply p-0.75;
     @apply text-rightarea-text dark:text-rightarea-text-dark bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
     @apply text-center text-xs font-semibold;
-    @apply border-1 border-solid border-accent rounded-md;
+    @apply border-1 border-solid border-border dark:border-border-dark rounded-md;
     @apply -translate-y-1/2 -translate-x-1/10;
     content: attr(data-address);
 }
@@ -603,14 +604,14 @@ svg.share {
 
 .postlist .postlistitem {
     @apply px-4;
-    @apply border-b-1 border-accent;
+    @apply border-b-1 border-border dark:border-border-dark;
     @apply hover:bg-rightarea-altbg dark:hover:bg-rightarea-altbg-dark;
     @apply transition-colors duration-200 ease-in;
 }
 
 .postlist .postlistitem.pinned {
     @apply pl-3;
-    @apply border-l-4 border-accent;
+    @apply border-l-4 border-l-accent;
     @apply hover:shadow-md hover:bg-accent/10;
     @apply transition-all duration-200 ease-in;
 }
@@ -700,7 +701,7 @@ ul.pagination li {
 }
 
 ul.pagination div {
-    @apply border-solid border-1 border-accent rounded-full;
+    @apply border-solid border-1 border-border dark:border-border-dark rounded-full;
     @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark hover:bg-accent;
     @apply hover:text-rightarea-altbg dark:hover:text-rightarea-altbg-dark;
     @apply text-center leading-relaxed;
@@ -758,7 +759,7 @@ ul.pagination div a {
 /* Author card */
 .authorcard {
 	@apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark text-rightarea-text dark:text-rightarea-text-dark;
-	@apply border-solid border-1 border-accent rounded-lg;
+	@apply border-solid border-1 border-border dark:border-border-dark rounded-lg;
 	@apply p-4 my-4 mx-4 lg:mx-20;
 }
 
@@ -820,6 +821,17 @@ ul.pagination div a {
 
 :-ms-input-placeholder {
     @apply text-rightarea-text dark:text-rightarea-text-dark;
+}
+
+@media (prefers-color-scheme: light) {
+    .auto-dark-bg {
+        @apply bg-gray-200;
+    }
+}
+@media (prefers-color-scheme: dark) {
+    .auto-dark-bg {
+        @apply bg-gray-800;
+    }
 }
 
 /* Print media style: Hide navigation and social elements, flatten grid layout, and remove borders for cleaner print output. */
