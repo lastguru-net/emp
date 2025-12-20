@@ -15,6 +15,54 @@ content:
     label: Posts
     path: content/posts
     type: collection
+    fields:
+    - name: title
+      label: Title
+      required: true
+      description: The title of the page. The URL is based on the title unless overriden in the header.
+      type: string
+    - name: date
+      label: Post date
+      required: true
+      description: The date in `YYYY-MM-DD` format or with time in `YYYY-MM-DD HH:MM:SS` or `YYYY-MM-DD HH:MM:SS +/-TTTT` format.
+      type: date
+    - name: updated
+      label: Update date
+      required: true
+      description: Optional last modification date in the same formats as the date field. When present, it is used in JSON-LD and in the sitemap.
+      type: date
+    - name: permalink
+      label: Permalink
+      description: Overrides the default URL for the page
+      type: string
+    - name: image
+      label: Image
+      description: Title image
+      type: image
+    - name: excerpt
+      label: Excerpt
+      description: A description used in post lists. If defined, it has no length limit. If omitted, an excerpt is auto-generated from the content (capped at full words, first paragraph, up to 250 characters).
+      type: text
+    - name: tags
+      label: Tags
+      description: One or more tags for the post. Depending on the configuration, some (or all) of the tags are displayed in the post lists.
+      type: string
+      list: true
+    - name: author
+      label: Author
+      description: The author’s name. Used to generate author pages and displayed in post lists.
+      type: string
+    - name: hidden
+      label: Hidden
+      description: When set to `true` on a post or a page, hides the post/page from all the lists (landing pages, author/tag pages, sitemap and RSS feeds). Commonly used for drafts.
+      type: boolean
+    - name: pinned
+      label: Pinned
+      description: When set to `true` on post (no effect on pages), puts the post on top of all the lists (landing pages, author/tag pages, sitemap and RSS feeds).
+      type: boolean
+    - name: body
+      label: Post
+      type: rich-text
   - name: pages
     label: Pages
     path: content/pages
