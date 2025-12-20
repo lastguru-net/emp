@@ -54,6 +54,9 @@ content:
       label: Hidden
       description: When set to `true` on a post or a page, hides the post/page from all the lists (landing pages, author/tag pages, sitemap and RSS feeds). Commonly used for drafts.
       type: boolean
+    - name: body
+      label: Post
+      type: rich-text
   - name: authors
     label: Authors
     path: content/_data/siteauthors.json5
