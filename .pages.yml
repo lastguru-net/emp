@@ -46,6 +46,10 @@ content:
       label: Author
       description: The author’s name. Used to generate author pages and displayed in post lists.
       type: string
+    - name: profilePage
+      label: Profile page
+      description: When set to `true` on a page (not a post), generates ProfilePage JSON‑LD and a corresponding Person/Organization node describing the site publisher. Commonly used for pages like “About Us.”
+      type: boolean
     - name: hidden
       label: Hidden
       description: When set to `true` on a post or a page, hides the post/page from all the lists (landing pages, author/tag pages, sitemap and RSS feeds). Commonly used for drafts.
