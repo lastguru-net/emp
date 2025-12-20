@@ -1,0 +1,29 @@
+media:
+  - name: images
+    label: Images
+    input: content/images
+    output: /images
+    categories: [ image ]
+  - name: files
+    label: Files
+    input: assets/files
+    output: /assets/files
+    categories: [ document ]
+
+content:
+  - name: authors
+    label: Authors
+    path: content/_data/siteauthors.json5
+    type: file
+  - name: elements
+    label: Site elements
+    path: content/_data/siteelements.json5
+    type: file
+  - name: posts
+    label: Posts
+    path: content/posts
+    type: collection
+  - name: pages
+    label: Pages
+    path: content/pages
+    type: collection
