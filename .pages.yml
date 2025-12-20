@@ -11,14 +11,6 @@ media:
     categories: [ document ]
 
 content:
-  - name: authors
-    label: Authors
-    path: content/_data/siteauthors.json5
-    type: file
-  - name: elements
-    label: Site elements
-    path: content/_data/siteelements.json5
-    type: file
   - name: posts
     label: Posts
     path: content/posts
@@ -27,3 +19,13 @@ content:
     label: Pages
     path: content/pages
     type: collection
+  - name: authors
+    label: Authors
+    path: content/_data/siteauthors.json5
+    type: file
+    format: json
+  - name: elements
+    label: Site elements
+    path: content/_data/siteelements.json5
+    type: file
+    format: json
