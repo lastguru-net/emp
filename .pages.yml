@@ -19,6 +19,37 @@ content:
     label: Pages
     path: content/pages
     type: collection
+    fields:
+    - name: title
+      label: Title
+      required: true
+      description: The title of the page. The URL is based on the title unless overriden in the header.
+      type: string
+    - name: permalink
+      label: Permalink
+      description: Overrides the default URL for the page
+      type: string
+    - name: image
+      label: Image
+      description: Title image
+      type: image
+    - name: excerpt
+      label: Excerpt
+      description: A description used in post lists. If defined, it has no length limit. If omitted, an excerpt is auto-generated from the content (capped at full words, first paragraph, up to 250 characters).
+      type: text
+    - name: tags
+      label: Tags
+      description: One or more tags for the post. Depending on the configuration, some (or all) of the tags are displayed in the post lists.
+      type: string
+      list: true
+    - name: author
+      label: Author
+      description: The author’s name. Used to generate author pages and displayed in post lists.
+      type: string
+    - name: hidden
+      label: Hidden
+      description: When set to `true` on a post or a page, hides the post/page from all the lists (landing pages, author/tag pages, sitemap and RSS feeds). Commonly used for drafts.
+      type: boolean
   - name: authors
     label: Authors
     path: content/_data/siteauthors.json5
