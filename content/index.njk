@@ -1,33 +1,10 @@
----js
-{
-  layout: "base.njk",
-  sitemapPriority: 1,
-  pagination: {
-    data: "collections.posts",
-    size: 10,
-    alias: "posts",
-    reverse: false, // we reverse manually below
-    before: (items = []) => {
-      if (!items.length) return items;
-      const source = items.length > 1 ? [...items].reverse() : items;
-
-      const isPinned = (item) => {
-        const tags = item?.data?.tags ?? [];
-        return (Array.isArray(tags) ? tags : [tags]).includes("pinned");
-      };
-
-      const pinned = [];
-      const regular = [];
-
-      for (const item of source) {
-        (isPinned(item) ? pinned : regular).push(item);
-      }
-
-      if (!pinned.length) return source;
-      return [...pinned, ...regular];
-    },
-  },
-}
+---
+layout: base.njk
+sitemapPriority: 1
+pagination:
+  data: collections.empPosts
+  alias: posts
+  reverse: false
 ---
 {% if siteelements.header %}{% set siteheader = true %}{% endif %}
 {% if siteelements.features.index == "postlist" %}{% include "postlist.njk" %}{% endif %}

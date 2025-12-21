@@ -18,8 +18,8 @@ layout: base.njk
 	{% if siteelements.features.prevnext %}
 	<div class="postbreak"></div>
 	<div class="additions flex flex-col md:flex-row gap-3">
-		{% set previousPost = collections.posts | getPreviousCollectionItem(page) %}
-		{% set nextPost = collections.posts | getNextCollectionItem(page) %}
+		{% set previousPost = collections.empPosts | getPreviousCollectionItem(page) %}
+		{% set nextPost = collections.empPosts | getNextCollectionItem(page) %}
 	  	<a href="{{ previousPost.url }}" class="flex-1" aria-label="{% if previousPost.url %}{{ sitestrings[siteconfig.lang].older }}: {{ previousPost.data.title }}{% endif %}">
 			<div class="prevnextprev {% if previousPost.url %}prevnextyes{% else %}prevnextno{% endif %}">
 				<span class="prevnexttitle">&lt; {{ sitestrings[siteconfig.lang].older }}</span>

@@ -46,6 +46,8 @@
         poweredBy: true,
         // Include generator meta tag
         generator: true,
+        // Toggle Lean Rada CSS-only LQIP placeholders
+        lqip: true,
         // Sitehero image style: 'square', 'rounded'
         siteheroStyle: "square",
     },

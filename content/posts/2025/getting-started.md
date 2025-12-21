@@ -95,6 +95,7 @@ If you want to preview and edit your site locally, follow these steps.
 4. Open the URL shown in the terminal (usually `http://localhost:8080`) to preview your site.
 
 For more detailed guides on setting up Node.js and npm, check:
+
 - [Beginner's Guide to Node.js](https://nodejs.dev/en/learn/)
 - [Installing Node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
@@ -113,7 +114,7 @@ The EMP theme has a modular design. At first glance, you’ll notice the distinc
      - Features an optional header image on top.
      - Lists all posts sorted by date. Each post includes a title, description (or excerpt), and optional properties like date, location, author, tags, and reading time.
      - Optional thumbnails can be enabled and placed on the left or right; they are responsive and clickable.
-     - If there are more than 10 posts, pagination appears (10 posts per page) with navigation controls at the bottom.
+     - If there are more than a configured number of posts (10 by default), pagination with navigation controls appears at the bottom.
    - **Tag Page**: Similar to the landing page but without a header image. Lists posts with a specific tag (e.g., "events").
      - Supports pagination and is generated automatically for each tag.
    - **Author Page**: Similar to the landing page but without a header image. Lists posts by a specific author (e.g., "lastguru").
@@ -144,6 +145,7 @@ Now that we understand the site’s main components, let’s explore the file st
     - **posts.json**: Defines default variables for posts.
   - **utils**: Contains additional templates like the "Error 404" page and `robots.txt`.
   - **index.njk**: Template for the landing page.
+  - **index.11tydata.js**: Pagination size control for the landing page.
   - **author.njk**: Template for author pages.
   - **tag.njk**: Template for tag pages.
 
@@ -158,6 +160,7 @@ This file contains the essential configuration settings for your site. It define
 - **Site Metadata**: Title, description, author, and locale settings.
 - **Images**: Paths for the sidebar profile image, favicon, and OpenGraph default image.
 - **Pixels**: Analytics and tracking pixels.
+- **Pagination**: number of posts per page, and the link prefixes for author/tag pages.
 
 This file is the starting point for setting up your site.
 
@@ -236,6 +239,10 @@ excerpt: "Excerpt of the description for the sample event."
 Sample event. Please visit us.
 ```
 
+### Editing with PagesCMS (Optional)
+
+If you prefer a more user-friendly editing experience (especially for non-technical editors), you can manage your EMP content with [**PagesCMS**](https://pagescms.org/). PagesCMS connects to your GitHub repository and provides a browser-based editor for Markdown content. Changes are saved back to the repository as commits, which then trigger your normal deployment pipeline (e.g., Cloudflare Pages rebuilds automatically).
+
 ### Header Variables
 
 The header contains metadata for the post or page. Supported variables (all optional except **title** and **date** for posts):
@@ -250,7 +257,9 @@ The header contains metadata for the post or page. Supported variables (all opti
 - **author**: The author’s name. Used to generate author pages and displayed in post lists.
 - **place**: The location of the post. Displayed in post lists, commonly used for events.
 - **address**: The location address of the event. Displayed as a tooltip for **place** and in the Event JSON-LD structured data.
-- **profilePage**: When set to `true` on a page (not posts), generates ProfilePage JSON‑LD and a corresponding Person/Organization node describing the site publisher. Commonly used for pages like “About Us.”
+- **profilePage**: When set to `true` on a page (not a post), generates ProfilePage JSON‑LD and a corresponding Person/Organization node describing the site publisher. Commonly used for pages like “About Us.”
+- **hidden**: When set to `true` on a post or a page, hides the post/page from all the lists (landing pages, author/tag pages, sitemap and RSS feeds). Commonly used for drafts.
+- **pinned**: When set to `true` on post (no effect on pages), puts the post on top of all the lists (landing pages, author/tag pages, sitemap and RSS feeds).
 
 The `posts.json` and `pages.json` files contain the default header variables. The most important setting there is **permalink**, which defines, how URL is generated for the pages and posts. You can customize the default URL there. Note that the system depends on the **layout** and **tags** variables as they are set there, so it is not recommended to change them.
 

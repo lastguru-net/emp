@@ -20,6 +20,8 @@ import minify from "./_11ty/minify.js";
 import tagPagination from "./_11ty/tag.js";
 import authorPagination from "./_11ty/author.js";
 import googleFontsPlugin from "./_11ty/google-fonts.js";
+import lqip from "./_11ty/lqip.js";
+import empPostsPlugin from "./_11ty/emp-posts.js";
 
 export default eleventyConfig => {
     // Add support for JSON5 data files
@@ -81,6 +83,9 @@ export default eleventyConfig => {
     // Transforming images
     eleventyConfig.addPlugin(imageTransform);
 
+    // Lean Rada CSS-only LQIP
+    eleventyConfig.addPlugin(lqip);
+
     // Minifying HTML
     eleventyConfig.addPlugin(minify);
 
@@ -94,6 +99,9 @@ export default eleventyConfig => {
     eleventyConfig.addPlugin(tagPagination);
     eleventyConfig.addPlugin(authorPagination);
     eleventyConfig.addPlugin(googleFontsPlugin);
+
+    // empPosts collection (pinned-first, etc.)
+    eleventyConfig.addPlugin(empPostsPlugin);
 
     return {
         dir: {

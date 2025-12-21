@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "./theme.css";
 @import "./prism-okaidia.css";
+@import "./lqip.css";
 @source "./safelist.txt";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -654,7 +655,7 @@ svg.share {
 	@apply w-full h-50;
 	@apply sm:w-56 sm:h-32 sm:mx-auto;
 	@apply md:w-32 md:h-20 md:mx-0;
-	@apply object-cover rounded-md;
+	@apply object-fill rounded-md;
 	@apply self-start mb-4;
 	@apply md:flex-none;
 	@apply transition-shadow duration-200 ease-in;

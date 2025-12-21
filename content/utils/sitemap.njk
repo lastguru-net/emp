@@ -4,7 +4,20 @@ permalink: /sitemap.xml
 ---
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{# NOTE: Sitemap URL order is not significant for search engines; this is for human readability.
+   We list posts (empPosts) first, then everything else. Remove this grouping if undesired. #}
+{% set postItems = collections.empPosts %}
+{% set postUrls = [] %}
+{% for p in postItems %}{% set postUrls = postUrls.concat([p.url]) %}{% endfor %}
+{% set nonPosts = [] %}
 {% for item in collections.all %}
+  {# prevent hidden content from getting into sitemap via collections.all #}
+  {% if (item.data.hidden !== true) and (item.url not in postUrls) %}
+    {% set nonPosts = nonPosts.concat([item]) %}
+  {% endif %}
+{% endfor %}
+{% set items = postItems.concat(nonPosts) %}
+{% for item in items %}
   <url>
     <loc>{{ item.url | absoluteUrl }}</loc>
     <lastmod>{% if item.data.updated %}{{ item.data.updated | isoDate }}{% else %}{{ item.date | isoDate }}{% endif %}</lastmod>

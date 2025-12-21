@@ -5,7 +5,7 @@
     </svg>
     <div class="sitehero {% if siteelements.features.siteheroStyle == "rounded" %}sitehero-rounded{% endif %}">
         <a href="/" aria-label="{{ siteelements.menuHome }}">
-            <img alt="{{ siteconfig.imageAlt }}" src="{{ siteconfig.image }}" loading="eager" eleventy:widths="160,320,480,640,960,1280" sizes="(max-width: 640px) 100vw, 480px" eleventy:pictureattr:sizes="(max-width: 640px) 100vw, 480px"/>
+            <img class="nolqip" alt="{{ siteconfig.imageAlt }}" src="{{ siteconfig.image }}" loading="eager" eleventy:widths="160,320,480,640,960,1280" sizes="(max-width: 640px) 100vw, 480px" eleventy:pictureattr:sizes="(max-width: 640px) 100vw, 480px"/>
         </a>
         <a class="sitetitle" href="/" aria-label="{{ siteelements.menuHome }}">{{ siteconfig.title }}</a>
         <div class="sitedesc">

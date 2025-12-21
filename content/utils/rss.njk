@@ -2,17 +2,11 @@
 eleventyExcludeFromCollections: true
 permalink: /rss.xml
 eleventyImport:
-  collections: ["posts"]
+  collections: ["empPosts"]
 ---
 <?xml version="1.0" encoding="UTF-8"?>
-{% set items = collections.posts if collections.posts else [] %}
-{% if not items %}
-  {% set items = [] %}
-  {% for it in collections.all %}
-    {% if it.data.tags and ('posts' in it.data.tags) %}{% set items = items.concat([it]) %}{% endif %}
-  {% endfor %}
-{% endif %}
-{% set items = items | reverse %}
+{% set items = collections.empPosts %}
+{# items are expected newest-first when empPosts is available #}
 {% set publisherName = siteauthors[siteconfig.author].fullName if (siteauthors[siteconfig.author] and siteauthors[siteconfig.author].fullName) else siteconfig.author %}
 {% set publisherData = siteauthors[siteconfig.author] %}
 {% set publisherEmail = publisherData.email if (publisherData and publisherData.email) else false %}

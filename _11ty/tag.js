@@ -40,22 +40,34 @@
 */
 
 import lodash from "@11ty/lodash-custom";
+import siteconfig from "../content/_data/siteconfig.js";
 
-// Collection properties that must be hardcoded here
-// Page size
-const pageSize = 10;
-// Permalink prefix for forming URLs
-const linkPrefix = '/';
+// Collection properties
+const pageSize = siteconfig?.pagination?.postsPerPage ?? 10;
+
+// Permalink prefix for forming URLs (configured)
+const rawPrefix = siteconfig?.pagination?.tagLinkPrefix ?? "/";
+const linkPrefix = rawPrefix.endsWith("/") ? rawPrefix : (rawPrefix + "/");
+
+const isHidden = (item) => item?.data?.hidden === true;
+const getTags = (item) => {
+	const tags = item?.data?.tags ?? [];
+	return Array.isArray(tags) ? tags : [tags];
+};
+const pinnedFirstNewestFirst = (items) => {
+	const newestFirst = [...items].sort((a, b) => (b.date || 0) - (a.date || 0));
+	const pinned = [];
+	const regular = [];
+	for (const it of newestFirst) ((it?.data?.pinned === true) ? pinned : regular).push(it);
+	return pinned.length ? pinned.concat(regular) : regular;
+};
 
 const tagPagination = (collection) => {
-    // Get unique list of tags
+    // Get unique list of tags (ignore hidden items)
     let tagSet = new Set();
     collection.getAllSorted().map(function(item) {
-        if ("tags" in item.data) {
-            let tags = item.data.tags;
-            for (let tag of tags) {
-                tagSet.add(tag);
-            }
+        if (!isHidden(item) && ("tags" in item.data)) {
+            for (let tag of getTags(item)) tagSet.add(tag);
         }
     });
 
@@ -63,7 +75,13 @@ const tagPagination = (collection) => {
     let tagMap = [];
     let tagArray = [...tagSet];
     for (let tagName of tagArray) {
-        let tagItems = collection.getFilteredByTag(tagName).reverse();
+        let tagItems = collection
+            .getFilteredByTag(tagName)
+            .filter((item) => !isHidden(item));
+
+        // newest-first + pinned-first
+        tagItems = pinnedFirstNewestFirst(tagItems);
+
         let pagedItems = lodash.chunk(tagItems, pageSize);
         let hrefs = [];
         for (let pageNumber = 0, max = pagedItems.length; pageNumber < max; pageNumber++) {

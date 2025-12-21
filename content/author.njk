@@ -1,7 +1,7 @@
 ---
 layout: base.njk
 sitemapPriority: 1
-permalink: /author/{{ tag.tagName | slugify }}/{% if tag.pageNumber %}{{ tag.pageNumber }}/{% endif %}
+permalink: "{{ siteconfig.pagination.authorLinkPrefix }}{{ tag.tagName | slugify }}/{% if tag.pageNumber %}{{ tag.pageNumber }}/{% endif %}"
 pagination:
   data: collections.authorPagination
   size: 1
@@ -13,8 +13,6 @@ eleventyComputed:
 tags: authorcard
 ---
 
-{# Note that pagination size is determined by the collection itself (edit author.js) #}
-{# Note that the permalink prefix (/author/) is determined by the collection itself #}
 {% set posts = tag.items %}
 {% set pagination = tag %}
 {% if siteelements.features.authorCard and siteauthors[author] %}{% set authorCard = siteauthors[author] %}{% endif %}
