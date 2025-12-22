@@ -126,7 +126,7 @@ img.siteheader {
 }
 
 .sidebar .navitem {
-    @apply text-base/10 font-medium uppercase;
+    @apply text-base/9 font-medium uppercase;
     @apply text-sidebar-text hover:text-accent;
     @apply px-1;
     @apply transition-colors duration-200 ease-in;
@@ -149,7 +149,7 @@ img.siteheader {
 /* NOTE: The menu indicator uses intentional “magic numbers” to create an effect
     beside the active/hovered item. These offsets are tuned to the current line-height
     and spacing. Do not change without revisiting the visual effect (values
-    like -right-29, -top-90, etc. are expected here). */
+    like -right-29, -top-81, etc. are expected here). */
 .menu ul > li:last-child > a {
     @apply -mr-[3px] max-w-[calc(100%-3px)];
 }
@@ -164,39 +164,39 @@ img.siteheader {
 
 .menu ul > li.active:nth-last-child(9) ~ li:last-child::after,
 .menu ul > li.navitem:nth-last-child(9):hover ~ li:last-child::after {
-    @apply visible -top-90;
+    @apply visible -top-81;
 }
 .menu ul > li.active:nth-last-child(8) ~ li:last-child::after,
 .menu ul > li.navitem:nth-last-child(8):hover ~ li:last-child::after {
-    @apply visible -top-80;
+    @apply visible -top-72;
 }
 .menu ul > li.active:nth-last-child(7) ~ li:last-child::after,
 .menu ul > li.navitem:nth-last-child(7):hover ~ li:last-child::after {
-    @apply visible -top-70;
+    @apply visible -top-63;
 }
 .menu ul > li.active:nth-last-child(6) ~ li:last-child::after,
 .menu ul > li.navitem:nth-last-child(6):hover ~ li:last-child::after {
-    @apply visible -top-60;
+    @apply visible -top-54;
 }
 .menu ul > li.active:nth-last-child(5) ~ li:last-child::after,
 .menu ul > li.navitem:nth-last-child(5):hover ~ li:last-child::after {
-    @apply visible -top-50;
+    @apply visible -top-45;
 }
 .menu ul > li.active:nth-last-child(4) ~ li:last-child::after,
 .menu ul > li.navitem:nth-last-child(4):hover ~ li:last-child::after {
-    @apply visible -top-40;
+    @apply visible -top-36;
 }
 .menu ul > li.active:nth-last-child(3) ~ li:last-child::after,
 .menu ul > li.navitem:nth-last-child(3):hover ~ li:last-child::after {
-    @apply visible -top-30;
+    @apply visible -top-27;
 }
 .menu ul > li.active:nth-last-child(2) ~ li:last-child::after,
 .menu ul > li.navitem:nth-last-child(2):hover ~ li:last-child::after {
-    @apply visible -top-20;
+    @apply visible -top-18;
 }
 .menu ul > li.active:nth-last-child(1):last-child::after,
 .menu ul > li.navitem:nth-last-child(1):last-child:hover::after {
-    @apply visible -top-10;
+    @apply visible -top-9;
 }
 
 .sidebar .sitesocial {
@@ -295,7 +295,7 @@ main {
 
 .content .incontent {
     @apply text-rightarea-text dark:text-rightarea-text-dark;
-    @apply font-body font-normal;
+    @apply font-body font-bodynormal;
 }
 
 .content h1 {
@@ -321,7 +321,7 @@ main {
 
 .content p {
     @apply py-2;
-    @apply font-normal text-base;
+    @apply font-bodynormal text-base;
 }
 
 .content p strong {
@@ -642,7 +642,7 @@ svg.share {
 
 .postlist .postexcerpt {
     @apply text-rightarea-text dark:text-rightarea-text-dark;
-    @apply font-body font-normal text-base;
+    @apply font-body font-bodynormal text-base;
     @apply pb-4;
 }
 
@@ -704,7 +704,10 @@ ul.pagination li {
 ul.pagination div {
     @apply border-solid border-1 border-border dark:border-border-dark rounded-full;
     @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark hover:bg-accent;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
     @apply hover:text-rightarea-altbg dark:hover:text-rightarea-altbg-dark;
+    @apply fill-rightarea-text dark:fill-rightarea-text-dark;
+    @apply hover:fill-rightarea-altbg dark:hover:fill-rightarea-altbg-dark;
     @apply text-center leading-relaxed;
     @apply w-8 h-8;
     @apply transition-colors duration-200 ease-in;
@@ -717,8 +720,11 @@ ul.pagination div.active {
 
 ul.pagination div a {
     @apply block;
-    @apply font-body font-normal text-lg;
+    @apply font-header font-normal text-lg;
     @apply hover:no-underline;
+}
+
+ul.pagination div a.page-number {
     @apply pt-[1.5px];
 }
 
@@ -824,11 +830,10 @@ ul.pagination div a {
     @apply text-rightarea-text dark:text-rightarea-text-dark;
 }
 
-@media (prefers-color-scheme: light) {
-    .auto-dark-bg {
-        @apply bg-gray-200;
-    }
+.auto-dark-bg {
+    @apply bg-gray-200;
 }
+
 @media (prefers-color-scheme: dark) {
     .auto-dark-bg {
         @apply bg-gray-800;

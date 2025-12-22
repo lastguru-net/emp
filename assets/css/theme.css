@@ -1,5 +1,6 @@
 @theme {
     --font-body: Montserrat, Verdana, Geneva, ui-sans-serif, sans-serif, system-ui;
+    --font-weight-bodynormal: var(--font-weight-normal);
     --font-header: "Titillium Web", Verdana, Geneva, ui-sans-serif, sans-serif, system-ui;
 
     --color-accent: #a300a3;

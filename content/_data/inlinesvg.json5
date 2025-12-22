@@ -118,5 +118,25 @@
     darkMode: {
         viewBox: "0 0 24 24",
         path: "M14 2c1.82 0 3.53.5 5 1.35c-2.99 1.73-5 4.95-5 8.65s2.01 6.92 5 8.65A10 10 0 0 1 14 22C8.48 22 4 17.52 4 12S8.48 2 14 2"
+    },
+    // Single left chevron icon mdi:chevron-left by Iconify
+    chevronLeft: {
+        viewBox: "0 0 24 24",
+        path: "M15.41 16.58L10.83 12l4.58-4.59L14 6l-6 6l6 6z"
+    },
+    // Double left chevron icon mdi:chevron-double-left by Iconify
+    chevronDoubleLeft: {
+        viewBox: "0 0 24 24",
+        path: "M18.41 7.41L17 6l-6 6l6 6l1.41-1.41L13.83 12zm-6 0L11 6l-6 6l6 6l1.41-1.41L7.83 12z"
+    },
+    // Single right chevron icon mdi:chevron-right by Iconify
+    chevronRight: {
+        viewBox: "0 0 24 24",
+        path: "M8.59 16.58L13.17 12L8.59 7.41L10 6l6 6l-6 6z"
+    },
+    // Double right chevron icon mdi:chevron-double-right by Iconify
+    chevronDoubleRight: {
+        viewBox: "0 0 24 24",
+        path: "M5.59 7.41L7 6l6 6l-6 6l-1.41-1.41L10.17 12zm6 0L13 6l6 6l-6 6l-1.41-1.41L16.17 12z"
     }
 }
