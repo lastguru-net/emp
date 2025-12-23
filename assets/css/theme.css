@@ -18,15 +18,13 @@
     --color-rightarea-bg: var(--color-white);
     --color-rightarea-altbg: var(--color-gray-100);
     --color-rightarea-pagination: var(--color-gray-400);
-    --color-rightarea-authorlinks: var(--color-gray-500);
-    --color-rightarea-postproperties: var(--color-gray-500);
+    --color-rightarea-subtext: var(--color-gray-500);
     --color-rightarea-text: var(--color-gray-700);
     --color-rightarea-title: var(--color-gray-900);
 
     --color-rightarea-bg-dark: var(--color-neutral-900);
     --color-rightarea-altbg-dark: var(--color-neutral-800);
-    --color-rightarea-authorlinks-dark: var(--color-neutral-400);
-    --color-rightarea-postproperties-dark: var(--color-neutral-400);
+    --color-rightarea-subtext-dark: var(--color-neutral-400);
     --color-rightarea-text-dark: var(--color-neutral-300);
     --color-rightarea-title-dark: var(--color-neutral-150);
 

@@ -20,8 +20,9 @@
    11) Pagination
    12) Footer
    13) Author card
-   14) Miscellaneous
-   15) Print
+   14) Error 404 page
+   15) Miscellaneous
+   16) Print
 */
 
 @utility h-dvh {
@@ -540,7 +541,7 @@ svg.share {
 /* Post properties */
 
 .postproperties {
-    @apply text-rightarea-postproperties dark:text-rightarea-postproperties-dark fill-rightarea-postproperties dark:fill-rightarea-postproperties-dark;
+    @apply text-rightarea-subtext dark:text-rightarea-subtext-dark fill-rightarea-subtext dark:fill-rightarea-subtext-dark;
     @apply font-header text-sm font-normal;
     @apply pb-4;
 }
@@ -559,7 +560,7 @@ svg.share {
 .postproperties .posttag a,
 .postproperties .postauthor a {
     @apply bg-accent/10 hover:bg-accent;
-    @apply text-rightarea-postproperties dark:text-rightarea-postproperties-dark fill-rightarea-postproperties dark:fill-rightarea-postproperties-dark;
+    @apply text-rightarea-subtext dark:text-rightarea-subtext-dark fill-rightarea-subtext dark:fill-rightarea-subtext-dark;
     @apply hover:text-rightarea-altbg dark:hover:text-rightarea-title-dark hover:fill-rightarea-altbg dark:hover:fill-rightarea-title-dark;
     @apply no-underline;
     @apply px-1;
@@ -795,14 +796,14 @@ ul.pagination div a.page-number {
 
 .authorcard .authorcard-link {
 	@apply inline-flex items-center gap-2 align-middle;
-	@apply font-header text-rightarea-authorlinks dark:text-rightarea-authorlinks-dark hover:text-accent;
+	@apply font-header text-rightarea-subtext dark:text-rightarea-subtext-dark hover:text-accent;
 	@apply hover:no-underline;
 	@apply transition-colors duration-200 ease-in;
 }
 
 .authorcard .authorcard-infoitem svg {
 	@apply h-4 w-4 flex-none;
-	@apply fill-rightarea-authorlinks dark:fill-rightarea-authorlinks-dark;
+	@apply fill-rightarea-subtext dark:fill-rightarea-subtext-dark;
 	@apply transition-colors duration-200 ease-in;
 }
 
@@ -816,8 +817,42 @@ ul.pagination div a.page-number {
 
 .authorcard .authorsocial svg {
 	@apply h-5 w-5;
-	@apply fill-rightarea-authorlinks dark:fill-rightarea-authorlinks-dark hover:fill-accent;
+	@apply fill-rightarea-subtext dark:fill-rightarea-subtext-dark hover:fill-accent;
 	@apply transition-colors duration-200 ease-in;
+}
+
+/* Error 404 page */
+
+.error {
+    @apply max-w-2xl min-h-[40vh];
+    @apply mx-auto py-24;
+    @apply text-center font-body font-normal;
+}
+
+.error .error-area {
+    @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
+    @apply border-solid border border-border dark:border-border-dark rounded-lg;
+    @apply p-8 shadow-sm;
+}
+
+.error .error-404 {
+    @apply text-6xl font-bold text-rightarea-title dark:text-rightarea-title-dark font-header;
+    @apply mb-4;
+}
+
+.error svg {
+    @apply fill-accent;
+    @apply w-12 h-12 inline-block align-middle;
+}
+
+.error h1 {
+    @apply text-3xl font-bold font-header text-rightarea-title dark:text-rightarea-title-dark;
+    @apply mb-3;
+}
+
+.error p {
+    @apply italic text-rightarea-subtext dark:text-rightarea-subtext-dark;
+    @apply mb-0;
 }
 
 /* Miscellaneous */
