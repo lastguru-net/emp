@@ -16,5 +16,8 @@
     // Tag-specific icons (fallback: hashtag)
     icons: {
         pinned: "pin"
+    },
+    // Tag aliases: map alias -> canonical tag (used to build tag page links)
+    aliases: {
     }
 }

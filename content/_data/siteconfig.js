@@ -4,6 +4,9 @@ export default {
 
     // Base site URL for generating absolute URLs (used throughout the site)
     url: "https://emp-starter.lastguru.dev",
+    // Alternative/internal URLs that should not be treated as external
+    internalUrls: [
+    ],
 
     // Sidebar profile image (relative path from the site root)
     image: "/images/logo.png",

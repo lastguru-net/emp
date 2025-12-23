@@ -5,12 +5,23 @@ import { getOuterHTML } from "domutils";
 import siteconfig from "../content/_data/siteconfig.js";
 
 const checkHrefs = (href) => {
-    return (
-        !href.startsWith("/") &&
-        !href.startsWith("#") &&
-        !href.startsWith(siteconfig.url) &&
-        !href.startsWith("about:blank")
-    );
+	if (!href) return false;
+	// local anchors, relative paths and about:blank are not external
+	if (href.startsWith("/") || href.startsWith("#") || href.startsWith("about:blank")) return false;
+
+	// main site URL, and any additional internal URLs
+	const internalPrefixes = [
+		siteconfig.url,
+		...(Array.isArray(siteconfig.internalUrls) ? siteconfig.internalUrls : [])
+	];
+
+	// if href starts with any internal prefix, treat as internal
+	for (const prefix of internalPrefixes) {
+		if (prefix && href.startsWith(prefix)) return false;
+	}
+
+	// otherwise it's external
+	return true;
 };
 
 const options = {

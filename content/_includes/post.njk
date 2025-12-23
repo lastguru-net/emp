@@ -20,16 +20,22 @@ layout: base.njk
 	<div class="additions flex flex-col md:flex-row gap-3">
 		{% set previousPost = collections.empPosts | getPreviousCollectionItem(page) %}
 		{% set nextPost = collections.empPosts | getNextCollectionItem(page) %}
-	  	<a href="{{ previousPost.url }}" class="flex-1" aria-label="{% if previousPost.url %}{{ sitestrings[siteconfig.lang].older }}: {{ previousPost.data.title }}{% endif %}">
+		<a {% if previousPost.url %}href="{{ previousPost.url }}"{% endif %} class="flex-1" aria-label="{% if previousPost.url %}{{ sitestrings[siteconfig.lang].older }}: {{ previousPost.data.title }}{% endif %}">
 			<div class="prevnextprev {% if previousPost.url %}prevnextyes{% else %}prevnextno{% endif %}">
-				<span class="prevnexttitle">&lt; {{ sitestrings[siteconfig.lang].older }}</span>
+				{# chevron left + title, vertically centered #}
+				<svg class="chevron-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.chevronLeft.viewBox }}">
+					<path d="{{ inlinesvg.chevronLeft.path }}" />
+				</svg>
 				<span class="prevnextlink">{% if not previousPost.url %} - {% else %}{{ previousPost.data.title | truncate(60, false, "…") }}{% endif %}</span>
 			</div>
 		</a>
-	  	<a href="{{ nextPost.url }}" class="flex-1" aria-label="{% if nextPost.url %}{{ sitestrings[siteconfig.lang].newer }}: {{ nextPost.data.title }}{% endif %}">
-		  	<div class="prevnextnext {% if nextPost.url %}prevnextyes{% else %}prevnextno{% endif %}">
-				<span class="prevnexttitle">{{ sitestrings[siteconfig.lang].newer }} &gt;</span>
+		<a {% if nextPost.url %}href="{{ nextPost.url }}"{% endif %} class="flex-1" aria-label="{% if nextPost.url %}{{ sitestrings[siteconfig.lang].newer }}: {{ nextPost.data.title }}{% endif %}">
+			<div class="prevnextnext {% if nextPost.url %}prevnextyes{% else %}prevnextno{% endif %}">
+				{# title + chevron right, vertically centered and aligned to the right #}
 				<span class="prevnextlink">{% if not nextPost.url %} - {% else %}{{ nextPost.data.title | truncate(60, false, "…") }}{% endif %}</span>
+				<svg class="chevron-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.chevronRight.viewBox }}">
+					<path d="{{ inlinesvg.chevronRight.path }}" />
+				</svg>
 			</div>
 		</a>
 	</div>

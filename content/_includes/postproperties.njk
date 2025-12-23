@@ -30,8 +30,10 @@
 	{% set posttagtext = sitestrings[siteconfig.lang][posttag] or posttag %}
 	{% set tagIconKey = (sitetags.icons and sitetags.icons[posttag]) or "hashtag" %}
 	{% set tagIcon = inlinesvg[tagIconKey] %}
+	{# resolve alias: use sitetags.aliases[posttag] if present, otherwise the tag itself #}
+	{% set targetTag = (sitetags.aliases and sitetags.aliases[posttag]) or posttag %}
 	<div class="posttag flex flex-none">
-		<a href="/{{ posttag }}/" class="inline-flex" aria-label="{{ sitestrings[siteconfig.lang].posts_tagged }} {{ posttagtext | capitalize }}">
+		<a href="/{{ targetTag }}/" class="inline-flex" aria-label="{{ sitestrings[siteconfig.lang].posts_tagged }} {{ posttagtext | capitalize }}">
 			<svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ tagIcon.viewBox }}">
 				<path d="{{ tagIcon.path }}" />
 			</svg>
@@ -50,7 +52,7 @@
 		<svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.readingTime.viewBox }}">
 			<path d="{{ inlinesvg.readingTime.path }}" />
 		</svg>
-		{{ post.templateContent | striptags | wordcount | readingTime }}
+		{{ post.templateContent | striptags | wordcount | readingTime }} {{ sitestrings[siteconfig.lang].minutes }}
 		<span></span>
 	</div>
 	{% endif %}

@@ -2,6 +2,7 @@
 @import "./theme.css";
 @import "./prism-okaidia.css";
 @import "./lqip.css";
+@import "./custom.css";
 @source "./safelist.txt";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -127,7 +128,7 @@ img.siteheader {
 }
 
 .sidebar .navitem {
-    @apply text-base/9 font-medium uppercase;
+    @apply text-lg/9 font-medium uppercase;
     @apply text-sidebar-text hover:text-accent;
     @apply px-1;
     @apply transition-colors duration-200 ease-in;
@@ -228,15 +229,13 @@ img.siteheader {
 }
 .sidebar .sidebar-colormode svg {
     @apply block w-4.5 h-4.5;
-    @apply fill-sidebar-text hover:fill-accent;
-    @apply transition-colors duration-200 ease-in;
 }
 .light #sidebar-color-toggle .lighttoggle,
 .dark #sidebar-color-toggle .darktoggle {
     @apply hidden;
 }
 
- /* Mobile top bar */
+/* Mobile top bar */
 
 .top-bar {
     @apply sm:hidden;
@@ -512,10 +511,26 @@ svg.share {
 
 .prevnextprev {
     @apply text-left;
+    /* center chevron and title vertically */
+    @apply flex items-center gap-3;
 }
 
 .prevnextnext {
     @apply text-right;
+    /* center chevron and title vertically and keep content to the right */
+    @apply flex items-center gap-3 justify-end;
+}
+
+/* size and spacing for chevrons used in prev/next */
+.prevnextprev .chevron-icon,
+.prevnextnext .chevron-icon {
+    @apply w-5 h-5 flex-none fill-current;
+}
+
+/* allow the title to break to multiple lines (up to 3) without changing the block size */
+.prevnextlink {
+    @apply text-base font-medium overflow-hidden wrap-break-word;
+    @apply line-clamp-3;
 }
 
 .prevnextyes {
@@ -527,15 +542,12 @@ svg.share {
 
 .prevnextno {
     @apply cursor-not-allowed;
+    @apply opacity-50
 }
 
 .prevnexttitle {
     @apply block my-1 px-2;
     @apply text-xs font-semibold;
-}
-
-.prevnextlink {
-    @apply text-base font-medium;
 }
 
 /* Post properties */
@@ -656,7 +668,7 @@ svg.share {
 	@apply w-full h-50;
 	@apply sm:w-56 sm:h-32 sm:mx-auto;
 	@apply md:w-32 md:h-20 md:mx-0;
-	@apply object-fill rounded-md;
+	@apply object-cover rounded-md;
 	@apply self-start mb-4;
 	@apply md:flex-none;
 	@apply transition-shadow duration-200 ease-in;
@@ -727,6 +739,10 @@ ul.pagination div a {
 
 ul.pagination div a.page-number {
     @apply pt-[1.5px];
+}
+
+ul.pagination div a.chevron-icon {
+    @apply p-1;
 }
 
 /* Footer */
@@ -831,7 +847,7 @@ ul.pagination div a.page-number {
 
 .error .error-area {
     @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
-    @apply border-solid border border-border dark:border-border-dark rounded-lg;
+    @apply border-solid border-1 border-border dark:border-border-dark rounded-lg;
     @apply p-8 shadow-sm;
 }
 

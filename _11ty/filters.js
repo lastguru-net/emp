@@ -1,5 +1,4 @@
 import { URL } from "url";
-import { Duration } from "luxon";
 import siteconfig from "../content/_data/siteconfig.js";
 
 export default eleventyConfig => {
@@ -12,7 +11,7 @@ export default eleventyConfig => {
 
     // Returns CSS class for active page link
     eleventyConfig.addNunjucksFilter("isActiveLink", function (url, pattern) {
-        return url.length > 1 && url.startsWith(pattern) ? "active" : "";
+        return url.length > 1 && pattern.length > 0 && url.startsWith(pattern) ? "active" : "";
     });
 
     // Set absolute url
@@ -22,9 +21,7 @@ export default eleventyConfig => {
     
     // Add reading time filter (migrated from reading-info.js)
     eleventyConfig.addNunjucksFilter("readingTime", (wordcount) => {
-        let readingTime = Math.ceil(wordcount / 250);
-        const dur = Duration.fromObject({ minutes: readingTime }).reconfigure({ locale: (siteconfig.lang || "en") });
-        return dur.toHuman();
+        return Math.ceil(wordcount / 250);
     });
 
     // Add word count formatting filter (migrated from reading-info.js)
