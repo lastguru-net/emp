@@ -110,14 +110,14 @@ Moon
 
 ## Footnote
 
-Click the hook will locate the footnote[^footnote], and here is another footnote[^fn-nth-2].
+Clicking the hook will locate the footnote[^footnote], and here is another footnote[^fn-nth-2].
 
 ## Code blocks
 
 ### Common
 
 ```text
-This is a common code snippet, without syntax highlight and line number.
+This is a common code snippet, without syntax highlight and line numbers.
 ```
 
 ### Specific Language

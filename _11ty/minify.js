@@ -1,39 +1,28 @@
-import minifyHtml from "@minify-html/node";
+import { minify as minifyHtml } from "html-minifier-next";
 
 const isProduction = process.env.NODE_ENV === "production";
 
-// Options for HTML minification. All supported options are listed below.
+// html-minifier-next options
 const htmlOpts = {
-    // Allow unquoted attribute values in the output to contain characters prohibited by the [WHATWG specification](https://html.spec.whatwg.org/multipage/syntax.html#attributes-2). These will still be parsed correctly by almost all browsers.
-    allow_noncompliant_unquoted_attribute_values: false,
-    // Allow some minifications around entities that may not pass validation, but will still be parsed correctly by almost all browsers.
-    allow_optimal_entities: false,
-    // Allow removing_spaces between attributes when possible, which may not be spec compliant. These will still be parsed correctly by almost all browsers.
-    allow_removing_spaces_between_attributes: false,
-    // Do not omit closing tags when possible.
-    keep_closing_tags: true,
-    // Keep all comments.
-    keep_comments: false,
-    // Do not omit `<html>` and `<head>` opening tags when they don't have attributes.
-    keep_html_and_head_opening_tags: true,
-    // Keep `type=text` attribute name and value on `<input>` elements.
-    keep_input_type_text_attr: true,
-    // Keep SSI comments.
-    keep_ssi_comments: false,
-    // Minify CSS in `<style>` tags and `style` attributes using [https://github.com/parcel-bundler/lightningcss](lightningcss).
-    minify_css: true,
-    // Minify DOCTYPEs. Minified DOCTYPEs may not be spec compliant, but will still be parsed correctly by almost all browsers.
-    minify_doctype: false,
-    // Minify JavaScript in `<script>` tags using [minify-js](https://github.com/wilsonzlin/minify-js).
-    minify_js: true,
-    // When `{{`, `{#`, or `{%` are seen in content, all source code until the subsequent matching closing `}}`, `#}`, or `%}` respectively gets piped through untouched.
-    preserve_brace_template_syntax: false,
-    // When `<%` is seen in content, all source code until the subsequent matching closing `%>` gets piped through untouched.
-    preserve_chevron_percent_template_syntax: false,
-    // Remove all bangs.
-    remove_bangs: false,
-    // Remove all processing instructions.
-    remove_processing_instructions: false
+	collapseWhitespace: true,
+	conservativeCollapse: true,
+    collapseInlineTagWhitespace: true,
+    collapseBooleanAttributes: true,
+
+	// Avoid "optimizing" entities in ways that can affect validation/semantics
+	decodeEntities: false,
+
+	removeComments: true,
+    removeEmptyAttributes: true,
+	removeOptionalTags: false,
+    removeRedundantAttributes: false,
+
+	// Inline minification
+	minifyCSS: true,
+	minifyJS: true,
+
+	// Avoid doctype shortening (prior minify_doctype: false)
+	useShortDoctype: false
 };
 
 // inline, dependency-free XML minifier — conservative and safe for typical feed XML:
@@ -83,8 +72,7 @@ const minifyContent = (content, path) => {
         // First, minify any embedded JSON-LD so shortcodes like imageTransform have already run.
         content = minifyInlineJsonLd(content);
 
-        const result = minifyHtml.minify(Buffer.from(content), htmlOpts);
-        content = result ? result.toString() : content;
+        content = minifyHtml(String(content), htmlOpts);
     } else if (path.endsWith(".xml")) {
         // use inline minifier
         content = simpleXmlMinify(content);
@@ -98,5 +86,5 @@ const minifyContent = (content, path) => {
 };
 
 export default eleventyConfig => {
-    eleventyConfig.addTransform("minifyContent", minifyContent);
+	eleventyConfig.addTransform("minifyContent", minifyContent);
 };

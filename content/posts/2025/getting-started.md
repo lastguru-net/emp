@@ -168,7 +168,7 @@ This file is the starting point for setting up your site.
 
 This file contains configuration for site-specific elements such as menu items, fonts, social media links, header and footer settings. Key sections include:
 
-- **Features**: Toggles for enabling/disabling features like post properties, JSON-LD structured data, sitemap generation, feed generation and social sharing buttons.
+- **Features**: Toggles for enabling/disabling features like post properties, JSON-LD structured data, sitemap generation, feed generation, and social sharing buttons.
 - **Fonts**: Google Fonts configuration for body and header typography that can be later used in `theme.css`.
 - **Menu**: Labels and URLs for the home link and additional menu items.
 - **Header**: Header image for the landing page.
@@ -186,7 +186,7 @@ This file defines text strings used throughout the site. It allows you to custom
 - **Labels**: Words like "Share," "Older," "Newer," and "Events."
 - **Tooltips**: Text for actions like "Copy page link to clipboard" and "Copied."
 
-You can add your own keys and reference them in templates. Use it to adapt the site’s language and tone. Note that multiple langiages can be defined there. The language is selected by the `lang` option in the `siteconfig.js`.
+You can add your own keys and reference them in templates. Use it to adapt the site’s language and tone. Note that multiple languages can be defined there. The language is selected by the `lang` option in the `siteconfig.js`.
 
 ### `/content/_data/sitetags.json5`
 
@@ -247,7 +247,7 @@ If you prefer a more user-friendly editing experience (especially for non-techni
 
 The header contains metadata for the post or page. Supported variables (all optional except **title** and **date** for posts):
 
-- **title** (*required*): The title of the post or page. The URL is based on the title unless overriden in the header.
+- **title** (*required*): The title of the post or page. The URL is based on the title unless overridden in the header.
 - **date** (*required for posts*): The date in `YYYY-MM-DD` format or with time in `YYYY-MM-DD HH:MM:SS` or `YYYY-MM-DD HH:MM:SS +/-TTTT` format.
 - **updated**: Optional last modification date in the same formats as **date**. When present, it is used in JSON-LD and in the sitemap.
 - **permalink**: Overrides the default URL for the post/page.
