@@ -5,7 +5,7 @@ const isProduction = process.env.NODE_ENV === "production";
 // html-minifier-next options
 const htmlOpts = {
 	collapseWhitespace: true,
-	conservativeCollapse: true,
+	conservativeCollapse: false,
     collapseInlineTagWhitespace: true,
     collapseBooleanAttributes: true,
 
@@ -54,24 +54,10 @@ function simpleXmlMinify(xml) {
     return xml;
 }
 
-// Inline minifier for JSON-LD inside HTML: parse and re-stringify script[type="application/ld+json"]
-function minifyInlineJsonLd(html) {
-    if (!html || typeof html !== "string") return html;
-    return html.replace(/(<script\b[^>]*type=(['"])application\/ld\+json\2[^>]*>)([\s\S]*?)(<\/script>)/gi, (match, openTag, _q, inner, closeTag) => {
-        const trimmed = inner.trim();
-        // Let JSON.parse/JSON.stringify throw if there's a problem so the build fails fast.
-        const min = JSON.stringify(JSON.parse(trimmed));
-        return openTag + min + closeTag;
-    });
-}
-
 const minifyContent = (content, path) => {
     if (!path || !isProduction) return content;
 
     if (path.endsWith(".html")) {
-        // First, minify any embedded JSON-LD so shortcodes like imageTransform have already run.
-        content = minifyInlineJsonLd(content);
-
         content = minifyHtml(String(content), htmlOpts);
     } else if (path.endsWith(".xml")) {
         // use inline minifier

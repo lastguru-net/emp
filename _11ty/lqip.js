@@ -5,8 +5,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
-import { parseDocument } from "htmlparser2";
-import { getOuterHTML } from "domutils";
 import JSON5 from "json5";
 
 let siteelementsCache = null;
@@ -28,8 +26,8 @@ const collectImages = (nodes, out) => {
 };
 
 const isSkippable = (node) => {
-    const src = node.attribs.src;
-    const cls = node.attribs.class || "";
+    const src = node.attrs.src;
+    const cls = node.attrs.class || "";
     if (!src || cls.split(/\s+/).includes("nolqip")) return true;
     if (src.startsWith("http")) return true;
     const ext = path.extname(src).toLowerCase();
@@ -116,8 +114,11 @@ const bitsToLab = (ll, aaa, bbb) => {
 const imgCache = new Map();
 const calculateLqip = async (src) => {
     if (imgCache.has(src)) return imgCache.get(src);
-    const filePath = path.join(process.cwd(), ".cache", src)
-    if (!filePath || !fs.existsSync(filePath)) return null;
+    const filePath = path.join(process.cwd(), "content", src);
+    if (!filePath || !fs.existsSync(filePath)) {
+        imgCache.set(src, null);
+        return null;
+    }
 
     const stats = await sharp(filePath).stats();
     const dominantColor = [
@@ -171,8 +172,10 @@ const calculateLqip = async (src) => {
         ((ll & 0b11) << 6) +
         ((aaa & 0b111) << 3) +
         (bbb & 0b111);
-    
-    return lqip.toFixed(0);
+
+    const result = lqip.toFixed(0);
+    imgCache.set(src, result);
+    return result;
 };
 
 const addClassOnce = (existing, cls) => {
@@ -181,31 +184,37 @@ const addClassOnce = (existing, cls) => {
     return parts.join(" ");
 };
 
-const applyLqip = async (rawContent, outputPath) => {
-    const siteelements = loadSiteelements();
-    if (!siteelements?.features?.lqip) return rawContent;
-    if (!outputPath || !outputPath.endsWith(".html")) return rawContent;
+const applyLqip = () => {
+    return async (tree) => {
+        const siteelements = loadSiteelements();
+        if (!siteelements?.features?.lqip) return tree;
 
-    const dom = parseDocument(String(rawContent));
-    const images = [];
-    collectImages(dom.children, images);
+        const transformTag = async (node) => {
+            const lqip = await calculateLqip(node.attrs.src);
+            if (lqip) {
+                node.attrs.class = addClassOnce(node.attrs.class, "lqip");
 
-    for (const node of images) {
-        if (isSkippable(node)) continue;
-        const lqip = await calculateLqip(node.attribs.src);
-        if (!lqip) continue;
+                const style = node.attrs.style || "";
+                const sep = style && !style.trim().endsWith(";") ? ";" : "";
+                node.attrs.style = style + sep + "--lqip:" + lqip + ";";
+            }
+        };
 
-        node.attribs.class = addClassOnce(node.attribs.class, "lqip");
+        const promises = [];
+        tree.match({ tag: "img" }, (node) => {
+            node.attrs = node.attrs || {};
+            if (isSkippable(node)) return node;
 
-        const style = node.attribs.style || "";
-        const sep = style && !style.trim().endsWith(";") ? ";" : "";
-        node.attribs.style = style + sep + "--lqip:" + lqip + ";";
-    }
+            promises.push(transformTag(node));
+            return node;
+        });
 
-    // serialize document children back to HTML
-    return (dom.children || []).map((child) => getOuterHTML(child)).join("");
+        await Promise.all(promises);
+        return tree;
+    };
 };
 
 export default (eleventyConfig) => {
-    eleventyConfig.addTransform("applyLqip", applyLqip);
+    // Runs in Eleventy's HTML pipeline (before writing the final .html files)
+    eleventyConfig.htmlTransformer.addPosthtmlPlugin("html", applyLqip);
 };
