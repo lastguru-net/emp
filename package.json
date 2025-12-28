@@ -1,6 +1,6 @@
 {
     "name": "eleventy-markdown-prime",
-    "version": "6.0.2",
+    "version": "6.0.3",
     "description": "A starter repository for a text-based blog site using the Eleventy site generator.",
     "type": "module",
     "license": "MIT",
@@ -15,7 +15,7 @@
     },
     "scripts": {
         "build": "npm run build:css && npm run build:js && npm run build:eleventy",
-        "build:css": "postcss assets/css/site.css -o assets/css/site-build.css",
+        "build:css": "npx @tailwindcss/cli -i assets/css/site.css -o assets/css/site-build.css --minify",
         "build:js": "esbuild assets/js/index.js --bundle --minify --outfile=assets/js/min.js --format=esm",
         "build:eleventy": "eleventy",
         "dev": "npm run build:css && npm run build:js && eleventy --serve"
@@ -28,7 +28,6 @@
         "xxhash-wasm": "^1.1.0",
         "json5": "^2.2.3",
         "esbuild": "^0.27.2",
-        "cssnano": "^7.1.2",
         "luxon": "^3.7.2",
         "html-minifier-next": "^4.15.2",
         "markdown-it": "^14.1.0",
@@ -40,9 +39,7 @@
         "markdown-it-sub": "^2.0.0",
         "markdown-it-sup": "^2.0.0",
         "markdown-it-task-lists": "^2.1.1",
-        "postcss": "^8.5.6",
-        "postcss-cli": "^11.0.1",
         "tailwindcss": "^4.1.18",
-        "@tailwindcss/postcss": "^4.1.18"
+        "@tailwindcss/cli": "^4.1.18"
     }
 }
