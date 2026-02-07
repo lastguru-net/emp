@@ -42,12 +42,12 @@
 {% eleventyGoogleFonts 'https://fonts.googleapis.com/css2?family=' ~ siteelements.fonts.body.family ~ ':ital,wght@' ~ siteelements.fonts.body.weights ~ '&family=' ~ siteelements.fonts.header.family ~ ':ital,wght@' ~ siteelements.fonts.header.weights ~ ('&display=swap' if siteelements.fonts.swap else '') %}
 {% endif %}
 {% endif %}
-<link rel="preload" href="{{ '/assets/css/site-build.css' | addHash }}" as="style">
-<link rel="stylesheet" href="{{ '/assets/css/site-build.css' | addHash }}">
+<link rel="preload" href="{{ '/assets/css/site-build.css' | addDirHash }}" as="style">
+<link rel="stylesheet" href="{{ '/assets/css/site-build.css' | addDirHash }}">
 {% if siteelements.features.colorMode != "light" and siteelements.features.colorMode != "dark" %}
 {% include "colormode-js.njk" %}
 {% endif %}
-{% if siteelements.features.js %}<script defer src="{{ '/assets/js/min.js' | addHash }}" type="module"></script>{% endif %}
+{% if siteelements.features.js %}<script defer src="{{ '/assets/js/min.js' | addDirHash }}" type="module"></script>{% endif %}
 {% if siteconfig.pixels.googleTag %}
 {% include "google-tag.njk" %}
 {% endif %}

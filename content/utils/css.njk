@@ -1,0 +1,22 @@
+---
+eleventyExcludeFromCollections: true
+permalink: /assets/css/site.css
+---
+@import "tailwindcss";
+@source "./safelist.txt";
+@import "./theme.css";
+@import "./base.css";
+@import "./custom.css";
+{% if siteelements.features.syntaxHighlighting %}@import "./prism-okaidia.css";{% endif %}
+{% if siteelements.features.topbar %}@import "./topbar.css";{% endif %}
+{% if siteelements.features.base == "regular" %}@import "./sidebar.css";{% endif %}
+{% if siteelements.features.index == "postlist" %}@import "./postlist.css";{% endif %}
+{% if siteelements.features.footer %}@import "./footer.css";{% endif %}
+{% if siteelements.features.postproperties %}@import "./postproperties.css";{% endif %}
+{% if siteelements.features.authorCard %}@import "./author-card.css";{% endif %}
+{% if siteelements.features.lqip %}@import "./lqip.css";{% endif %}
+@import "./content.css";
+{% if siteelements.features.sharer %}@import "./share.css";{% endif %}
+{% if siteelements.features.prevnext %}@import "./prevnext.css";{% endif %}
+@import "./error.css";
+@import "./misc.css";

@@ -1,6 +1,6 @@
 {
     "name": "eleventy-markdown-prime",
-    "version": "6.0.3",
+    "version": "6.1.0",
     "description": "A starter repository for a text-based blog site using the Eleventy site generator.",
     "type": "module",
     "license": "MIT",
@@ -14,11 +14,11 @@
         "url": "git+https://github.com/lastguru-net/emp.git"
     },
     "scripts": {
-        "build": "npm run build:css && npm run build:js && npm run build:eleventy",
-        "build:css": "npx @tailwindcss/cli -i assets/css/site.css -o assets/css/site-build.css --minify",
-        "build:js": "esbuild assets/js/index.js --bundle --minify --outfile=assets/js/min.js --format=esm",
+        "build": "npm run build:eleventy && npm run build:css",
+        "build:css": "npx @tailwindcss/cli -i assets/css/site.css -o assets/css/site-build.css --minify --cwd=_site/",
         "build:eleventy": "eleventy",
-        "dev": "npm run build:css && npm run build:js && eleventy --serve"
+        "build:css-dev": "npx @tailwindcss/cli -i assets/css/site.css -o assets/css/site-build.css --minify",
+        "dev": "npm run build:css-dev && eleventy --serve"
     },
     "dependencies": {
         "@11ty/eleventy": "^3.1.2",
@@ -27,9 +27,8 @@
         "eleventy-plugin-embed-everything": "^1.21.1",
         "xxhash-wasm": "^1.1.0",
         "json5": "^2.2.3",
-        "esbuild": "^0.27.2",
         "luxon": "^3.7.2",
-        "html-minifier-next": "^4.15.2",
+        "html-minifier-next": "^5.0.3",
         "markdown-it": "^14.1.0",
         "markdown-it-anchor": "^9.2.0",
         "markdown-it-deflist": "^3.0.0",

@@ -1,0 +1,34 @@
+/* Footer */
+
+.footer {
+    @apply bg-footer-bg;
+    @apply w-full;
+    @apply py-2 mt-auto;
+}
+
+.footer .footer-content {
+    /* keep centered on small screens, allow space-between on md+ so a right-aligned block can sit at the end */
+    @apply flex flex-wrap items-center justify-center md:justify-between gap-2;
+    @apply text-footer-text font-header font-normal text-sm;
+    @apply px-8 lg:px-24;
+}
+
+.footer a {
+    @apply text-footer-text hover:text-accent;
+    @apply no-underline;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.footer .footer-privacy-sep {
+    @apply px-2;
+}
+
+.footer .footer-privacy {
+    @apply w-full text-center md:w-auto md:text-left;
+    @apply text-footer-text font-header font-normal text-sm;
+}
+
+.footer .footer-poweredby {
+    @apply w-full text-center md:w-auto md:text-right md:ml-auto;
+    @apply text-footer-text font-header font-normal text-sm;
+}

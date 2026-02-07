@@ -1,0 +1,136 @@
+/* Post list */
+
+.postlist {
+    @apply my-4 mx-4 lg:mx-20;
+    @apply leading-relaxed tracking-wider;
+    @apply font-normal;
+}
+
+.postlist .postlistitem {
+    @apply px-4;
+    @apply border-b-1 border-border dark:border-border-dark;
+    @apply hover:bg-rightarea-altbg dark:hover:bg-rightarea-altbg-dark;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.postlist .postlistitem.pinned {
+    @apply pl-3;
+    @apply border-l-4 border-l-accent;
+    @apply hover:shadow-md hover:bg-accent/10;
+    @apply transition-all duration-200 ease-in;
+}
+
+.postlist .pinned-badge {
+    @apply text-accent;
+}
+.postlist .pinned-badge .pin-icon {
+    @apply w-4 h-4 fill-current;
+}
+
+.postlist h1 {
+    @apply text-rightarea-title dark:text-rightarea-title-dark;
+    @apply text-center text-3xl font-bold font-header;
+    @apply py-6;
+}
+
+.postlist .postlistheading {
+    @apply py-4;
+}
+
+.postlist .postlistheading a {
+    @apply text-rightarea-title dark:text-rightarea-title-dark hover:text-accent;
+    @apply text-2xl font-semibold font-header hover:no-underline;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.postlist .postexcerpt {
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
+    @apply font-body font-bodynormal text-base;
+    @apply pb-4;
+}
+
+/* Post list thumbnails (responsive)
+   - Mobile: full-width, stacked above excerpt (w-full h-50)
+   - sm: stacked above excerpt, medium size and centered (sm:w-48 sm:h-28 sm:mx-auto)
+   - md+: side-by-side row with compact image; right variant enlarged at md
+*/
+.postlist .postthumb {
+	@apply w-full h-50;
+	@apply sm:w-56 sm:h-32 sm:mx-auto;
+	@apply md:w-32 md:h-20 md:mx-0;
+	@apply object-cover rounded-md;
+	@apply self-start mb-4;
+	@apply md:flex-none;
+	@apply transition-shadow duration-200 ease-in;
+}
+
+/* Clickable thumbnail wrapper */
+.postlist .postthumblink {
+	@apply block rounded-md;
+}
+
+/* Hover/focus effect: stronger shadow + accent-colored ring (simulates colored shadow) */
+.postlist a.postthumblink:hover .postthumb,
+.postlist a.postthumblink:focus-visible .postthumb {
+	@apply shadow-xl ring-1 ring-accent;
+}
+
+.postlist .thumb-right .postthumb {
+	@apply md:w-40 md:h-24;
+}
+/* Keep items aligned so postproperties sits at the bottom on wider rows. */
+.postlist .postlistrow {
+	@apply items-stretch;
+}
+.postlist .postlistside {
+	@apply min-w-0;
+	@apply md:flex-1 md:flex md:flex-col;
+}
+.postlist .postlistside .postexcerpt {
+	@apply md:flex-1;
+}
+
+/* Collection pagination */
+
+.postpagination {
+    @apply mt-2 mx-4 lg:mx-20 pb-8;
+}
+
+ul.pagination {
+    @apply list-none;
+}
+
+ul.pagination li {
+    @apply mr-1.5;
+}
+
+ul.pagination div {
+    @apply border-solid border-1 border-border dark:border-border-dark rounded-full;
+    @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark hover:bg-accent;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
+    @apply hover:text-rightarea-altbg dark:hover:text-rightarea-altbg-dark;
+    @apply fill-rightarea-text dark:fill-rightarea-text-dark;
+    @apply hover:fill-rightarea-altbg dark:hover:fill-rightarea-altbg-dark;
+    @apply text-center leading-relaxed;
+    @apply w-8 h-8;
+    @apply transition-colors duration-200 ease-in;
+}
+
+ul.pagination div.active {
+    @apply bg-rightarea-pagination;
+    @apply text-accent;
+}
+
+ul.pagination div a {
+    @apply block;
+    @apply font-header font-normal text-lg;
+    @apply hover:no-underline;
+}
+
+ul.pagination div a.page-number {
+    @apply pt-[1.5px];
+}
+
+ul.pagination div a.chevron-icon {
+    @apply p-1;
+}

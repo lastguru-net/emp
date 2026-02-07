@@ -1,0 +1,7 @@
+---
+eleventyExcludeFromCollections: true
+permalink: /assets/js/min.js
+---
+{% if siteelements.features.topbar == "dynamic" %}{% include "../../assets/js/topbar.js" %}{% endif %}
+{% if siteelements.features.base == "regular" %}{% include "../../assets/js/sidebar.js" %}{% endif %}
+{% if siteelements.features.sharer %}{% include "../../assets/js/sharer.js" %}{% endif %}

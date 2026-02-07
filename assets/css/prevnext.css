@@ -1,0 +1,64 @@
+/* Previous - Next navigation block */
+
+.postbreak {
+    @apply block w-full h-1;
+    @apply border-solid border-b-1 border-border dark:border-border-dark;
+
+}
+
+.additions {
+    @apply mt-6 w-full;
+}
+
+.additions a {
+    @apply no-underline hover:no-underline;
+}
+
+.additions div {
+    @apply text-rightarea-text dark:text-rightarea-text-dark bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
+    @apply border-solid border-1 border-border dark:border-border-dark rounded-lg;
+    @apply h-22 px-2;
+    @apply overflow-hidden;
+    @apply no-underline hover:no-underline;
+}
+
+.prevnextprev {
+    @apply text-left;
+    /* center chevron and title vertically */
+    @apply flex items-center gap-3;
+}
+
+.prevnextnext {
+    @apply text-right;
+    /* center chevron and title vertically and keep content to the right */
+    @apply flex items-center gap-3 justify-end;
+}
+
+/* size and spacing for chevrons used in prev/next */
+.prevnextprev .chevron-icon,
+.prevnextnext .chevron-icon {
+    @apply w-5 h-5 flex-none fill-current;
+}
+
+/* allow the title to break to multiple lines (up to 3) without changing the block size */
+.prevnextlink {
+    @apply text-base font-medium overflow-hidden wrap-break-word;
+    @apply line-clamp-3;
+}
+
+.prevnextyes {
+    @apply hover:bg-accent;
+    @apply hover:text-rightarea-altbg dark:hover:text-rightarea-altbg-dark;
+    @apply cursor-pointer;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.prevnextno {
+    @apply cursor-not-allowed;
+    @apply opacity-50;
+}
+
+.prevnexttitle {
+    @apply block my-1 px-2;
+    @apply text-xs font-semibold;
+}

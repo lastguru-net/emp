@@ -1,9 +1,4 @@
-import { slideLeftSidebar } from "./ui.js";
-import { copyUrlToClipboard } from "./utils.js";
-
-window.slideLeftSidebar = slideLeftSidebar;
-window.copyUrlToClipboard = copyUrlToClipboard;
-
+// Bundled by content/utils/js.njk
 document.addEventListener("DOMContentLoaded", function () {
     const areaEl = document.getElementById("right-area");
     const barEl = document.getElementById("top-bar");

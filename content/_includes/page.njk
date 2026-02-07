@@ -7,7 +7,7 @@ layout: base.njk
 	{% if image %}
 	<img class="postimage" src="{{ image }}" alt="{{ imageAlt }}" fetchpriority="high" />
 	{% endif %}
-	<div class="incontent">
+	<div class="incontent{% if siteelements.features.initialLetter %} initial-letter{% endif %}">
   		{{ content | safe }}
 	</div>
   	{% if siteelements.features.sharer %}{% include "social.njk" %}{% endif %}

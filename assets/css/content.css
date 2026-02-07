@@ -1,0 +1,147 @@
+/* content area */
+
+.content {
+    @apply my-4 mx-8 lg:mx-24;
+    @apply leading-relaxed tracking-wider;
+}
+
+.content .postimage {
+    @apply mb-6;
+}
+
+.content .incontent {
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
+    @apply font-body font-bodynormal;
+}
+
+.content h1 {
+    @apply text-rightarea-title dark:text-rightarea-title-dark;
+    @apply text-3xl font-bold font-header;
+    @apply py-6;
+}
+
+.content h2 {
+    @apply text-2xl font-semibold font-header;
+    @apply pt-6;
+}
+
+.content h3 {
+    @apply text-xl font-medium font-header;
+    @apply pt-4;
+}
+
+.content h4 {
+    @apply text-lg font-medium font-header;
+    @apply pt-4;
+}
+
+.content p {
+    @apply py-2;
+    @apply font-bodynormal text-base;
+}
+
+.content b,
+.content strong {
+    @apply font-bold;
+}
+
+.content a {
+    @apply hover:text-accent;
+    @apply underline decoration-accent hover:decoration-transparent;
+    @apply transition-[text-decoration-color] duration-200 ease-in;
+}
+
+.content blockquote {
+    @apply border-l-4 border-accent;
+    @apply py-4;
+}
+
+.content blockquote > p {
+    @apply pl-4 py-2;
+}
+
+.content ol {
+    @apply list-decimal leading-8;
+    @apply pl-10;
+}
+
+.content ul {
+    @apply list-disc leading-8;
+    @apply pl-10;
+}
+
+.content li {
+    @apply marker:text-accent;
+    @apply text-base;
+    @apply py-0.5;
+}
+
+.content li ol,
+.content li ul {
+    @apply pl-5;
+}
+
+.content ul.contains-task-list {
+    @apply list-none;
+    @apply pl-5;
+}
+
+.content input.task-list-item-checkbox {
+    @apply appearance-none inline-grid place-content-center;
+    @apply w-4 h-4;
+    @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark checked:bg-accent;
+    @apply border-accent rounded-sm border-2;
+    @apply before:text-rightarea-altbg before:dark:text-rightarea-altbg-dark before:-mb-0.5;
+    @apply before:content-['\00a0'] checked:before:content-['\2713'];
+}
+
+.content dt {
+    @apply font-bold;
+}
+
+.content dd {
+    @apply pl-5 pb-2;
+}
+
+.content table {
+    @apply table-auto w-full my-2;
+    @apply border-b-1 border-accent;
+}
+
+.content table thead tr {
+    @apply leading-10;
+    @apply border-b-1 border-accent;
+}
+
+/* Content table styles */
+/* Intentionally left blank for future zebra-striping adjustments on even rows. */
+.content table tbody tr:nth-child(even) {
+}
+/* Zebra striping uses odd rows for now; even rows may be styled later. */
+.content table tbody tr:nth-child(odd) {
+    @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
+}
+
+.content img {
+    @apply max-w-full;
+}
+
+.content hr {
+    @apply text-accent;
+}
+.content .footnotes p {
+    @apply py-0;
+}
+
+.content :not(pre) > code:not([class*="language-"]) {
+    @apply border-1 border-border dark:border-border-dark rounded-sm;
+    @apply p-0.25;
+}
+
+/* Initial letter (drop cap) */
+.content .initial-letter > p:first-of-type::first-letter {
+    @apply text-accent;
+    @apply pr-2;
+    -webkit-initial-letter: 2;
+    initial-letter: 2;
+}

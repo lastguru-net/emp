@@ -1,0 +1,39 @@
+/* Miscellaneous */
+
+::placeholder {
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
+}
+
+:-ms-input-placeholder {
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
+}
+
+.auto-dark-bg {
+    @apply bg-gray-200;
+}
+
+@media (prefers-color-scheme: dark) {
+    .auto-dark-bg {
+        @apply bg-gray-800;
+    }
+}
+
+/* Print media style: Hide navigation and social elements, flatten grid layout, and remove borders for cleaner print output. */
+
+@media print {
+    #sidebar #sidebar-contents,
+    #right-area #top-bar,
+    main .content .social,
+    main .content .additions {
+        @apply hidden;
+    }
+
+    .grid {
+        @apply block;
+    }
+
+    main .content,
+    main .block.border-b-1 {
+        @apply border-b-0;
+    }
+}

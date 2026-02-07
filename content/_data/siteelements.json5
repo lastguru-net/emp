@@ -48,8 +48,12 @@
         generator: true,
         // Toggle Lean Rada CSS-only LQIP placeholders
         lqip: true,
+        // Toggle syntax highlighting CSS
+        syntaxHighlighting: true,
         // Sitehero image style: 'square', 'rounded'
         siteheroStyle: "square",
+        // Enable initial-letter styling on first paragraph
+        initialLetter: false,
     },
 
     // Google Fonts configuration for typography

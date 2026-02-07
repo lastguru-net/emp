@@ -1,0 +1,33 @@
+/* Error 404 page */
+
+.error {
+    @apply max-w-2xl min-h-[40vh];
+    @apply mx-auto py-24;
+    @apply text-center font-body font-normal;
+}
+
+.error .error-area {
+    @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
+    @apply border-solid border-1 border-border dark:border-border-dark rounded-lg;
+    @apply p-8 shadow-sm;
+}
+
+.error .error-404 {
+    @apply text-6xl font-bold text-rightarea-title dark:text-rightarea-title-dark font-header;
+    @apply mb-4;
+}
+
+.error svg {
+    @apply fill-accent;
+    @apply w-12 h-12 inline-block align-middle;
+}
+
+.error h1 {
+    @apply text-3xl font-bold font-header text-rightarea-title dark:text-rightarea-title-dark;
+    @apply mb-3;
+}
+
+.error p {
+    @apply italic text-rightarea-subtext dark:text-rightarea-subtext-dark;
+    @apply mb-0;
+}

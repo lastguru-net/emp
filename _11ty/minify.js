@@ -1,4 +1,5 @@
 import { minify as minifyHtml } from "html-minifier-next";
+import { minify as minifyJs } from "terser";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -54,11 +55,12 @@ function simpleXmlMinify(xml) {
     return xml;
 }
 
-const minifyContent = (content, path) => {
+const minifyContent = async (content, path) => {
     if (!path || !isProduction) return content;
 
     if (path.endsWith(".html")) {
-        content = minifyHtml(String(content), htmlOpts);
+        const s = String(content);
+        content = await minifyHtml(s, htmlOpts);
     } else if (path.endsWith(".xml")) {
         // use inline minifier
         content = simpleXmlMinify(content);
@@ -66,6 +68,10 @@ const minifyContent = (content, path) => {
         // use strict JSON parse/stringify to produce compact, valid JSON
         const s = String(content);
         content = JSON.stringify(JSON.parse(s));
+    } else if (path.endsWith(".js")) {
+        const s = String(content);
+        const m = await minifyJs(s);
+        content = m.code;
     }
 
     return content;

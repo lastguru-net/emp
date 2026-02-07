@@ -1,0 +1,63 @@
+/* Social share links for content */
+
+svg.twitter {
+    fill: #1da1f2;
+}
+
+svg.twitter_x {
+    fill: black;
+}
+
+svg.facebook {
+    fill: #4267b2;
+}
+
+svg.linkedin {
+    fill: #0072b1;
+}
+
+svg.bluesky {
+    fill: #0a7aff;
+}
+
+svg.threads {
+    fill: black;
+}
+
+svg.share {
+    @apply fill-rightarea-text;
+}
+
+.social svg {
+    @apply h-5 px-2;
+    @apply dark:fill-rightarea-text-dark hover:fill-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.social span {
+    @apply text-sm;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
+}
+
+.social {
+    @apply mt-8 mb-4;
+}
+
+.social a {
+    @apply relative;
+}
+
+.social a:hover::before {
+    @apply absolute block -top-8 -left-36 w-54;
+    @apply p-2.5;
+    @apply text-rightarea-text dark:text-rightarea-text-dark bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
+    @apply text-center text-xs font-semibold;
+    @apply border-1 border-solid border-border dark:border-border-dark rounded-md;
+    @apply -translate-y-1/2;
+    content: attr(aria-label);
+}
+
+.social a.link:active::before {
+    @apply -top-8;
+    content: attr(data-copied);
+}

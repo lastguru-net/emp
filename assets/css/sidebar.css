@@ -1,0 +1,169 @@
+/* Left sidebar */
+
+#sidebar {
+    @apply fixed top-0 left-0 z-30;
+    @apply w-sidebar bg-sidebar-bg;
+    @apply h-lvh;
+    @apply transition-transform sm:transition-none translate-x-0;
+    @apply overflow-visible; /* allow bleed pseudo to extend */
+    @apply flex flex-col;
+}
+
+#sidebar.is-closed {
+    @apply -translate-x-sidebar sm:translate-x-0;
+}
+
+/* Bleed the sidebar background above and below viewport */
+#sidebar::before {
+    @apply fixed left-0 w-sidebar bg-sidebar-bg pointer-events-none;
+    @apply top-[-25vh] h-[150vh];
+    content: "";
+}
+
+.sidebar {
+    @apply px-2 h-dvh overflow-hidden;
+    @apply tracking-wider text-center font-header;
+}
+
+.sidebar svg.sidebar-close {
+    @apply sm:hidden;
+    @apply absolute top-2 right-2 w-6 h-6;
+    @apply rounded-md border-1 border-border dark:border-border-dark;
+}
+
+.sidebar .sitehero {
+    @apply pt-6;
+}
+
+.sidebar .sitehero img {
+    @apply max-w-56 max-h-48;
+    @apply object-cover shadow-none;
+}
+
+.sidebar .sitehero.sitehero-rounded img {
+    @apply max-w-48;
+    @apply rounded-full;
+	@apply ring-1 ring-accent;
+}
+
+.sidebar .sitetitle {
+    @apply block mx-auto;
+    @apply font-semibold text-2xl;
+    @apply text-sidebar-highlight hover:text-accent;
+    @apply pt-6;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.sidebar .sitedesc {
+    @apply font-normal;
+    @apply text-sidebar-text;
+    @apply pt-2;
+}
+
+.sidebar .navitem {
+    @apply text-lg/9 font-medium uppercase;
+    @apply text-sidebar-text hover:text-accent;
+    @apply px-1;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.sidebar .navitem.active {
+    @apply text-sidebar-highlight hover:text-accent;
+}
+
+.menu ul {
+    @apply list-none;
+    @apply pl-0;
+}
+
+.menu a {
+    @apply block;
+    @apply no-underline;
+}
+
+/* NOTE: The menu indicator uses intentional “magic numbers” to create an effect
+    beside the active/hovered item. These offsets are tuned to the current line-height
+    and spacing. Do not change without revisiting the visual effect (values
+    like -right-29, -top-81, etc. are expected here). */
+.menu ul > li:last-child > a {
+    @apply -mr-[3px] max-w-[calc(100%-3px)];
+}
+.menu ul > li:last-child::after {
+    @apply invisible relative pointer-events-none;
+    @apply bg-accent;
+    @apply border-solid border-r-2 border-r-accent;
+    @apply w-[3px] -right-29;
+    @apply transition-[top] duration-500;
+    content: "";
+}
+
+.menu ul > li.active:nth-last-child(9) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(9):hover ~ li:last-child::after {
+    @apply visible -top-81;
+}
+.menu ul > li.active:nth-last-child(8) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(8):hover ~ li:last-child::after {
+    @apply visible -top-72;
+}
+.menu ul > li.active:nth-last-child(7) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(7):hover ~ li:last-child::after {
+    @apply visible -top-63;
+}
+.menu ul > li.active:nth-last-child(6) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(6):hover ~ li:last-child::after {
+    @apply visible -top-54;
+}
+.menu ul > li.active:nth-last-child(5) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(5):hover ~ li:last-child::after {
+    @apply visible -top-45;
+}
+.menu ul > li.active:nth-last-child(4) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(4):hover ~ li:last-child::after {
+    @apply visible -top-36;
+}
+.menu ul > li.active:nth-last-child(3) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(3):hover ~ li:last-child::after {
+    @apply visible -top-27;
+}
+.menu ul > li.active:nth-last-child(2) ~ li:last-child::after,
+.menu ul > li.navitem:nth-last-child(2):hover ~ li:last-child::after {
+    @apply visible -top-18;
+}
+.menu ul > li.active:nth-last-child(1):last-child::after,
+.menu ul > li.navitem:nth-last-child(1):last-child:hover::after {
+    @apply visible -top-9;
+}
+
+.sidebar .sitesocial {
+    @apply gap-5 mx-auto;
+}
+
+.sidebar .sitesocial a {
+    @apply w-5 h-5;
+}
+
+.sidebar svg {
+    @apply fill-sidebar-text hover:fill-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.sidebar .privacy-policy {
+    @apply text-sm font-normal;
+    @apply py-2;
+}
+.sidebar .privacy-policy a {
+    @apply text-sidebar-text hover:text-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
+/* Sidebar color toggle (desktop only; mobile already has topbar) */
+.sidebar .sidebar-colormode {
+    @apply hidden sm:inline-flex sm:items-center sm:gap-2;
+}
+.sidebar .sidebar-colormode svg {
+    @apply block w-4.5 h-4.5;
+}
+.light #sidebar-color-toggle .lighttoggle,
+.dark #sidebar-color-toggle .darktoggle {
+    @apply hidden;
+}

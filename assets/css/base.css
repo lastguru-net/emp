@@ -1,0 +1,57 @@
+@custom-variant dark (&:where(.dark, .dark *));
+
+@utility h-dvh {
+    height: 100vh;
+    @supports (height: 100dvh) {
+        height: 100dvh;
+    }
+}
+
+@utility max-h-dvh {
+    max-height: 100vh;
+    @supports (max-height: 100dvh) {
+        max-height: 100dvh;
+    }
+}
+
+/* Add: largest viewport height utility to avoid gaps on viewport changes */
+@utility h-lvh {
+    height: 100vh;
+    @supports (height: 100lvh) {
+        height: 100lvh;
+    }
+}
+
+.h-screen {
+    @apply overflow-x-hidden overflow-y-hidden;
+    @apply h-dvh;
+}
+
+/* Images */
+
+img {
+    @apply block mx-auto h-auto;
+    @apply rounded-lg shadow-lg;
+}
+
+img.siteheader {
+    @apply rounded-t-none;
+    @apply -mt-4;
+}
+
+/* Content area */
+
+#right-area {
+    @apply flex flex-col;
+    @apply overflow-x-hidden overflow-y-auto;
+    @apply sm:ml-sidebar; /* sit beside the fixed sidebar on desktop */
+    @apply bg-rightarea-bg dark:bg-rightarea-bg-dark;
+}
+
+.max-w-content {
+    @apply flex-1;
+}
+
+main {
+    @apply min-w-0;
+}

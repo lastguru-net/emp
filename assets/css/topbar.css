@@ -1,0 +1,31 @@
+/* Mobile top bar */
+
+.top-bar {
+    @apply sm:hidden;
+    @apply border-border dark:border-border-dark border-b-1 shadow-lg;
+    @apply bg-topbar-bg dark:bg-topbar-bg-dark;
+    @apply top-0 h-12 z-10;
+    @apply transition-transform duration-200 ease-in;
+}
+
+.top-bar svg {
+    @apply block align-middle h-12 leading-12 px-3 pt-4 pb-3;
+    @apply fill-topbar-fg dark:fill-topbar-fg-dark hover:fill-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.light .top-bar svg.lighttoggle,
+.dark .top-bar svg.darktoggle {
+    @apply hidden;
+}
+
+.top-bar a {
+    @apply align-middle text-center leading-12;
+    @apply text-2xl font-semibold font-header hover:no-underline;
+    @apply text-topbar-fg dark:text-topbar-fg-dark hover:text-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.top-bar.hide {
+    @apply -translate-y-12;
+}

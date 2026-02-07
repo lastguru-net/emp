@@ -52,8 +52,6 @@ export default eleventyConfig => {
 
     // Add watch target for JS files (needed for JS bundling in dev mode)
     eleventyConfig.addWatchTarget("./assets/js/");
-    // And to make this work we've to disable the .gitignore usage of eleventy.
-    eleventyConfig.setUseGitIgnore(false);
 
     // Define 11ty template formats
     eleventyConfig.setTemplateFormats([
