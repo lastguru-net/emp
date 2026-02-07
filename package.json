@@ -1,6 +1,6 @@
 {
     "name": "eleventy-markdown-prime",
-    "version": "6.1.0",
+    "version": "6.1.1",
     "description": "A starter repository for a text-based blog site using the Eleventy site generator.",
     "type": "module",
     "license": "MIT",
@@ -15,9 +15,9 @@
     },
     "scripts": {
         "build": "npm run build:eleventy && npm run build:css",
-        "build:css": "npx @tailwindcss/cli -i assets/css/site.css -o assets/css/site-build.css --minify --cwd=_site/",
+        "build:css": "npx @tailwindcss/cli -i assets/css/css.css -o assets/css/min.css --minify --cwd=_site/",
         "build:eleventy": "eleventy",
-        "build:css-dev": "npx @tailwindcss/cli -i assets/css/site.css -o assets/css/site-build.css --minify",
+        "build:css-dev": "npx @tailwindcss/cli -i assets/css/site.css -o assets/css/min.css",
         "dev": "npm run build:css-dev && eleventy --serve"
     },
     "dependencies": {
