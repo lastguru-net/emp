@@ -61,6 +61,13 @@ const addDirHash = async (absolutePath) => {
 	);
 	combined += h64(siteElementsBuf).toString(36) + '|';
 
+	// include package.json as dependency changes can affect the output
+	const packageJsonBuf = readFileSync(
+		join(process.cwd(), 'package.json'),
+		{ encoding: 'utf-8' }
+	);
+	combined += h64(packageJsonBuf).toString(36) + '|';
+
 	const hashBase36 = h64(combined).toString(36);
 	hashes.set(dirKey, hashBase36);
 	return `${absolutePath}?hash=${hashBase36}`;

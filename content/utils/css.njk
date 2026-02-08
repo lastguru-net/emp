@@ -1,22 +1,25 @@
 ---
 eleventyExcludeFromCollections: true
-permalink: /assets/css/css.css
+permalink: /assets/css/min.css
 ---
 @import "tailwindcss";
-@source "./safelist.txt";
-@import "./theme.css";
-@import "./base.css";
-@import "./custom.css";
-{% if siteelements.features.syntaxHighlighting %}@import "./prism-okaidia.css";{% endif %}
-{% if siteelements.features.topbar %}@import "./topbar.css";{% endif %}
-{% if siteelements.features.base == "regular" %}@import "./sidebar.css";{% endif %}
-{% if siteelements.features.index == "postlist" %}@import "./postlist.css";{% endif %}
-{% if siteelements.features.footer %}@import "./footer.css";{% endif %}
-{% if siteelements.features.postproperties %}@import "./postproperties.css";{% endif %}
-{% if siteelements.features.authorCard %}@import "./author-card.css";{% endif %}
-{% if siteelements.features.lqip %}@import "./lqip.css";{% endif %}
-@import "./content.css";
-{% if siteelements.features.sharer %}@import "./share.css";{% endif %}
-{% if siteelements.features.prevnext %}@import "./prevnext.css";{% endif %}
-@import "./error.css";
-@import "./misc.css";
+@source "./assets/css/safelist.txt";
+@import "./assets/css/theme.css";
+{% if siteelements.fonts and siteelements.fonts.local == "css" %}
+{% eleventyGoogleFonts 'https://fonts.googleapis.com/css2?family=' ~ siteelements.fonts.body.family ~ ':ital,wght@' ~ siteelements.fonts.body.weights ~ '&family=' ~ siteelements.fonts.header.family ~ ':ital,wght@' ~ siteelements.fonts.header.weights ~ ('&display=swap' if siteelements.fonts.swap else '') %}
+{% endif %}
+@import "./assets/css/base.css";
+@import "./assets/css/custom.css";
+{% if siteelements.features.syntaxHighlighting %}@import "./assets/css/prism-okaidia.css";{% endif %}
+{% if siteelements.features.topbar %}@import "./assets/css/topbar.css";{% endif %}
+{% if siteelements.features.base == "regular" %}@import "./assets/css/sidebar.css";{% endif %}
+{% if siteelements.features.index == "postlist" %}@import "./assets/css/postlist.css";{% endif %}
+{% if siteelements.features.footer %}@import "./assets/css/footer.css";{% endif %}
+{% if siteelements.features.postproperties %}@import "./assets/css/postproperties.css";{% endif %}
+{% if siteelements.features.authorCard %}@import "./assets/css/author-card.css";{% endif %}
+{% if siteelements.features.lqip %}@import "./assets/css/lqip.css";{% endif %}
+@import "./assets/css/content.css";
+{% if siteelements.features.sharer %}@import "./assets/css/share.css";{% endif %}
+{% if siteelements.features.prevnext %}@import "./assets/css/prevnext.css";{% endif %}
+@import "./assets/css/error.css";
+@import "./assets/css/misc.css";

@@ -41,7 +41,7 @@ const renderStyle = (css, url) => {
 const shortcode = async (url) => {
 	try {
 		const css = await getCss(url);
-		return renderStyle(css, url);
+		return css; // if css should be rendered directly in HTML, use renderStyle(css, url);
 	} catch (error) {
 		console.warn(`[google-fonts] Failed to inline "${url}": ${error.message}`);
 		return `<link rel="stylesheet" href="${url}">`;

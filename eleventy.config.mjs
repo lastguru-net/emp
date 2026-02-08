@@ -22,6 +22,7 @@ import authorPagination from "./_11ty/author.js";
 import googleFontsPlugin from "./_11ty/google-fonts.js";
 import lqip from "./_11ty/lqip.js";
 import empPostsPlugin from "./_11ty/emp-posts.js";
+import tailwind from "./_11ty/tailwind.js";
 
 export default eleventyConfig => {
     // Add support for JSON5 data files
@@ -50,8 +51,9 @@ export default eleventyConfig => {
     eleventyConfig.addPassthroughCopy("assets");
     eleventyConfig.addPassthroughCopy({"content/images" : "images"});
 
-    // Add watch target for JS files (needed for JS bundling in dev mode)
+    // Add watch target for JS and CSS files (needed for JS and CSS bundling in dev mode)
     eleventyConfig.addWatchTarget("./assets/js/");
+    eleventyConfig.addWatchTarget("./assets/css/");
 
     // Define 11ty template formats
     eleventyConfig.setTemplateFormats([
@@ -100,6 +102,9 @@ export default eleventyConfig => {
 
     // empPosts collection (pinned-first, etc.)
     eleventyConfig.addPlugin(empPostsPlugin);
+
+    // Tailwind CSS processing
+    eleventyConfig.addPlugin(tailwind);
 
     return {
         dir: {

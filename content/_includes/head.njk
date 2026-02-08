@@ -39,7 +39,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ siteelements.fonts.body.family }}:ital,wght@{{ siteelements.fonts.body.weights }}&family={{ siteelements.fonts.header.family }}:ital,wght@{{ siteelements.fonts.header.weights }}{% if siteelements.fonts.swap %}&display=swap{% endif %}">
 {% elseif siteelements.fonts.local == "css" %}
 <link rel="preconnect" href="https://fonts.gstatic.com">
-{% eleventyGoogleFonts 'https://fonts.googleapis.com/css2?family=' ~ siteelements.fonts.body.family ~ ':ital,wght@' ~ siteelements.fonts.body.weights ~ '&family=' ~ siteelements.fonts.header.family ~ ':ital,wght@' ~ siteelements.fonts.header.weights ~ ('&display=swap' if siteelements.fonts.swap else '') %}
 {% endif %}
 {% endif %}
 <link rel="preload" href="{{ '/assets/css/min.css' | addDirHash }}" as="style">
