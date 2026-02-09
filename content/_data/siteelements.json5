@@ -44,6 +44,8 @@
         authorCard: true,
         // Toggle for showing "Powered by" text/link in the footer
         poweredBy: true,
+        // Toggle for showing RSS feed link in the footer
+        rssInFooter: true,
         // Include generator meta tag
         generator: true,
         // Toggle Lean Rada CSS-only LQIP placeholders

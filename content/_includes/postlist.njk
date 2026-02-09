@@ -24,10 +24,11 @@
 				{{ post.data.title }}
 			</a>
 		</div>
-		{% if siteelements.features.postlistThumbnail and post.data.image %}
+		{% if siteelements.features.postlistThumbnail and post.data.thumbnail !== false and (post.data.thumbnail or post.data.image) %}
+			{% set _postThumb = post.data.thumbnail or post.data.image %}
 			<div class="postlistrow flex flex-col items-start gap-3 md:flex-row md:items-stretch md:gap-4 {% if siteelements.features.postlistThumbnail == 'right' %}md:flex-row-reverse{% endif %}">
 				<a class="postthumblink" href="{{ post.url | url }}" aria-label="{{ post.data.title }}">
-					<img class="postthumb" src="{{ post.data.image }}" alt="{{ post.data.title }}" eleventy:widths="160,320,480,640,960,1280" sizes="(max-width: 640px) 100vw, 480px" eleventy:pictureattr:sizes="(max-width: 640px) 100vw, 480px" />
+					<img class="postthumb" src="{{ _postThumb }}" alt="{{ post.data.title }}" eleventy:widths="160,320,480,640,960,1280" sizes="(max-width: 640px) 100vw, 480px" eleventy:pictureattr:sizes="(max-width: 640px) 100vw, 480px" />
 				</a>
 				<div class="postlistside">
 					<div class="postexcerpt">{% if post.data.excerpt %}{{ post.data.excerpt }}{% else %}{% getExcerpt post %}{% endif %}</div>

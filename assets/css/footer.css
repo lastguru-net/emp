@@ -19,6 +19,12 @@
     @apply transition-colors duration-200 ease-in;
 }
 
+.footer .footer-rss svg {
+    @apply w-4.5 h-4.5;
+    @apply fill-footer-text hover:fill-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
 .footer .footer-privacy-sep {
     @apply px-2;
 }

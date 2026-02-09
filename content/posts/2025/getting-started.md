@@ -252,6 +252,7 @@ The header contains metadata for the post or page. Supported variables (all opti
 - **updated**: Optional last modification date in the same formats as **date**. When present, it is used in JSON-LD and in the sitemap.
 - **permalink**: Overrides the default URL for the post/page.
 - **image**: Path to the title image, relative to the `content` folder.
+- **thumbnail**: Optional path for a thumbnail image to use in post lists instead of the title image. To hide thumbnail completely instead, use `thumbnail: false`.
 - **excerpt**: A description used in post lists. If defined, it has no length limit. If omitted, an excerpt is auto-generated from the content (capped at full words, first paragraph, up to 250 characters).
 - **tags**: One or more tags for the post. Depending on the configuration, some (or all) of the tags are displayed in the post lists.
 - **author**: The author’s name. Used to generate author pages and displayed in post lists.

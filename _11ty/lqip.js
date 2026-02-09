@@ -15,16 +15,6 @@ const loadSiteelements = () => {
     return siteelementsCache;
 };
 
-// recursive DOM walker to collect image nodes
-const collectImages = (nodes, out) => {
-    if (!nodes) return;
-    for (const node of Array.isArray(nodes) ? nodes : [nodes]) {
-        if (!node) continue;
-        if (node.type === "tag" && node.name === "img") out.push(node);
-        if (node.children && node.children.length) collectImages(node.children, out);
-    }
-};
-
 const isSkippable = (node) => {
     const src = node.attrs.src;
     const cls = node.attrs.class || "";
@@ -120,17 +110,17 @@ const calculateLqip = async (src) => {
         return null;
     }
 
-    const stats = await sharp(filePath).stats();
+    const img = sharp(filePath);
+    const stats = await img.clone().stats();
     const dominantColor = [
         Math.round(stats.dominant.r),
         Math.round(stats.dominant.g),
         Math.round(stats.dominant.b),
     ];
 
-    const buf = await sharp(filePath)
+    const buf = await img.clone()
         .gamma(2)
-        .resize(3, 2, { fit: "fill" })
-        .sharpen({ sigma: 0.5 })
+        .resize(3, 2, { fit: "fill", kernel: sharp.kernel.mks2013 })
         .removeAlpha()
         .toFormat("raw", { bitdepth: 8 })
         .toBuffer();

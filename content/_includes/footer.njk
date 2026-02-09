@@ -1,5 +1,13 @@
 <footer class="footer">
     <div class="footer-content max-w-content">
+        {% if siteelements.features.rssInFooter %}
+        <a href="/rss.xml" class="footer-rss" aria-label="RSS Feed">
+            <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.rss.viewBox }}">
+                <title>RSS</title>
+                <path d="{{ inlinesvg.rss.path }}" />
+            </svg>
+        </a>
+        {% endif %}
         {% set copyright = siteelements.copyright %}
         <div class="footer-copyright">
             <span class="footer-copyright-text">
