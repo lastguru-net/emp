@@ -2,15 +2,15 @@
 // More info: https://leanrada.com/notes/css-only-lqip/
 // Adapted from: https://github.com/Kalabasa/leanrada.com/blob/src/main/scripts/update/lqip/lqip.mjs
 // and https://github.com/Virtuouz/SiteStitcher/blob/main/utils/lqip.js
-import fs from "node:fs";
+import { readFile, access } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 import JSON5 from "json5";
 
 let siteelementsCache = null;
-const loadSiteelements = () => {
+const loadSiteelements = async () => {
     if (siteelementsCache) return siteelementsCache;
-    const raw = fs.readFileSync("content/_data/siteelements.json5", "utf8");
+    const raw = await readFile("content/_data/siteelements.json5", "utf8");
     siteelementsCache = JSON5.parse(raw);
     return siteelementsCache;
 };
@@ -105,7 +105,9 @@ const imgCache = new Map();
 const calculateLqip = async (src) => {
     if (imgCache.has(src)) return imgCache.get(src);
     const filePath = path.join(process.cwd(), "content", src);
-    if (!filePath || !fs.existsSync(filePath)) {
+    try {
+        await access(filePath);
+    } catch (err) {
         imgCache.set(src, null);
         return null;
     }
@@ -176,7 +178,7 @@ const addClassOnce = (existing, cls) => {
 
 const applyLqip = () => {
     return async (tree) => {
-        const siteelements = loadSiteelements();
+        const siteelements = await loadSiteelements();
         if (!siteelements?.features?.lqip) return tree;
 
         const transformTag = async (node) => {

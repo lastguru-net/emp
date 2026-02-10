@@ -1,5 +1,5 @@
-import { readFileSync, readdirSync } from "fs";
-import { dirname, join } from "path";
+import { readFile, readdir } from "node:fs/promises";
+import { dirname, join } from "node:path";
 import xxhash from "xxhash-wasm";
 
 // persistent cache across calls
@@ -23,7 +23,7 @@ const addHash = async (absolutePath) => {
 	if (cached) {
 		return `${absolutePath}?hash=${cached}`;
 	}
-	const fileBuffer = readFileSync(`${process.cwd()}${realPath}`, {encoding: 'utf-8'});
+	const fileBuffer = await readFile(`${process.cwd()}${realPath}`, {encoding: 'utf-8'});
 	const { h64 } = await getHasher();
 	const hashBigInt = h64(fileBuffer);
 	const hashBase36 = hashBigInt.toString(36);
@@ -43,7 +43,7 @@ const addDirHash = async (absolutePath) => {
 	}
 
 	const realDir = dirname(`${process.cwd()}${realPath}`);
-	const entries = readdirSync(realDir, { withFileTypes: true })
+	const entries = (await readdir(realDir, { withFileTypes: true }))
 		.filter(d => d.isFile())
 		.map(d => d.name)
 		.sort();
@@ -51,18 +51,18 @@ const addDirHash = async (absolutePath) => {
 	const { h64 } = await getHasher();
 	let combined = '';
 	for (const name of entries) {
-		const buf = readFileSync(join(realDir, name), { encoding: 'utf-8' });
+		const buf = await readFile(join(realDir, name), { encoding: 'utf-8' });
 		combined += h64(buf).toString(36) + '|';
 	}
 	// include siteelements.json5 just in case, as the configuration there can affect the output
-	const siteElementsBuf = readFileSync(
+	const siteElementsBuf = await readFile(
 		join(process.cwd(), 'content', '_data', 'siteelements.json5'),
 		{ encoding: 'utf-8' }
 	);
 	combined += h64(siteElementsBuf).toString(36) + '|';
 
 	// include package.json as dependency changes can affect the output
-	const packageJsonBuf = readFileSync(
+	const packageJsonBuf = await readFile(
 		join(process.cwd(), 'package.json'),
 		{ encoding: 'utf-8' }
 	);
