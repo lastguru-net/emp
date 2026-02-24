@@ -14,6 +14,7 @@ Eleventy Markdown Prime is a minimalistic, opinionated starter for text‑first 
 - Light and dark modes with an optional toggle
 - Content is exclusively pre-rendered (static site), but supports supplemental JavaScript
 - Can be used for a text-based (Markdown) blog or simple page
+- Optional fulltext in-memory search with MiniSearch
 - Logo, site name and main menu are placed on the left sidebar
 - Social network links on the sidebar
 - Automatic post list (index), tag and author pages with pagination and post pinning
@@ -31,3 +32,23 @@ Eleventy Markdown Prime is a minimalistic, opinionated starter for text‑first 
 - Progressive Web Apps (PWA) support
 
 More features are in the works...
+
+## Installation
+
+```
+npm install
+```
+
+## Local testing
+
+```
+npm run build
+```
+
+## Running in production
+
+Some features are disabled by default for testing and debugging purposes. When running in production, ensure that the `NODE_ENV` variable is set to `production`.
+
+## Additional info
+
+More info on running, modifying and configuring the template is available on the its demo page: [Eleventy Markdown Prime Demo](https://emp-starter.lastguru.dev).

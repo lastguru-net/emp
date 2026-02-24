@@ -27,6 +27,15 @@
             {% endfor %}
         </ul>
     </div>
+    {% if siteelements.features.search %}
+    <div class="sidebar-search">
+        <button id="sidebar-search-open" class="sidebar-search-button" type="button" onclick="searchButton()" aria-haspopup="dialog" aria-controls="search-modal" aria-label="{{ sitestrings[siteconfig.lang].search_open }}">
+            <svg viewBox="{{ inlinesvg.search.viewBox }}" xmlns="http://www.w3.org/2000/svg">
+                <path d="{{ inlinesvg.search.path }}" />
+            </svg>
+        </button>
+    </div>
+    {% endif %}
     {% if siteelements.features.sitesocial == "below" %}
         {% include "sitesocial.njk" %}
     {% endif %}

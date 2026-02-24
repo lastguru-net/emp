@@ -1,0 +1,18 @@
+<div id="search-modal" class="search-modal hidden" role="dialog" aria-modal="true" aria-labelledby="search-modal-title">
+    <div class="search-modal-backdrop" onclick="closeSearchModal()"></div>
+    <div class="search-modal-panel" role="document">
+        <div class="search-modal-header">
+            <h2 id="search-modal-title">{{ sitestrings[siteconfig.lang].search_title }}</h2>
+            <button id="search-modal-close" type="button" class="search-modal-close" onclick="closeSearchModal()" aria-label="{{ sitestrings[siteconfig.lang].search_close }}">
+                <svg viewBox="{{ inlinesvg.close.viewBox }}" xmlns="http://www.w3.org/2000/svg">
+                    <path d="{{ inlinesvg.close.path }}" />
+                </svg>
+            </button>
+        </div>
+        <div class="search-modal-body">
+            <label class="sr-only" for="search-input">{{ sitestrings[siteconfig.lang].search }}</label>
+            <input id="search-input" class="search-input" type="search" autocomplete="off" placeholder="{{ sitestrings[siteconfig.lang].search_placeholder }}" />
+            <div id="search-results" class="search-results"></div>
+        </div>
+    </div>
+</div>

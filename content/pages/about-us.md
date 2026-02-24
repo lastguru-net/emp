@@ -19,6 +19,7 @@ Eleventy Markdown Prime is a minimalistic, opinionated starter for text‑first 
 - Light and dark modes with an optional toggle
 - Content is exclusively pre-rendered (static site), but supports supplemental JavaScript
 - Can be used for a text-based (Markdown) blog or simple page
+- Optional fulltext in-memory search with MiniSearch
 - Logo, site name and main menu are placed on the left sidebar
 - Social network links on the sidebar
 - Automatic post list (index), tag and author pages with pagination and post pinning

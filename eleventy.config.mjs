@@ -22,6 +22,7 @@ import authorPagination from "./_11ty/author.js";
 import googleFontsPlugin from "./_11ty/google-fonts.js";
 import lqip from "./_11ty/lqip.js";
 import empPostsPlugin from "./_11ty/emp-posts.js";
+import searchDocsPlugin from "./_11ty/search-docs.js";
 import tailwind from "./_11ty/tailwind.js";
 
 export default eleventyConfig => {
@@ -102,6 +103,9 @@ export default eleventyConfig => {
 
     // empPosts collection (pinned-first, etc.)
     eleventyConfig.addPlugin(empPostsPlugin);
+
+    // Search docs collection and serialized Minisearch payload filter
+    eleventyConfig.addPlugin(searchDocsPlugin);
 
     // Tailwind CSS processing
     eleventyConfig.addPlugin(tailwind);

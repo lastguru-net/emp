@@ -1,6 +1,6 @@
 {
     "name": "eleventy-markdown-prime",
-    "version": "6.1.4",
+    "version": "6.2.0",
     "description": "A starter repository for a text-based blog site using the Eleventy site generator.",
     "type": "module",
     "license": "MIT",
@@ -27,8 +27,8 @@
         "xxhash-wasm": "^1.1.0",
         "json5": "^2.2.3",
         "luxon": "^3.7.2",
-        "html-minifier-next": "^5.0.3",
-        "markdown-it": "^14.1.0",
+        "html-minifier-next": "^5.1.2",
+        "markdown-it": "^14.1.1",
         "markdown-it-anchor": "^9.2.0",
         "markdown-it-deflist": "^3.0.0",
         "markdown-it-emoji": "^3.0.0",
@@ -37,8 +37,9 @@
         "markdown-it-sub": "^2.0.0",
         "markdown-it-sup": "^2.0.0",
         "markdown-it-task-lists": "^2.1.1",
-        "tailwindcss": "^4.1.18",
-        "@tailwindcss/node": "^4.1.18",
-        "@tailwindcss/oxide": "^4.1.18"
+        "minisearch": "^7.2.0",
+        "tailwindcss": "^4.2.1",
+        "@tailwindcss/node": "^4.2.1",
+        "@tailwindcss/oxide": "^4.2.1"
     }
 }

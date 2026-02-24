@@ -28,7 +28,6 @@
 .sidebar svg.sidebar-close {
     @apply sm:hidden;
     @apply absolute top-2 right-2 w-6 h-6;
-    @apply rounded-md border-1 border-border dark:border-border-dark;
 }
 
 .sidebar .sitehero {
@@ -64,6 +63,7 @@
     @apply text-lg/9 font-medium uppercase;
     @apply text-sidebar-text hover:text-accent;
     @apply px-1;
+    @apply max-h-9;
     @apply transition-colors duration-200 ease-in;
 }
 
@@ -132,6 +132,12 @@
 .menu ul > li.active:nth-last-child(1):last-child::after,
 .menu ul > li.navitem:nth-last-child(1):last-child:hover::after {
     @apply visible -top-9;
+}
+
+.sidebar .sidebar-search-button svg {
+    @apply w-5 h-5;
+    @apply fill-accent;
+    @apply cursor-pointer;
 }
 
 .sidebar .sitesocial {

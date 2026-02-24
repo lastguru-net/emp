@@ -20,7 +20,13 @@
         open_sidebar_menu: "Open sidebar menu",
         close_sidebar_menu: "Close sidebar menu",
         pinned_badge: "Pinned",
-        color_mode: "Switch theme"
+        color_mode: "Switch theme",
+        search: "Search",
+        search_open: "Open search",
+        search_close: "Close search",
+        search_title: "Search",
+        search_placeholder: "Type to search...",
+        search_no_results: "No results found"
     },
     lv: {
         words: "vārdi",
@@ -43,6 +49,12 @@
         open_sidebar_menu: "Atvērt sānu izvēlni",
         close_sidebar_menu: "Aizvērt sānu izvēlni",
         pinned_badge: "Piesprausts",
-        color_mode: "Pārslēgt tēmu"
+        color_mode: "Pārslēgt tēmu",
+        search: "Meklēt",
+        search_open: "Atvērt meklēšanu",
+        search_close: "Aizvērt meklēšanu",
+        search_title: "Meklēšana",
+        search_placeholder: "Rakstiet, lai meklētu...",
+        search_no_results: "Rezultāti netika atrasti"
     }
 }

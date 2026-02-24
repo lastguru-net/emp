@@ -26,6 +26,9 @@
                 {% include "footer.njk" %}
             {% endif %}
         </div>
+        {% if siteelements.features.search %}
+            {% include "search.njk" %}
+        {% endif %}
     {% endif %}
     </body>
 </html>

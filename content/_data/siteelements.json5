@@ -52,6 +52,8 @@
         lqip: true,
         // Toggle syntax highlighting CSS
         syntaxHighlighting: true,
+        // Toggle Minisearch modal search
+        search: true,
         // Sitehero image style: 'square', 'rounded'
         siteheroStyle: "square",
         // Enable initial-letter styling on first paragraph
