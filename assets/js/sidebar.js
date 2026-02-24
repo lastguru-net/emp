@@ -1,4 +1,5 @@
 // Bundled by content/utils/js.njk
+// Sidebar toggle and swipe-to-close gesture
 window.slideLeftSidebar = () => {
     const elSidebar = document.getElementById("sidebar");
     if (elSidebar) {

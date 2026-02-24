@@ -1,3 +1,4 @@
+// Excerpt extraction from content
 import siteconfig from "../content/_data/siteconfig.js";
 
 const stripTags = (value = "") => value.replace(/<[^>]*>/g, " ");
@@ -22,6 +23,7 @@ export const extractExcerpt = (text = "", limit = 250) => {
     return excerpt;
 };
 
+// Find the collection entry for the current page
 const findCollectionItem = (collections = {}, page = {}) => {
     if (!collections.all || !page.url) {
         return undefined;
@@ -29,6 +31,7 @@ const findCollectionItem = (collections = {}, page = {}) => {
     return collections.all.find((entry) => entry.url === page.url);
 };
 
+// Short description for meta tags and JSON-LD
 const deriveShortDescription = (ctx = {}) => {
     let source = "";
     if (ctx.excerpt) {
@@ -42,6 +45,7 @@ const deriveShortDescription = (ctx = {}) => {
     return extractExcerpt(source, 150);
 };
 
+// Excerpt shortcode for post lists
 const getExcerpt = (article = {}) => {
     return extractExcerpt(article.templateContent || "", 250);
 };

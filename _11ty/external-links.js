@@ -1,5 +1,4 @@
-// PostHTML plugin to ensure external links open in a new window
-// and have for SEO reasons `rel="noopener"` set.
+// PostHTML plugin: add target="_blank" and rel="noopener" to external links
 import siteconfig from "../content/_data/siteconfig.js";
 
 const isExternalHref = (href) => {
@@ -48,6 +47,7 @@ const ensureRelTokens = (rel, tokensToEnsure) => {
     return Array.from(existing).join(" ");
 };
 
+// PostHTML plugin: mark external links with target and rel attributes
 const externalContentLinks = () => {
     return (tree) => {
         // Use PostHTML's native matcher/traversal
@@ -68,6 +68,5 @@ const externalContentLinks = () => {
 };
 
 export default (eleventyConfig) => {
-    // Runs in Eleventy's HTML pipeline (before writing the final .html files)
     eleventyConfig.htmlTransformer.addPosthtmlPlugin("html", externalContentLinks);
 };

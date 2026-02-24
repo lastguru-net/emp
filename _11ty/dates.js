@@ -1,47 +1,28 @@
+// Date formatting filters and shortcodes
 import { DateTime } from "luxon";
 import siteconfig from "../content/_data/siteconfig.js";
 
+// Convert any date value to a Luxon DateTime
+const toDateTime = (date) => {
+    if (!(date instanceof Date)) date = new Date(date);
+    return DateTime.fromISO(date.toISOString());
+};
+
 export default (eleventyConfig) => {
-    // Format dates for sitemap
-    eleventyConfig.addNunjucksFilter("isoDate", (date) => {
-        // Ensure date is a Date object
-        if (!(date instanceof Date)) {
-            date = new Date(date);
-        }
-        const dt = DateTime.fromISO(date.toISOString());
-        return dt.toISODate();
-    });
+    // ISO date (YYYY-MM-DD) for sitemaps
+    eleventyConfig.addNunjucksFilter("isoDate", (date) => toDateTime(date).toISODate());
 
-    // Format dates for JSON-LD
-    eleventyConfig.addNunjucksFilter("isoDateTime", (date) => {
-        // Ensure date is a Date object
-        if (!(date instanceof Date)) {
-            date = new Date(date);
-        }
-        const dt = DateTime.fromISO(date.toISOString());
-        return dt.toISO();
-    });
+    // Full ISO datetime for JSON-LD and Atom
+    eleventyConfig.addNunjucksFilter("isoDateTime", (date) => toDateTime(date).toISO());
 
-    // Extracts readable date of a date
+    // Localized readable date
     eleventyConfig.addNunjucksFilter("readableDate", (date) => {
-        // Ensure date is a Date object
-        if (!(date instanceof Date)) {
-            date = new Date(date);
-        }
-        const dt = DateTime.fromISO(date.toISOString());
-        return dt.setLocale(siteconfig.lang || "en").toLocaleString(DateTime.DATE_MED);
+        return toDateTime(date).setLocale(siteconfig.lang || "en").toLocaleString(DateTime.DATE_MED);
     });
 
-    // Shortcode for current year
-    eleventyConfig.addShortcode("year", () => {
-        return new Date().getFullYear();
-    });
+    // RFC 2822 date for RSS feeds
+    eleventyConfig.addNunjucksFilter("rssDate", (date) => toDateTime(date).toRFC2822());
 
-    eleventyConfig.addNunjucksFilter("rssDate", (date) => {
-        if (!(date instanceof Date)) {
-            date = new Date(date);
-        }
-        const dt = DateTime.fromISO(date.toISOString());
-        return dt.toRFC2822();
-    });
+    // Current year shortcode
+    eleventyConfig.addShortcode("year", () => new Date().getFullYear());
 };

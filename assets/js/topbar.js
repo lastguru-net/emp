@@ -1,4 +1,5 @@
 // Bundled by content/utils/js.njk
+// Auto-hide top bar on scroll
 document.addEventListener("DOMContentLoaded", () => {
     const areaEl = document.getElementById("right-area");
     const barEl = document.getElementById("top-bar");

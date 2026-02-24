@@ -22,14 +22,14 @@ import authorPagination from "./_11ty/author.js";
 import googleFontsPlugin from "./_11ty/google-fonts.js";
 import lqip from "./_11ty/lqip.js";
 import empPostsPlugin from "./_11ty/emp-posts.js";
-import searchDocsPlugin from "./_11ty/search-docs.js";
+import searchIndex from "./_11ty/search-index.js";
 import tailwind from "./_11ty/tailwind.js";
 
 export default (eleventyConfig) => {
-    // Add support for JSON5 data files
+    // JSON5 data files
     eleventyConfig.addDataExtension("json5", (contents) => JSON5.parse(contents));
 
-    // Set Markdown library
+    // Markdown library
     eleventyConfig.setLibrary(
         "md",
         markdownIt({
@@ -48,15 +48,15 @@ export default (eleventyConfig) => {
         .use(markdownItTasklists)
     );
 
-    // Define passthrough for assets
+    // Passthrough assets and images
     eleventyConfig.addPassthroughCopy("assets");
     eleventyConfig.addPassthroughCopy({ "content/images": "images" });
 
-    // Add watch target for JS and CSS files (needed for JS and CSS bundling in dev mode)
+    // Watch JS and CSS for dev-mode rebuilds
     eleventyConfig.addWatchTarget("./assets/js/");
     eleventyConfig.addWatchTarget("./assets/css/");
 
-    // Define 11ty template formats
+    // Template formats
     eleventyConfig.setTemplateFormats([
         "njk",
         "md",
@@ -66,7 +66,7 @@ export default (eleventyConfig) => {
         "png"
     ]);
 
-    // Custom filters for various tasks
+    // Plugins
     eleventyConfig.addPlugin(filters);
 
     // Generate excerpt from first paragraph
@@ -105,7 +105,7 @@ export default (eleventyConfig) => {
     eleventyConfig.addPlugin(empPostsPlugin);
 
     // Search docs collection and serialized Minisearch payload filter
-    eleventyConfig.addPlugin(searchDocsPlugin);
+    eleventyConfig.addPlugin(searchIndex);
 
     // Tailwind CSS processing
     eleventyConfig.addPlugin(tailwind);

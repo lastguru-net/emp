@@ -6,11 +6,10 @@ eleventyImport:
 ---
 {
     {% set items = collections.empPosts %}
-    {# items are expected newest-first when empPosts is available #}
-    {% set publisherName = siteauthors[siteconfig.author].fullName if (siteauthors[siteconfig.author] and siteauthors[siteconfig.author].fullName) else siteconfig.author %}
+    {# Publisher context #}
     {% set publisherData = siteauthors[siteconfig.author] %}
-    {% set publisherEmail = publisherData.email if (publisherData and publisherData.email) else false %}
-    {% set publisherWebsite = publisherData.website if (publisherData and publisherData.website) else false %}
+    {% set publisherName = publisherData.fullName or siteconfig.author %}
+    {% set publisherWebsite = publisherData.website %}
     "version": "https://jsonfeed.org/version/1.1",
     "title": "{{ siteconfig.title | jsonEscape | safe }}",
     "home_page_url": "{{ siteconfig.url }}",
@@ -27,22 +26,21 @@ eleventyImport:
     ],
     "items": [
         {% for item in items %}
+            {# Per-item metadata #}
             {% set fallbackExcerpt -%}{% getExcerpt item %}{%- endset %}
             {% set itemUrl = item.url | absoluteUrl %}
             {% set itemExcerpt = item.data.excerpt or fallbackExcerpt %}
             {% set activeAuthorId = item.data.author or siteconfig.author %}
             {% set activeAuthorData = siteauthors[activeAuthorId] %}
-            {% set activeAuthorDisplayName = activeAuthorData.fullName if (activeAuthorData and activeAuthorData.fullName) else activeAuthorId %}
+            {% set activeAuthorDisplayName = activeAuthorData.fullName or activeAuthorId %}
             {% set authorPageUrl = ('/author/' ~ (activeAuthorId | slugify) ~ '/') | absoluteUrl %}
             {% set itemKeywords = [] %}
-            {% if item.data.tags %}
-                {% for t in item.data.tags %}
-                    {% if t not in sitetags.notag %}
-                        {% set kw = sitestrings[siteconfig.lang][t] or t %}
-                        {% set itemKeywords = itemKeywords.concat([kw]) %}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
+            {% for t in item.data.tags %}
+                {% if t not in sitetags.notag %}
+                    {% set kw = sitestrings[siteconfig.lang][t] or t %}
+                    {% set itemKeywords = itemKeywords.concat([kw]) %}
+                {% endif %}
+            {% endfor %}
             {% set itemImageSrc = item.data.image or siteconfig.openGraphDefaultImage %}
             {
                 "id": "{{ itemUrl }}",
@@ -60,13 +58,13 @@ eleventyImport:
                         {{ comma() }} "{{ tag | jsonEscape | safe }}"
                     {%- endfor %}
                 ],
-                "date_published": "{{ (item.date | isoDateTime) }}"{% if activeAuthorDisplayName %},
+                "date_published": "{{ (item.date | isoDateTime) }}",
                 "authors": [
                     {
                         "name": "{{ activeAuthorDisplayName | jsonEscape | safe }}",
                         "url": "{{ authorPageUrl }}"
                     }
-                ]{% endif %}
+                ]
             }{% if not loop.last %},{% endif %}
             {% endfor %}
     ]

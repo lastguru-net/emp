@@ -1,3 +1,4 @@
+// Cache-busting hash filters (single file and directory)
 import { readFile, readdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import xxhash from "xxhash-wasm";
@@ -7,41 +8,36 @@ const hashes = new Map();
 
 let hasherPromise = null;
 const getHasher = async () => {
-    if (!hasherPromise) {
-        hasherPromise = xxhash();
-    }
+    if (!hasherPromise) hasherPromise = xxhash();
     return hasherPromise;
 };
 
-// Add custom hash for cache busting
-const addHash = async (absolutePath) => {
-    let realPath = absolutePath;
-    if (absolutePath.startsWith("/images")) {
-        realPath = "/content" + absolutePath;
-    }
-    const cached = hashes.get(absolutePath);
-    if (cached) {
-        return absolutePath + "?hash=" + cached;
-    }
-    const fileBuffer = await readFile(join(process.cwd(), realPath), "utf8");
-    const { h64 } = await getHasher();
-    const hashBigInt = h64(fileBuffer);
-    const hashBase36 = hashBigInt.toString(36);
-    hashes.set(absolutePath, hashBase36);
-    return absolutePath + "?hash=" + hashBase36;
+// Map /images/* paths to /content/images/* on disk
+const resolvePath = (urlPath) => {
+    if (urlPath.startsWith("/images")) return "/content" + urlPath;
+    return urlPath;
 };
 
+// Single-file content hash for cache busting
+const addHash = async (absolutePath) => {
+    const cached = hashes.get(absolutePath);
+    if (cached) return absolutePath + "?hash=" + cached;
+
+    const realPath = resolvePath(absolutePath);
+    const content = await readFile(join(process.cwd(), realPath), "utf8");
+    const { h64 } = await getHasher();
+    const hash = h64(content).toString(36);
+    hashes.set(absolutePath, hash);
+    return absolutePath + "?hash=" + hash;
+};
+
+// Combined hash of all files in a directory (for bundled assets)
 const addDirHash = async (absolutePath) => {
-    let realPath = absolutePath;
-    if (absolutePath.startsWith("/images")) {
-        realPath = "/content" + absolutePath;
-    }
     const dirKey = dirname(absolutePath);
     const cached = hashes.get(dirKey);
-    if (cached) {
-        return absolutePath + "?hash=" + cached;
-    }
+    if (cached) return absolutePath + "?hash=" + cached;
 
+    const realPath = resolvePath(absolutePath);
     const realDir = dirname(join(process.cwd(), realPath));
     const entries = (await readdir(realDir, { withFileTypes: true }))
         .filter((entry) => entry.isFile())
@@ -54,34 +50,26 @@ const addDirHash = async (absolutePath) => {
         const buf = await readFile(join(realDir, name), "utf8");
         combined += h64(buf).toString(36) + "|";
     }
-    // include siteelements.json5 just in case, as the configuration there can affect the output
-    const siteElementsBuf = await readFile(
+
+    // Include config files that can affect build output
+    const configPaths = [
         join(process.cwd(), "content", "_data", "siteelements.json5"),
-        "utf8"
-    );
-    combined += h64(siteElementsBuf).toString(36) + "|";
+        join(process.cwd(), "package.json")
+    ];
+    for (const configPath of configPaths) {
+        combined += h64(await readFile(configPath, "utf8")).toString(36) + "|";
+    }
 
-    // include package.json as dependency changes can affect the output
-    const packageJsonBuf = await readFile(
-        join(process.cwd(), "package.json"),
-        "utf8"
-    );
-    combined += h64(packageJsonBuf).toString(36) + "|";
-
-    const hashBase36 = h64(combined).toString(36);
-    hashes.set(dirKey, hashBase36);
-    return absolutePath + "?hash=" + hashBase36;
+    const hash = h64(combined).toString(36);
+    hashes.set(dirKey, hash);
+    return absolutePath + "?hash=" + hash;
 };
 
 export default (eleventyConfig) => {
     eleventyConfig.addNunjucksAsyncFilter("addHash", (absolutePath, callback) => {
-        addHash(absolutePath)
-            .then((result) => callback(null, result))
-            .catch(callback);
+        addHash(absolutePath).then((result) => callback(null, result)).catch(callback);
     });
     eleventyConfig.addNunjucksAsyncFilter("addDirHash", (absolutePath, callback) => {
-        addDirHash(absolutePath)
-            .then((result) => callback(null, result))
-            .catch(callback);
+        addDirHash(absolutePath).then((result) => callback(null, result)).catch(callback);
     });
 };

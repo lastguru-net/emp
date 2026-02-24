@@ -1,4 +1,4 @@
-// persistent cache across calls
+// Inline Google Fonts CSS at build time with caching
 const inflight = new Map();
 const cssCache = new Map();
 

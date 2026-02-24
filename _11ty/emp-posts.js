@@ -1,3 +1,4 @@
+// Curated posts collection: pinned items first, then newest-first
 export default (eleventyConfig) => {
     eleventyConfig.addCollection("empPosts", (collectionApi) => {
         // NOTE: In a config-time collection callback you don't have template context (`collections.posts`).

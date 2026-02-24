@@ -1,7 +1,5 @@
-// Custom collection for double pagination
-// Makes an author collection that is paginated like with tags
-// Based on the solution suggested here: https://github.com/11ty/eleventy/issues/332#issuecomment-445236776
-// A version of tag.js from this repository
+// Double-paginated author collection (same structure as tag.js)
+// Based on: https://github.com/11ty/eleventy/issues/332#issuecomment-445236776
 
 import lodash from "@11ty/lodash-custom";
 import slugify from "@sindresorhus/slugify";
@@ -25,7 +23,7 @@ const pinnedFirstNewestFirst = (items) => {
 };
 
 const authorPagination = (collection) => {
-    // Get unique list of authors as tags (ignore hidden items)
+    // Collect unique authors (ignoring hidden items)
     const tagSet = new Set();
     collection.getAllSorted().forEach((item) => {
         if (!isHidden(item) && item.data.author) {
@@ -36,7 +34,7 @@ const authorPagination = (collection) => {
     // Cache the full sorted collection once (we'll sort per-author explicitly below)
     const allItems = collection.getAllSorted();
 
-    // Get each item that matches the author
+    // Build paginated entries per author
     const tagMap = [];
     const tagArray = [...tagSet];
     for (const tagName of tagArray) {

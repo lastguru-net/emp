@@ -1,3 +1,4 @@
+// Content minification transforms (HTML, XML, JSON, JS)
 import { minify as minifyHtml } from "html-minifier-next";
 import { minify as minifyJs } from "terser";
 
@@ -22,11 +23,11 @@ const htmlOpts = {
     minifyCSS: true,
     minifyJS: true,
 
-    // Avoid doctype shortening (prior minify_doctype: false)
+    // Avoid doctype shortening
     useShortDoctype: false
 };
 
-// inline, dependency-free XML minifier — conservative and safe for typical feed XML:
+// Inline, dependency-free XML minifier — conservative and safe for typical feed XML:
 // - preserves CDATA blocks
 // - removes XML comments
 // - collapses whitespace between tags
@@ -55,6 +56,36 @@ const simpleXmlMinify = (xml) => {
     return xml;
 };
 
+// Minify HTML for feed content (preserves pre/code/script/style blocks)
+const simpleHtmlMinify = (html) => {
+    if (html === undefined || html === null) return "";
+    if (!isProduction) return String(html);
+    let s = String(html);
+
+    // preserve pre/code/textarea/script/style blocks entirely
+    const preserved = [];
+    s = s.replace(/<(pre|code|textarea|script|style)[\s\S]*?<\/\1>/gi, (m) => {
+        preserved.push(m);
+        return "__PRESERVE_" + (preserved.length - 1) + "__";
+    });
+
+    // remove HTML comments
+    s = s.replace(/<!--[\s\S]*?-->/g, "");
+
+    // collapse whitespace between tags
+    s = s.replace(/>\s+</g, "><");
+
+    // collapse multiple spaces to one (only outside preserved blocks)
+    s = s.replace(/ {2,}/g, " ");
+
+    s = s.trim();
+
+    // restore preserved blocks
+    s = s.replace(/__PRESERVE_(\d+)__/g, (m, idx) => preserved[Number(idx)]);
+
+    return s;
+};
+
 const minifyContent = async (content, path) => {
     if (!path || !isProduction) return content;
 
@@ -79,4 +110,5 @@ const minifyContent = async (content, path) => {
 
 export default (eleventyConfig) => {
     eleventyConfig.addTransform("minifyContent", minifyContent);
+    eleventyConfig.addNunjucksFilter("minifyFeedHtml", simpleHtmlMinify);
 };

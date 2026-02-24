@@ -4,8 +4,7 @@ permalink: /sitemap.xml
 ---
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{# NOTE: Sitemap URL order is not significant for search engines; this is for human readability.
-     We list posts (empPosts) first, then everything else. Remove this grouping if undesired. #}
+{# Posts first, then remaining pages (order is cosmetic) #}
 {% set postItems = collections.empPosts %}
 {% set postUrls = [] %}
 {% for p in postItems %}{% set postUrls = postUrls.concat([p.url]) %}{% endfor %}

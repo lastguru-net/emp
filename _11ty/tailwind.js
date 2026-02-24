@@ -1,3 +1,4 @@
+// Tailwind CSS compilation and minification
 import path from "node:path";
 import { compile, optimize } from "@tailwindcss/node";
 import { Scanner } from "@tailwindcss/oxide";

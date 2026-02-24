@@ -1,8 +1,7 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-import JSON5 from "json5";
+// Full-text MiniSearch index builder (async Nunjucks filter)
 import MiniSearch from "minisearch";
 import siteconfig from "../content/_data/siteconfig.js";
+import { loadConfig } from "./config.js";
 import { extractExcerpt } from "./excerpt.js";
 
 const stripTags = (value = "") => String(value).replace(/<[^>]*>/g, " ");
@@ -14,6 +13,7 @@ const capitalize = (value = "") => {
     return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
 };
 
+// Strip Markdown formatting to extract plain text for indexing
 const stripMarkdown = (value = "") => String(value)
     .replace(/^```[\w-]*\s*$/gm, "")
     .replace(/^~~~[\w-]*\s*$/gm, "")
@@ -28,45 +28,36 @@ const stripMarkdown = (value = "") => String(value)
     .replace(/^\s{0,3}>\s?/gm, "")
     .replace(/^\s{0,3}([-*+]|\d+\.)\s+/gm, "");
 
-const loadJson5 = async (relativePath) => {
-    const fullPath = path.join(process.cwd(), relativePath);
-    return JSON5.parse(await readFile(fullPath, "utf8"));
-};
-
-const baseOptions = {
+const indexOptions = {
     idField: "id",
     fields: ["title", "excerpt", "content", "tags"],
     storeFields: ["id", "url", "title", "excerpt", "tags", "date"]
 };
 
-const searchDocs = async (collectionApi) => {
-    const sitetags = await loadJson5("content/_data/sitetags.json5") || {};
-    const sitestrings = await loadJson5("content/_data/sitestrings.json5") || {};
+const buildSearchIndex = async (allItems) => {
+    const sitetags = await loadConfig("sitetags");
+    const sitestrings = await loadConfig("sitestrings");
+    const localizedStrings = sitestrings[siteconfig.lang];
 
-    const all = collectionApi.getAll() || [];
-
-    const docs = all
+    const docs = (allItems || [])
         .filter((item) => {
             if (!item || item.data?.hidden === true) return false;
             const tags = toArray(item.data?.tags);
             return tags.includes("posts") || tags.includes("pages");
         })
         .map((item) => {
-            const localizedStrings = sitestrings[siteconfig.lang];
             const tags = toArray(item.data?.tags)
                 .filter((tag) => !sitetags.notag.includes(tag))
                 .map((tag) => capitalize(localizedStrings[tag] || tag));
-            const url = item.url;
-            const title = item.data.title;
             const sourceContent = stripFrontMatter(item.rawInput).trim();
             const excerpt = item.data.excerpt || extractExcerpt(stripMarkdown(sourceContent), 250);
             const content = collapseWhitespace(stripMarkdown(stripTags(sourceContent)));
             const date = item.date instanceof Date ? item.date.toISOString() : item.date;
 
             return {
-                id: url,
-                url,
-                title,
+                id: item.url,
+                url: item.url,
+                title: item.data.title,
                 excerpt,
                 content,
                 tags,
@@ -75,25 +66,22 @@ const searchDocs = async (collectionApi) => {
         })
         .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
 
-    return docs;
-};
-
-const buildIndex = (docs) => {
-    const documents = Array.isArray(docs) ? docs : [];
-    const miniSearch = new MiniSearch(baseOptions);
-    miniSearch.addAll(documents);
+    const miniSearch = new MiniSearch(indexOptions);
+    miniSearch.addAll(docs);
 
     return JSON.stringify({
-        options: baseOptions,
-        searchOptions: {
-            prefix: true,
-            fuzzy: 0.2
+        options: indexOptions,
+        searchOptions: { prefix: true, fuzzy: 0.2 },
+        strings: {
+            noResults: localizedStrings.search_no_results,
+            placeholder: localizedStrings.search_placeholder
         },
         index: miniSearch.toJSON()
     });
 };
 
 export default (eleventyConfig) => {
-    eleventyConfig.addCollection("searchDocs", searchDocs);
-    eleventyConfig.addNunjucksFilter("buildMiniSearchPayload", buildIndex);
+    eleventyConfig.addNunjucksAsyncFilter("buildSearchIndex", (allItems, callback) => {
+        buildSearchIndex(allItems).then((result) => callback(null, result)).catch(callback);
+    });
 };

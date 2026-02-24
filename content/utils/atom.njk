@@ -6,11 +6,11 @@ eleventyImport:
 ---
 <?xml version="1.0" encoding="utf-8"?>
 {% set items = collections.empPosts %}
-{# items are expected newest-first when empPosts is available #}
-{% set publisherName = siteauthors[siteconfig.author].fullName if (siteauthors[siteconfig.author] and siteauthors[siteconfig.author].fullName) else siteconfig.author %}
+{# Publisher context #}
 {% set publisherData = siteauthors[siteconfig.author] %}
-{% set publisherEmail = publisherData.email if (publisherData and publisherData.email) else false %}
-{% set publisherWebsite = publisherData.website if (publisherData and publisherData.website) else false %}
+{% set publisherName = publisherData.fullName or siteconfig.author %}
+{% set publisherEmail = publisherData.email %}
+{% set publisherWebsite = publisherData.website %}
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>{{ siteconfig.title }}</title>
     <subtitle>{{ siteconfig.description }}</subtitle>
@@ -25,31 +25,30 @@ eleventyImport:
         <email>{{ publisherEmail }}</email>{% endif %}{% if publisherWebsite %}
         <uri>{{ publisherWebsite }}</uri>{% endif %}
     </author>
-    {% if items and items[0] %}<updated>{{ items[0].date | isoDateTime }}</updated>{% endif %}
+    {% if items | length %}<updated>{{ items[0].date | isoDateTime }}</updated>{% endif %}
     {% for item in items %}
+        {# Per-item metadata #}
         {% set fallbackExcerpt -%}{% getExcerpt item %}{%- endset %}
         {% set itemUrl = item.url | absoluteUrl %}
         {% set itemExcerpt = item.data.excerpt or fallbackExcerpt %}
         {% set activeAuthorId = item.data.author or siteconfig.author %}
         {% set activeAuthorData = siteauthors[activeAuthorId] %}
-        {% set activeAuthorDisplayName = activeAuthorData.fullName if (activeAuthorData and activeAuthorData.fullName) else activeAuthorId %}
+        {% set activeAuthorDisplayName = activeAuthorData.fullName or activeAuthorId %}
         {% set authorPageUrl = ('/author/' ~ (activeAuthorId | slugify) ~ '/') | absoluteUrl %}
         {% set itemKeywords = [] %}
-        {% if item.data.tags %}
-            {% for t in item.data.tags %}
-                {% if t not in sitetags.notag %}
-                    {% set kw = sitestrings[siteconfig.lang][t] or t %}
-                    {% set itemKeywords = itemKeywords.concat([kw]) %}
-                {% endif %}
-            {% endfor %}
-        {% endif %}
+        {% for t in item.data.tags %}
+            {% if t not in sitetags.notag %}
+                {% set kw = sitestrings[siteconfig.lang][t] or t %}
+                {% set itemKeywords = itemKeywords.concat([kw]) %}
+            {% endif %}
+        {% endfor %}
         <entry>
             <title>{{ item.data.title }}</title>
             <link rel="alternate" href="{{ itemUrl }}" />
             <id>{{ itemUrl }}</id>
             <updated>{{ item.date | isoDateTime }}</updated>
             <author>
-                <name>{{ activeAuthorDisplayName }}</name>{% if activeAuthorData and activeAuthorData.email %}
+                <name>{{ activeAuthorDisplayName }}</name>{% if activeAuthorData.email %}
                 <email>{{ activeAuthorData.email }}</email>{% endif %}
                 <uri>{{ authorPageUrl }}</uri>
             </author>

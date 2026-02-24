@@ -65,7 +65,7 @@ const pinnedFirstNewestFirst = (items) => {
 };
 
 const tagPagination = (collection) => {
-    // Get unique list of tags (ignore hidden items)
+    // Collect unique tags (ignoring hidden items)
     const tagSet = new Set();
     collection.getAllSorted().forEach((item) => {
         if (!isHidden(item) && ("tags" in item.data)) {
@@ -73,7 +73,7 @@ const tagPagination = (collection) => {
         }
     });
 
-    // Get each item that matches the tag
+    // Build paginated entries per tag
     const tagMap = [];
     const tagArray = [...tagSet];
     for (const tagName of tagArray) {

@@ -6,10 +6,6 @@ permalink: /assets/js/min.js
 {% if siteelements.features.base == "regular" %}{% include "../../assets/js/sidebar.js" %}{% endif %}
 {% if siteelements.features.sharer %}{% include "../../assets/js/sharer.js" %}{% endif %}
 {% if siteelements.features.search %}
-const cfg = {
-    indexUrl: "/search-index.json",
-    noResults: "{{ sitestrings[siteconfig.lang].search_no_results | jsonEscape | safe }}",
-    placeholder: "{{ sitestrings[siteconfig.lang].search_placeholder | jsonEscape | safe }}"
-};
-{% include "../../assets/js/search-load.js" %}
+const indexUrl = "/search-index.json";
+{% include "../../assets/js/search.js" %}
 {% endif %}
