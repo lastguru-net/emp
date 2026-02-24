@@ -1,16 +1,17 @@
 /* Footer */
 
 .footer {
-    @apply bg-footer-bg;
     @apply w-full;
-    @apply py-2 mt-auto;
+    @apply mt-auto py-2;
+    @apply bg-footer-bg;
 }
 
 .footer .footer-content {
     /* keep centered on small screens, allow space-between on md+ so a right-aligned block can sit at the end */
-    @apply flex flex-wrap items-center justify-center md:justify-between gap-2;
-    @apply text-footer-text font-header font-normal text-sm;
+    @apply flex flex-wrap items-center justify-center md:justify-between;
+    @apply gap-2;
     @apply px-8 lg:px-24;
+    @apply font-header text-sm font-normal text-footer-text;
 }
 
 .footer a {
@@ -20,7 +21,7 @@
 }
 
 .footer .footer-rss svg {
-    @apply w-4.5 h-4.5;
+    @apply h-4.5 w-4.5;
     @apply fill-footer-text hover:fill-accent;
     @apply transition-colors duration-200 ease-in;
 }
@@ -30,11 +31,14 @@
 }
 
 .footer .footer-privacy {
-    @apply w-full text-center md:w-auto md:text-left;
-    @apply text-footer-text font-header font-normal text-sm;
+    @apply w-full md:w-auto;
+    @apply text-center md:text-left;
+    @apply font-header text-sm font-normal text-footer-text;
 }
 
 .footer .footer-poweredby {
-    @apply w-full text-center md:w-auto md:text-right md:ml-auto;
-    @apply text-footer-text font-header font-normal text-sm;
+    @apply w-full md:w-auto;
+    @apply md:ml-auto;
+    @apply text-center md:text-right;
+    @apply font-header text-sm font-normal text-footer-text;
 }

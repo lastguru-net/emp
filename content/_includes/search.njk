@@ -3,8 +3,8 @@
     <div class="search-modal-panel" role="document">
         <div class="search-modal-header">
             <h2 id="search-modal-title">{{ sitestrings[siteconfig.lang].search_title }}</h2>
-            <button id="search-modal-close" type="button" class="search-modal-close" onclick="closeSearchModal()" aria-label="{{ sitestrings[siteconfig.lang].search_close }}">
-                <svg viewBox="{{ inlinesvg.close.viewBox }}" xmlns="http://www.w3.org/2000/svg">
+            <button id="search-modal-close" class="search-modal-close" type="button" aria-label="{{ sitestrings[siteconfig.lang].search_close }}" onclick="closeSearchModal()">
+                <svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.close.viewBox }}">
                     <path d="{{ inlinesvg.close.path }}" />
                 </svg>
             </button>

@@ -2,14 +2,14 @@
 layout: base.njk
 sitemapPriority: 1
 pagination:
-  data: collections.empPosts
-  alias: posts
-  reverse: false
+    data: collections.empPosts
+    alias: posts
+    reverse: false
 ---
 {% if siteelements.header %}{% set siteheader = true %}{% endif %}
 {% if siteelements.features.index == "postlist" %}{% include "postlist.njk" %}{% endif %}
 {% if siteelements.features.index == "singlepost" %}
 <div class="{% if siteelements.features.base != "primitive" %}content {% endif %}post">
-{% set cp = collections.all | getCollectionItem(posts[0]) %}{{ cp.templateContent | safe }}
+    {% set cp = collections.all | getCollectionItem(posts[0]) %}{{ cp.templateContent | safe }}
 </div>
 {% endif %}

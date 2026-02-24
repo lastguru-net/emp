@@ -14,34 +14,35 @@
 }
 
 .search-modal-panel {
-    @apply relative mx-auto mt-8 sm:mt-14;
+    @apply relative;
+    @apply overflow-hidden;
     @apply w-[min(42rem,calc(100vw-1.5rem))] sm:w-[min(42rem,calc(100vw-3rem))];
     @apply max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100dvh-4rem)];
-    @apply overflow-hidden;
-    @apply border border-border dark:border-border-dark;
-    @apply rounded-lg;
+    @apply mx-auto mt-8 sm:mt-14;
+    @apply border border-border dark:border-border-dark rounded-lg;
     @apply bg-rightarea-bg dark:bg-rightarea-bg-dark;
     @apply shadow-xl;
 }
 
 .search-modal-header {
-    @apply flex items-center justify-between gap-3;
+    @apply flex items-center justify-between;
+    @apply gap-3;
     @apply px-4 py-3;
 }
 
 .search-modal-header h2 {
     @apply m-0;
+    @apply font-header text-xl font-semibold;
     @apply text-rightarea-title dark:text-rightarea-title-dark;
-    @apply text-xl font-semibold font-header;
 }
 
 .search-modal-close {
     @apply inline-flex items-center justify-center;
-    @apply w-8 h-8;
+    @apply h-8 w-8;
 }
 
 .search-modal-close svg {
-    @apply w-5 h-5;
+    @apply h-5 w-5;
     @apply fill-rightarea-text dark:fill-rightarea-text-dark hover:fill-accent;
     @apply transition-colors duration-200 ease-in;
 }
@@ -53,15 +54,15 @@
 .search-input {
     @apply w-full;
     @apply p-2;
-    @apply border border-border dark:border-border-dark;
-    @apply rounded-md;
+    @apply border border-border dark:border-border-dark rounded-md;
     @apply bg-rightarea-bg dark:bg-rightarea-bg-dark;
     @apply text-rightarea-title dark:text-rightarea-title-dark;
 }
 
 .search-results {
+    @apply overflow-y-auto;
+    @apply max-h-[calc(100dvh-14rem)];
     @apply mt-4;
-    @apply max-h-[calc(100dvh-14rem)] overflow-y-auto;
 }
 
 .search-result-item {
@@ -76,20 +77,20 @@
 }
 
 .search-result-title {
+    @apply font-header text-lg font-semibold;
     @apply text-rightarea-title dark:text-rightarea-title-dark;
-    @apply text-lg font-semibold font-header;
 }
 
 .search-result-excerpt {
     @apply mt-1;
+    @apply font-body text-sm font-bodynormal;
     @apply text-rightarea-text dark:text-rightarea-text-dark;
-    @apply text-sm font-body font-bodynormal;
 }
 
 .search-result-meta {
     @apply mt-1;
-    @apply text-rightarea-subtext dark:text-rightarea-subtext-dark;
     @apply text-xs;
+    @apply text-rightarea-subtext dark:text-rightarea-subtext-dark;
 }
 
 .search-empty {

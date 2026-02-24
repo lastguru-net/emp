@@ -21,12 +21,14 @@ export const extractExcerpt = (text = "", limit = 250) => {
     }
     return excerpt;
 };
+
 const findCollectionItem = (collections = {}, page = {}) => {
     if (!collections.all || !page.url) {
         return undefined;
     }
-    return collections.all.find(entry => entry.url === page.url);
+    return collections.all.find((entry) => entry.url === page.url);
 };
+
 const deriveShortDescription = (ctx = {}) => {
     let source = "";
     if (ctx.excerpt) {
@@ -44,9 +46,9 @@ const getExcerpt = (article = {}) => {
     return extractExcerpt(article.templateContent || "", 250);
 };
 
-export default eleventyConfig => {
-    eleventyConfig.addShortcode("getExcerpt", getExcerpt); 
-    eleventyConfig.addNunjucksShortcode("getShortDescription", function() {
+export default (eleventyConfig) => {
+    eleventyConfig.addShortcode("getExcerpt", getExcerpt);
+    eleventyConfig.addNunjucksShortcode("getShortDescription", function () {
         return deriveShortDescription(this.ctx);
     });
 };

@@ -2,6 +2,6 @@
 eleventyExcludeFromCollections: true
 permalink: /search-index.json
 eleventyImport:
-  collections: ["searchDocs"]
+    collections: ["searchDocs"]
 ---
 {{ collections.searchDocs | buildMiniSearchPayload | safe }}

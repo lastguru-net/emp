@@ -1,8 +1,8 @@
-/* content area */
+/* Content area */
 
 .content {
-    @apply my-4 mx-8 lg:mx-24;
-    @apply leading-relaxed tracking-wider;
+    @apply mx-8 my-4 lg:mx-24;
+    @apply tracking-wider leading-relaxed;
 }
 
 .content .postimage {
@@ -10,34 +10,34 @@
 }
 
 .content .incontent {
-    @apply text-rightarea-text dark:text-rightarea-text-dark;
     @apply font-body font-bodynormal;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
 }
 
 .content h1 {
-    @apply text-rightarea-title dark:text-rightarea-title-dark;
-    @apply text-3xl font-bold font-header;
     @apply py-6;
+    @apply font-header text-3xl font-bold;
+    @apply text-rightarea-title dark:text-rightarea-title-dark;
 }
 
 .content h2 {
-    @apply text-2xl font-semibold font-header;
     @apply pt-6;
+    @apply font-header text-2xl font-semibold;
 }
 
 .content h3 {
-    @apply text-xl font-medium font-header;
     @apply pt-4;
+    @apply font-header text-xl font-medium;
 }
 
 .content h4 {
-    @apply text-lg font-medium font-header;
     @apply pt-4;
+    @apply font-header text-lg font-medium;
 }
 
 .content p {
     @apply py-2;
-    @apply font-bodynormal text-base;
+    @apply text-base font-bodynormal;
 }
 
 .content b,
@@ -52,12 +52,12 @@
 }
 
 .content blockquote {
-    @apply border-l-4 border-accent;
     @apply py-4;
+    @apply border-l-4 border-accent;
 }
 
 .content blockquote > p {
-    @apply pl-4 py-2;
+    @apply py-2 pl-4;
 }
 
 .content ol {
@@ -88,9 +88,9 @@
 
 .content input.task-list-item-checkbox {
     @apply appearance-none inline-grid place-content-center;
-    @apply w-4 h-4;
+    @apply h-4 w-4;
     @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark checked:bg-accent;
-    @apply border-accent rounded-sm border-2;
+    @apply border-2 border-accent rounded-sm;
     @apply before:text-rightarea-altbg before:dark:text-rightarea-altbg-dark before:-mb-0.5;
     @apply before:content-['\00a0'] checked:before:content-['\2713'];
 }
@@ -104,13 +104,14 @@
 }
 
 .content table {
-    @apply table-auto w-full my-2;
-    @apply border-b-1 border-accent;
+    @apply table-auto w-full;
+    @apply my-2;
+    @apply border-b border-accent;
 }
 
 .content table thead tr {
+    @apply border-b border-accent;
     @apply leading-10;
-    @apply border-b-1 border-accent;
 }
 
 /* Content table styles */
@@ -129,19 +130,20 @@
 .content hr {
     @apply text-accent;
 }
+
 .content .footnotes p {
     @apply py-0;
 }
 
 .content :not(pre) > code:not([class*="language-"]) {
-    @apply border-1 border-border dark:border-border-dark rounded-sm;
-    @apply p-0.25;
+    @apply p-px;
+    @apply border border-border dark:border-border-dark rounded-sm;
 }
 
 /* Initial letter (drop cap) */
 .content .initial-letter > p:first-of-type::first-letter {
-    @apply text-accent;
     @apply pr-2;
+    @apply text-accent;
     -webkit-initial-letter: 2;
     initial-letter: 2;
 }

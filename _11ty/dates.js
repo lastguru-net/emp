@@ -1,9 +1,9 @@
 import { DateTime } from "luxon";
 import siteconfig from "../content/_data/siteconfig.js";
 
-export default eleventyConfig => {
+export default (eleventyConfig) => {
     // Format dates for sitemap
-    eleventyConfig.addNunjucksFilter("isoDate", function (date) {
+    eleventyConfig.addNunjucksFilter("isoDate", (date) => {
         // Ensure date is a Date object
         if (!(date instanceof Date)) {
             date = new Date(date);
@@ -13,7 +13,7 @@ export default eleventyConfig => {
     });
 
     // Format dates for JSON-LD
-    eleventyConfig.addNunjucksFilter("isoDateTime", function (date) {
+    eleventyConfig.addNunjucksFilter("isoDateTime", (date) => {
         // Ensure date is a Date object
         if (!(date instanceof Date)) {
             date = new Date(date);
@@ -23,7 +23,7 @@ export default eleventyConfig => {
     });
 
     // Extracts readable date of a date
-    eleventyConfig.addNunjucksFilter("readableDate", function (date) {
+    eleventyConfig.addNunjucksFilter("readableDate", (date) => {
         // Ensure date is a Date object
         if (!(date instanceof Date)) {
             date = new Date(date);
@@ -33,11 +33,11 @@ export default eleventyConfig => {
     });
 
     // Shortcode for current year
-    eleventyConfig.addShortcode("year", function () {
+    eleventyConfig.addShortcode("year", () => {
         return new Date().getFullYear();
     });
 
-    eleventyConfig.addNunjucksFilter("rssDate", function (date) {
+    eleventyConfig.addNunjucksFilter("rssDate", (date) => {
         if (!(date instanceof Date)) {
             date = new Date(date);
         }

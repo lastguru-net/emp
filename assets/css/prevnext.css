@@ -1,48 +1,58 @@
 /* Previous - Next navigation block */
 
 .postbreak {
-    @apply block w-full h-1;
-    @apply border-solid border-b-1 border-border dark:border-border-dark;
-
+    @apply block h-1 w-full;
+    @apply border-b border-solid border-border dark:border-border-dark;
 }
 
 .additions {
-    @apply mt-6 w-full;
+    @apply flex flex-col gap-3 md:flex-row;
+    @apply w-full;
+    @apply mt-6;
 }
 
 .additions a {
+    @apply flex-1;
     @apply no-underline hover:no-underline;
 }
 
 .additions div {
-    @apply text-rightarea-text dark:text-rightarea-text-dark bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
-    @apply border-solid border-1 border-border dark:border-border-dark rounded-lg;
-    @apply h-22 px-2;
     @apply overflow-hidden;
+    @apply h-22;
+    @apply px-2;
+    @apply border border-solid border-border dark:border-border-dark rounded-lg;
+    @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
     @apply no-underline hover:no-underline;
 }
 
 .prevnextprev {
-    @apply text-left;
     /* center chevron and title vertically */
-    @apply flex items-center gap-3;
+    @apply flex items-center;
+    @apply gap-3;
+    @apply text-left;
 }
 
 .prevnextnext {
-    @apply text-right;
     /* center chevron and title vertically and keep content to the right */
-    @apply flex items-center gap-3 justify-end;
+    @apply flex items-center justify-end;
+    @apply gap-3;
+    @apply text-right;
 }
 
 /* size and spacing for chevrons used in prev/next */
 .prevnextprev .chevron-icon,
 .prevnextnext .chevron-icon {
-    @apply w-5 h-5 flex-none fill-current;
+    @apply flex-none;
+    @apply h-5 w-5;
+    @apply fill-current;
 }
 
 /* allow the title to break to multiple lines (up to 3) without changing the block size */
 .prevnextlink {
-    @apply text-base font-medium overflow-hidden wrap-break-word;
+    @apply overflow-hidden;
+    @apply text-base font-medium;
+    @apply wrap-break-word;
     @apply line-clamp-3;
 }
 
@@ -59,6 +69,7 @@
 }
 
 .prevnexttitle {
-    @apply block my-1 px-2;
+    @apply block;
+    @apply my-1 px-2;
     @apply text-xs font-semibold;
 }

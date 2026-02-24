@@ -1,3 +1,4 @@
+// Bundled by content/utils/js.njk
 const escapeHtml = (value = "") => String(value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
@@ -38,7 +39,7 @@ const renderResults = (query) => {
         .slice(0, runtimeConfig.maxResults);
 
     if (!found.length) {
-        searchResults.innerHTML = `<div class="search-empty">${escapeHtml(runtimeConfig.strings.noResults)}</div>`;
+        searchResults.innerHTML = '<div class="search-empty">' + escapeHtml(runtimeConfig.strings.noResults) + "</div>";
         return;
     }
 
@@ -49,13 +50,11 @@ const renderResults = (query) => {
         const tags = result.tags;
         const meta = tags.length ? tags.join(" · ") : "";
 
-        return `
-            <a class="search-result-item" href="${escapeHtml(url)}">
-                <div class="search-result-title">${escapeHtml(title)}</div>
-                ${excerpt ? `<div class="search-result-excerpt">${escapeHtml(excerpt)}</div>` : ""}
-                ${meta ? `<div class="search-result-meta">${escapeHtml(meta)}</div>` : ""}
-            </a>
-        `;
+        return '<a class="search-result-item" href="' + escapeHtml(url) + '">' +
+                '<div class="search-result-title">' + escapeHtml(title) + "</div>" +
+                (excerpt ? '<div class="search-result-excerpt">' + escapeHtml(excerpt) + "</div>" : "") +
+                (meta ? '<div class="search-result-meta">' + escapeHtml(meta) + "</div>" : "") +
+            "</a>";
     }).join("");
 };
 

@@ -8,15 +8,15 @@ const tailwindTransform = async (content, outputPath) => {
     const base = path.resolve(process.cwd());
 
     const compiler = await compile(String(content), {
-        base: base,
-        onDependency: () => {},
+        base,
+        onDependency: () => {}
     });
 
     const scanner = new Scanner({
         sources: [
             ...compiler.sources,
-            { base, pattern: "content/**/*.njk", negated: false },
-        ],
+            { base, pattern: "content/**/*.njk", negated: false }
+        ]
     });
 
     const candidates = scanner.scan();
@@ -25,6 +25,6 @@ const tailwindTransform = async (content, outputPath) => {
     return content;
 };
 
-export default eleventyConfig => {
+export default (eleventyConfig) => {
     eleventyConfig.addTransform("tailwind", tailwindTransform);
 };

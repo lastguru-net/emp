@@ -29,7 +29,8 @@ svg.share {
 }
 
 .social svg {
-    @apply h-5 px-2;
+    @apply h-5;
+    @apply px-2;
     @apply dark:fill-rightarea-text-dark hover:fill-accent;
     @apply transition-colors duration-200 ease-in;
 }
@@ -40,7 +41,12 @@ svg.share {
 }
 
 .social {
+    @apply flex flex-row-reverse;
     @apply mt-8 mb-4;
+}
+
+.social .social-label {
+    @apply mr-1;
 }
 
 .social a {
@@ -48,11 +54,13 @@ svg.share {
 }
 
 .social a:hover::before {
-    @apply absolute block -top-8 -left-36 w-54;
+    @apply block absolute -top-8 -left-36;
+    @apply w-54;
     @apply p-2.5;
-    @apply text-rightarea-text dark:text-rightarea-text-dark bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
-    @apply text-center text-xs font-semibold;
-    @apply border-1 border-solid border-border dark:border-border-dark rounded-md;
+    @apply border border-solid border-border dark:border-border-dark rounded-md;
+    @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
+    @apply text-xs font-semibold text-center;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
     @apply -translate-y-1/2;
     content: attr(aria-label);
 }

@@ -3,12 +3,12 @@ layout: base.njk
 sitemapPriority: 1
 permalink: "{{ siteconfig.pagination.tagLinkPrefix }}{{ tag.tagName }}/{% if tag.pageNumber %}{{ tag.pageNumber }}/{% endif %}"
 pagination:
-  data: collections.tagPagination
-  size: 1
-  alias: tag
+    data: collections.tagPagination
+    size: 1
+    alias: tag
 eleventyComputed:
-  title: "{% if sitestrings[siteconfig.lang][tag.tagName] %}{{ sitestrings[siteconfig.lang][tag.tagName] | capitalize }}{% else %}{{ tag.tagName | capitalize }}{% endif %}"
-  excerpt: "{{ sitestrings[siteconfig.lang].posts_tagged }} {% if sitestrings[siteconfig.lang][tag.tagName] %}{{ sitestrings[siteconfig.lang][tag.tagName] | capitalize }}{% else %}{{ tag.tagName | capitalize }}{% endif %}"
+    title: "{% if sitestrings[siteconfig.lang][tag.tagName] %}{{ sitestrings[siteconfig.lang][tag.tagName] | capitalize }}{% else %}{{ tag.tagName | capitalize }}{% endif %}"
+    excerpt: "{{ sitestrings[siteconfig.lang].posts_tagged }} {% if sitestrings[siteconfig.lang][tag.tagName] %}{{ sitestrings[siteconfig.lang][tag.tagName] | capitalize }}{% else %}{{ tag.tagName | capitalize }}{% endif %}"
 ---
 
 {% set posts = tag.items %}

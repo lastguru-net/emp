@@ -30,7 +30,7 @@
 /* Images */
 
 img {
-    @apply block mx-auto h-auto;
+    @apply block h-auto mx-auto;
     @apply rounded-lg shadow-lg;
 }
 
@@ -42,6 +42,7 @@ img.siteheader {
 /* Content area */
 
 #right-area {
+    @apply h-screen;
     @apply flex flex-col;
     @apply overflow-x-hidden overflow-y-auto;
     @apply sm:ml-sidebar; /* sit beside the fixed sidebar on desktop */

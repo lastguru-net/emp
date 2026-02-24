@@ -10,11 +10,11 @@ const imageTransformParams = {
     // filename configuration
     outputDir: ".cache/images/",
     urlPath: "/images/",
-    filenameFormat: function (id, src, width, format, options) {
+    filenameFormat: (id, src, width, format, options) => {
         const extension = path.extname(src);
         const name = path.basename(src, extension);
 
-        return `${name}-${id}-${width}w.${format}`;
+        return name + "-" + id + "-" + width + "w." + format;
     },
 
     // optional, output image formats
@@ -29,7 +29,7 @@ const imageTransformParams = {
     defaultAttributes: {
         loading: "lazy",
         decoding: "async",
-        sizes: "100vw",
+        sizes: "100vw"
     },
 
     // sharp options
@@ -50,18 +50,18 @@ const imageTransformParams = {
     sharpAvifOptions: {
         quality: 50,
         effort: 4
-    },
+    }
 };
 
 const imageTransform = async (src, width, format) => {
     const options = {
         outputDir: ".cache/images/",
         urlPath: "/images/",
-        filenameFormat: function (id, src, width, format, options) {
+        filenameFormat: (id, src, width, format, options) => {
             const extension = path.extname(src);
             const name = path.basename(src, extension);
 
-            return `${name}-${id}-${width}w.${format}`;
+            return name + "-" + id + "-" + width + "w." + format;
         },
         formats: [format],
         widths: [width],
@@ -82,22 +82,22 @@ const imageTransform = async (src, width, format) => {
         sharpAvifOptions: {
             quality: 50,
             effort: 4
-        },
+        }
     };
 
     const metadata = await Image(path.join("content", src), options);
     return metadata[format][0].url;
 };
 
-export default eleventyConfig => {
+export default (eleventyConfig) => {
     eleventyConfig.addPlugin(eleventyImageTransformPlugin, imageTransformParams);
 
     eleventyConfig.addShortcode("imageTransform", imageTransform);
-    
+
     // Copy the optimized images to the public folder after build
     eleventyConfig.on("eleventy.after", () => {
-		fs.cpSync(".cache/images/", "_site/images/", {
-			recursive: true
-		});
-	});
+        fs.cpSync(".cache/images/", "_site/images/", {
+            recursive: true
+        });
+    });
 };

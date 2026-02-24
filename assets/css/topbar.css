@@ -2,14 +2,19 @@
 
 .top-bar {
     @apply sm:hidden;
-    @apply border-border dark:border-border-dark border-b-1 shadow-lg;
+    @apply top-0 z-10;
+    @apply h-12;
+    @apply border-b border-border dark:border-border-dark;
     @apply bg-topbar-bg dark:bg-topbar-bg-dark;
-    @apply top-0 h-12 z-10;
+    @apply shadow-lg;
     @apply transition-transform duration-200 ease-in;
 }
 
 .top-bar svg {
-    @apply block align-middle h-12 leading-12 px-3 pt-4 pb-3;
+    @apply block;
+    @apply h-12;
+    @apply px-3 pt-4 pb-3;
+    @apply align-middle leading-12;
     @apply fill-topbar-fg dark:fill-topbar-fg-dark hover:fill-accent;
     @apply transition-colors duration-200 ease-in;
 }
@@ -20,10 +25,15 @@
 }
 
 .top-bar a {
+    @apply inline grow;
     @apply align-middle text-center leading-12;
-    @apply text-2xl font-semibold font-header hover:no-underline;
+    @apply font-header text-2xl font-semibold hover:no-underline;
     @apply text-topbar-fg dark:text-topbar-fg-dark hover:text-accent;
     @apply transition-colors duration-200 ease-in;
+}
+
+.top-bar #mobile-top-bar {
+    @apply col-span-2 flex;
 }
 
 .top-bar.hide {

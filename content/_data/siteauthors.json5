@@ -1,25 +1,25 @@
 {
-	lastguru: {
-		// Author's full name (mandatory)
-		fullName: "Dmitry Golubev",
-		// Author's profile photo (mandatory, relative path from the site root)
-		photo: "/images/logo.png",
-		// Author's bio (optional, but highly recommended)
-		bio: "Developer and writer focused on minimal, content-first web experiences.",
-		// Author's local "About me" page, if available (optional, relative path from the site root)
-		aboutMe: "/about-us",
-		// Author's website (optional, but highly recommended)
-		website: "https://lastguru.lv",
-		// Author's email address (optional)
-		email: "example@example.com",
-		// Author's social media profiles (the object must be present, but profiles are optional)
-		social: {
-			github: "lastguru-net",
-			linkedin: "lastguru",
-			twitter_x: "lastguru_net",
-			mastodon: "https://toot.lv/@lastguru",
-			bluesky: "https://bsky.app/profile/lastguru.net",
-			threads: "lastguru_net"
-		}
-	}
+    lastguru: {
+        // Author's full name (mandatory)
+        fullName: "Dmitry Golubev",
+        // Author's profile photo (mandatory, relative path from the site root)
+        photo: "/images/logo.png",
+        // Author's bio (optional, but highly recommended)
+        bio: "Developer and writer focused on minimal, content-first web experiences.",
+        // Author's local "About me" page, if available (optional, relative path from the site root)
+        aboutMe: "/about-us",
+        // Author's website (optional, but highly recommended)
+        website: "https://lastguru.lv",
+        // Author's email address (optional)
+        email: "example@example.com",
+        // Author's social media profiles (the object must be present, but profiles are optional)
+        social: {
+            github: "lastguru-net",
+            linkedin: "lastguru",
+            twitter_x: "lastguru_net",
+            mastodon: "https://toot.lv/@lastguru",
+            bluesky: "https://bsky.app/profile/lastguru.net",
+            threads: "lastguru_net"
+        }
+    }
 }

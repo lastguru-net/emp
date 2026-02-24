@@ -1,56 +1,56 @@
 <div class="postpagination">
-	{% if pagination.hrefs.length > 1 %}
-	<ul class="pagination flex">
-	    {% if pagination.pageNumber > 0 %}
-	    <li>
-			<div>
-				<a class="chevron-icon" href="{{ pagination.href.first }}" aria-label="{{ sitestrings[siteconfig.lang].first_page }}">
-					<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.chevronDoubleLeft.viewBox }}">
-						<path d="{{ inlinesvg.chevronDoubleLeft.path }}" />
-					</svg>
-				</a>
-			</div>
-		</li>
-	    <li>
-			<div>
-				<a class="chevron-icon" href="{{ pagination.href.previous }}" aria-label="{{ sitestrings[siteconfig.lang].previous_page }}">
-					<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.chevronLeft.viewBox }}">
-						<path d="{{ inlinesvg.chevronLeft.path }}" />
-					</svg>
-				</a>
-			</div>
-		</li>
-		{% endif %}
-		{% if pagination.pageNumber < 2 %}{% set startWith = 0 %}{% else %}{% set startWith = pagination.pageNumber - 2 %}{% endif %}
-	    {% for pageHref in pagination.hrefs %}
-		{% if loop.index0 < 5  and pagination.hrefs[loop.index0 + startWith] %}
-	    <li>
-			<div class="{% if pagination.hrefs[loop.index0 + startWith] === page.url %}active{% endif %}">
-				<a class="page-number" href="{{ pagination.hrefs[loop.index0 + startWith] }}" aria-label="{{ sitestrings[siteconfig.lang].go_to_page }} {{ loop.index + startWith }}">{{ loop.index + startWith }}</a>
-			</div>
-		</li>
-		{% endif %}
-		{% endfor %}
-		{% if (startWith + 5) < pagination.hrefs.length %}
-	    <li>
-			<div>
-				<a class="chevron-icon" href="{{ pagination.href.next }}" aria-label="{{ sitestrings[siteconfig.lang].next_page }}">
-					<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.chevronRight.viewBox }}">
-						<path d="{{ inlinesvg.chevronRight.path }}" />
-					</svg>
-				</a>
-			</div>
-		</li>
-	    <li>
-			<div>
-				<a class="chevron-icon" href="{{ pagination.href.last }}" aria-label="{{ sitestrings[siteconfig.lang].last_page }}">
-					<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.chevronDoubleRight.viewBox }}">
-						<path d="{{ inlinesvg.chevronDoubleRight.path }}" />
-					</svg>
-				</a>
-			</div>
-		</li>
-		{% endif %}
-	</ul>
-	{% endif %}
+    {% if pagination.hrefs.length > 1 %}
+    <ul class="pagination">
+        {% if pagination.pageNumber > 0 %}
+        <li>
+            <div>
+                <a class="chevron-icon" href="{{ pagination.href.first }}" aria-label="{{ sitestrings[siteconfig.lang].first_page }}">
+                    <svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.chevronDoubleLeft.viewBox }}">
+                        <path d="{{ inlinesvg.chevronDoubleLeft.path }}" />
+                    </svg>
+                </a>
+            </div>
+        </li>
+        <li>
+            <div>
+                <a class="chevron-icon" href="{{ pagination.href.previous }}" aria-label="{{ sitestrings[siteconfig.lang].previous_page }}">
+                    <svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.chevronLeft.viewBox }}">
+                        <path d="{{ inlinesvg.chevronLeft.path }}" />
+                    </svg>
+                </a>
+            </div>
+        </li>
+        {% endif %}
+        {% if pagination.pageNumber < 2 %}{% set startWith = 0 %}{% else %}{% set startWith = pagination.pageNumber - 2 %}{% endif %}
+        {% for pageHref in pagination.hrefs %}
+            {% if loop.index0 < 5 and pagination.hrefs[loop.index0 + startWith] %}
+            <li>
+                <div class="{% if pagination.hrefs[loop.index0 + startWith] === page.url %}active{% endif %}">
+                    <a class="page-number" href="{{ pagination.hrefs[loop.index0 + startWith] }}" aria-label="{{ sitestrings[siteconfig.lang].go_to_page }} {{ loop.index + startWith }}">{{ loop.index + startWith }}</a>
+                </div>
+            </li>
+            {% endif %}
+        {% endfor %}
+        {% if (startWith + 5) < pagination.hrefs.length %}
+        <li>
+            <div>
+                <a class="chevron-icon" href="{{ pagination.href.next }}" aria-label="{{ sitestrings[siteconfig.lang].next_page }}">
+                    <svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.chevronRight.viewBox }}">
+                        <path d="{{ inlinesvg.chevronRight.path }}" />
+                    </svg>
+                </a>
+            </div>
+        </li>
+        <li>
+            <div>
+                <a class="chevron-icon" href="{{ pagination.href.last }}" aria-label="{{ sitestrings[siteconfig.lang].last_page }}">
+                    <svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.chevronDoubleRight.viewBox }}">
+                        <path d="{{ inlinesvg.chevronDoubleRight.path }}" />
+                    </svg>
+                </a>
+            </div>
+        </li>
+        {% endif %}
+    </ul>
+    {% endif %}
 </div>

@@ -2,7 +2,7 @@ import JSON5 from "json5";
 import markdownIt from "markdown-it";
 import markdownItAnchor from "markdown-it-anchor";
 import markdownItDeflist from "markdown-it-deflist";
-import { full as markdownItEmoji} from "markdown-it-emoji";
+import { full as markdownItEmoji } from "markdown-it-emoji";
 import markdownItFootnote from "markdown-it-footnote";
 import markdownItMark from "markdown-it-mark";
 import markdownItSub from "markdown-it-sub";
@@ -25,9 +25,9 @@ import empPostsPlugin from "./_11ty/emp-posts.js";
 import searchDocsPlugin from "./_11ty/search-docs.js";
 import tailwind from "./_11ty/tailwind.js";
 
-export default eleventyConfig => {
+export default (eleventyConfig) => {
     // Add support for JSON5 data files
-  	eleventyConfig.addDataExtension("json5", (contents) => JSON5.parse(contents));
+    eleventyConfig.addDataExtension("json5", (contents) => JSON5.parse(contents));
 
     // Set Markdown library
     eleventyConfig.setLibrary(
@@ -50,7 +50,7 @@ export default eleventyConfig => {
 
     // Define passthrough for assets
     eleventyConfig.addPassthroughCopy("assets");
-    eleventyConfig.addPassthroughCopy({"content/images" : "images"});
+    eleventyConfig.addPassthroughCopy({ "content/images": "images" });
 
     // Add watch target for JS and CSS files (needed for JS and CSS bundling in dev mode)
     eleventyConfig.addWatchTarget("./assets/js/");

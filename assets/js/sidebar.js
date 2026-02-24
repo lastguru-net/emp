@@ -6,7 +6,7 @@ window.slideLeftSidebar = () => {
     }
 };
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
     const elSidebar = document.getElementById("sidebar");
     if (!elSidebar) return;
 

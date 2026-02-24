@@ -1,12 +1,12 @@
 /* Left sidebar */
 
 #sidebar {
-    @apply fixed top-0 left-0 z-30;
-    @apply w-sidebar bg-sidebar-bg;
-    @apply h-lvh;
-    @apply transition-transform sm:transition-none translate-x-0;
-    @apply overflow-visible; /* allow bleed pseudo to extend */
     @apply flex flex-col;
+    @apply fixed top-0 left-0 z-30;
+    @apply overflow-visible; /* allow bleed pseudo to extend */
+    @apply w-sidebar h-lvh;
+    @apply bg-sidebar-bg;
+    @apply translate-x-0 transition-transform sm:transition-none;
 }
 
 #sidebar.is-closed {
@@ -15,19 +15,25 @@
 
 /* Bleed the sidebar background above and below viewport */
 #sidebar::before {
-    @apply fixed left-0 w-sidebar bg-sidebar-bg pointer-events-none;
-    @apply top-[-25vh] h-[150vh];
+    @apply fixed left-0;
+    @apply pointer-events-none;
+    @apply top-[-25vh] h-[150vh] w-sidebar;
+    @apply bg-sidebar-bg;
     content: "";
 }
 
 .sidebar {
-    @apply px-2 h-dvh overflow-hidden;
-    @apply tracking-wider text-center font-header;
+    @apply relative;
+    @apply overflow-hidden;
+    @apply grid grid-cols-1 content-between gap-4;
+    @apply h-dvh;
+    @apply px-2;
+    @apply font-header tracking-wider text-center;
 }
 
 .sidebar svg.sidebar-close {
     @apply sm:hidden;
-    @apply absolute top-2 right-2 w-6 h-6;
+    @apply absolute top-2 right-2 h-6 w-6;
 }
 
 .sidebar .sitehero {
@@ -42,28 +48,29 @@
 .sidebar .sitehero.sitehero-rounded img {
     @apply max-w-48;
     @apply rounded-full;
-	@apply ring-1 ring-accent;
+    @apply ring-1 ring-accent;
 }
 
 .sidebar .sitetitle {
-    @apply block mx-auto;
-    @apply font-semibold text-2xl;
-    @apply text-sidebar-highlight hover:text-accent;
+    @apply block;
+    @apply mx-auto;
     @apply pt-6;
+    @apply text-2xl font-semibold;
+    @apply text-sidebar-highlight hover:text-accent;
     @apply transition-colors duration-200 ease-in;
 }
 
 .sidebar .sitedesc {
+    @apply pt-2;
     @apply font-normal;
     @apply text-sidebar-text;
-    @apply pt-2;
 }
 
 .sidebar .navitem {
+    @apply max-h-9;
+    @apply px-1;
     @apply text-lg/9 font-medium uppercase;
     @apply text-sidebar-text hover:text-accent;
-    @apply px-1;
-    @apply max-h-9;
     @apply transition-colors duration-200 ease-in;
 }
 
@@ -89,10 +96,10 @@
     @apply -mr-[3px] max-w-[calc(100%-3px)];
 }
 .menu ul > li:last-child::after {
-    @apply invisible relative pointer-events-none;
+    @apply relative invisible pointer-events-none;
+    @apply -right-29 w-[3px];
+    @apply border-r-2 border-solid border-r-accent;
     @apply bg-accent;
-    @apply border-solid border-r-2 border-r-accent;
-    @apply w-[3px] -right-29;
     @apply transition-[top] duration-500;
     content: "";
 }
@@ -135,13 +142,13 @@
 }
 
 .sidebar .sidebar-search-button svg {
-    @apply w-5 h-5;
+    @apply h-5 w-5;
     @apply fill-accent;
     @apply cursor-pointer;
 }
 
 .sidebar .sitesocial {
-    @apply gap-5 mx-auto;
+    @apply mx-auto gap-5;
 }
 
 .sidebar .sitesocial a {
@@ -154,9 +161,11 @@
 }
 
 .sidebar .privacy-policy {
-    @apply text-sm font-normal;
+    @apply flex items-center justify-center gap-6;
     @apply py-2;
+    @apply text-sm font-normal;
 }
+
 .sidebar .privacy-policy a {
     @apply text-sidebar-text hover:text-accent;
     @apply transition-colors duration-200 ease-in;
@@ -166,9 +175,11 @@
 .sidebar .sidebar-colormode {
     @apply hidden sm:inline-flex sm:items-center sm:gap-2;
 }
+
 .sidebar .sidebar-colormode svg {
-    @apply block w-4.5 h-4.5;
+    @apply block h-4.5 w-4.5;
 }
+
 .light #sidebar-color-toggle .lighttoggle,
 .dark #sidebar-color-toggle .darktoggle {
     @apply hidden;

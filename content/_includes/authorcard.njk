@@ -1,39 +1,39 @@
 <div class="authorcard">
-	<div class="authorcard-row">
-		<img class="authorcard-photo nolqip" src="{{ authorCard.photo }}" alt="{{ authorCard.fullName }}" />
-		<div class="authorcard-main">
-			<div class="authorcard-name">{{ authorCard.fullName }}</div>
-			{% if authorCard.bio %}<p class="authorcard-bio">{{ authorCard.bio }}</p>{% endif %}
-			<div class="authorcard-links">
-				{% if authorCard.aboutMe %}
-				<div class="authorcard-infoitem">
-					<a class="authorcard-link" href="{{ authorCard.aboutMe }}">
-						<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.web.viewBox }}"><path d="{{ inlinesvg.web.path }}" /></svg>
-						{{ sitestrings[siteconfig.lang].about_me }}
-					</a>
-				</div>
-				{% endif %}
-				{% if authorCard.website %}
-				<div class="authorcard-infoitem">
-					<a class="authorcard-link" href="{{ authorCard.website }}" target="_blank" rel="noopener">
-						<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.web.viewBox }}"><path d="{{ inlinesvg.web.path }}" /></svg>
-						{{ authorCard.website | replace('https://','') | replace('http://','') }}
-					</a>
-				</div>
-				{% endif %}
-				{% if authorCard.email %}
-				<div class="authorcard-infoitem">
-					<a class="authorcard-link" href="mailto:{{ authorCard.email }}">
-						<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.email.viewBox }}"><path d="{{ inlinesvg.email.path }}" /></svg>
-						{{ authorCard.email }}
-					</a>
-				</div>
-				{% endif %}
-			</div>
-			{% set social = authorCard.social or {} %}
-			{% if social and (social | length) %}
-  			{% include "sitesocial.njk" %}
-  			{% endif %}
-		</div>
-	</div>
+    <div class="authorcard-row">
+        <img class="authorcard-photo nolqip" src="{{ authorCard.photo }}" alt="{{ authorCard.fullName }}" />
+        <div class="authorcard-main">
+            <div class="authorcard-name">{{ authorCard.fullName }}</div>
+            {% if authorCard.bio %}<p class="authorcard-bio">{{ authorCard.bio }}</p>{% endif %}
+            <div class="authorcard-links">
+                {% if authorCard.aboutMe %}
+                <div class="authorcard-infoitem">
+                    <a class="authorcard-link" href="{{ authorCard.aboutMe }}">
+                        <svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.web.viewBox }}"><path d="{{ inlinesvg.web.path }}" /></svg>
+                        {{ sitestrings[siteconfig.lang].about_me }}
+                    </a>
+                </div>
+                {% endif %}
+                {% if authorCard.website %}
+                <div class="authorcard-infoitem">
+                    <a class="authorcard-link" href="{{ authorCard.website }}" target="_blank" rel="noopener">
+                        <svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.web.viewBox }}"><path d="{{ inlinesvg.web.path }}" /></svg>
+                        {{ authorCard.website | replace('https://','') | replace('http://','') }}
+                    </a>
+                </div>
+                {% endif %}
+                {% if authorCard.email %}
+                <div class="authorcard-infoitem">
+                    <a class="authorcard-link" href="mailto:{{ authorCard.email }}">
+                        <svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.email.viewBox }}"><path d="{{ inlinesvg.email.path }}" /></svg>
+                        {{ authorCard.email }}
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% set social = authorCard.social or {} %}
+            {% if social and (social | length) %}
+                {% include "sitesocial.njk" %}
+            {% endif %}
+        </div>
+    </div>
 </div>

@@ -1,57 +1,65 @@
 /* Author card */
 
 .authorcard {
-	@apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark text-rightarea-text dark:text-rightarea-text-dark;
-	@apply border-solid border-1 border-border dark:border-border-dark rounded-lg;
-	@apply p-4 my-4 mx-4 lg:mx-20;
+    @apply my-4 mx-4 p-4 lg:mx-20;
+    @apply border border-solid border-border dark:border-border-dark rounded-lg;
+    @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
 }
 
 .authorcard .authorcard-row {
-	@apply flex flex-col sm:flex-row items-start sm:items-center gap-4;
+    @apply flex flex-col sm:flex-row items-start sm:items-center;
+    @apply gap-4;
 }
 
 .authorcard .authorcard-main {
-	@apply flex-1 min-w-0;
+    @apply flex-1 min-w-0;
 }
 
 .authorcard .authorcard-photo {
-	@apply w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32;
-	@apply rounded-full object-cover;
-	@apply ring-1 ring-accent;
+    @apply w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32;
+    @apply object-cover;
+    @apply rounded-full;
+    @apply ring-1 ring-accent;
 }
 
 .authorcard .authorcard-name {
-	@apply font-header text-xl font-semibold text-rightarea-title dark:text-rightarea-title-dark;
+    @apply font-header text-xl font-semibold;
+    @apply text-rightarea-title dark:text-rightarea-title-dark;
 }
 
 .authorcard .authorcard-bio {
-	@apply mt-2;
+    @apply mt-2;
     @apply font-body text-base leading-relaxed;
 }
 
 .authorcard .authorcard-link {
-	@apply inline-flex items-center gap-2 align-middle;
-	@apply font-header text-rightarea-subtext dark:text-rightarea-subtext-dark hover:text-accent;
-	@apply hover:no-underline;
-	@apply transition-colors duration-200 ease-in;
+    @apply inline-flex items-center align-middle;
+    @apply gap-2;
+    @apply font-header;
+    @apply text-rightarea-subtext dark:text-rightarea-subtext-dark hover:text-accent;
+    @apply no-underline hover:no-underline;
+    @apply transition-colors duration-200 ease-in;
 }
 
 .authorcard .authorcard-infoitem svg {
-	@apply h-4 w-4 flex-none;
-	@apply fill-rightarea-subtext dark:fill-rightarea-subtext-dark;
-	@apply transition-colors duration-200 ease-in;
+    @apply h-4 w-4 flex-none;
+    @apply fill-rightarea-subtext dark:fill-rightarea-subtext-dark;
+    @apply transition-colors duration-200 ease-in;
 }
 
 .authorcard .authorcard-link:hover svg {
-	@apply fill-accent;
+    @apply fill-accent;
 }
 
 .authorcard .authorsocial {
-	@apply flex items-center flex-wrap gap-2 mt-2;
+    @apply flex items-center flex-wrap;
+    @apply gap-2;
+    @apply mt-2;
 }
 
 .authorcard .authorsocial svg {
-	@apply h-5 w-5;
-	@apply fill-rightarea-subtext dark:fill-rightarea-subtext-dark hover:fill-accent;
-	@apply transition-colors duration-200 ease-in;
+    @apply h-5 w-5;
+    @apply fill-rightarea-subtext dark:fill-rightarea-subtext-dark hover:fill-accent;
+    @apply transition-colors duration-200 ease-in;
 }

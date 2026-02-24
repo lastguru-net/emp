@@ -3,13 +3,13 @@ layout: base.njk
 sitemapPriority: 1
 permalink: "{{ siteconfig.pagination.authorLinkPrefix }}{{ tag.tagName | slugify }}/{% if tag.pageNumber %}{{ tag.pageNumber }}/{% endif %}"
 pagination:
-  data: collections.authorPagination
-  size: 1
-  alias: tag
+    data: collections.authorPagination
+    size: 1
+    alias: tag
 eleventyComputed:
-  title: "{% if siteauthors[tag.tagName] %}{{ siteauthors[tag.tagName].fullName }}{% else %}{{ tag.tagName }}{% endif %}"
-  author: "{{ tag.tagName }}"
-  excerpt: "{% if siteauthors[tag.tagName] %}{{ siteauthors[tag.tagName].bio }}{% else %}{{ sitestrings[siteconfig.lang].posts_by }} {{ tag.tagName }}{% endif %}"
+    title: "{% if siteauthors[tag.tagName] %}{{ siteauthors[tag.tagName].fullName }}{% else %}{{ tag.tagName }}{% endif %}"
+    author: "{{ tag.tagName }}"
+    excerpt: "{% if siteauthors[tag.tagName] %}{{ siteauthors[tag.tagName].bio }}{% else %}{{ sitestrings[siteconfig.lang].posts_by }} {{ tag.tagName }}{% endif %}"
 tags: authorcard
 ---
 

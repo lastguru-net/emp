@@ -33,7 +33,7 @@
     }
 
     main .content,
-    main .block.border-b-1 {
+    main .block.border-b {
         @apply border-b-0;
     }
 }

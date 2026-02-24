@@ -20,19 +20,19 @@ const isExternalHref = (href) => {
         href.startsWith("data:")
     ) return false;
 
-	// main site URL, and any additional internal URLs
-	const internalPrefixes = [
-		siteconfig.url,
-		...(Array.isArray(siteconfig.internalUrls) ? siteconfig.internalUrls : [])
-	];
+    // main site URL, and any additional internal URLs
+    const internalPrefixes = [
+        siteconfig.url,
+        ...(Array.isArray(siteconfig.internalUrls) ? siteconfig.internalUrls : [])
+    ];
 
-	// if href starts with any internal prefix, treat as internal
-	for (const prefix of internalPrefixes) {
-		if (prefix && href.startsWith(prefix)) return false;
-	}
+    // if href starts with any internal prefix, treat as internal
+    for (const prefix of internalPrefixes) {
+        if (prefix && href.startsWith(prefix)) return false;
+    }
 
-	// otherwise it's external
-	return true;
+    // otherwise it's external
+    return true;
 };
 
 const ensureRelTokens = (rel, tokensToEnsure) => {

@@ -9,23 +9,21 @@ meta:
 ---
 
 <div class="content page">
-    <div class="error flex items-center justify-center">
+    <div class="error">
         <!-- add error-code to the labelled set so AT hears "Error 404" first -->
         <div class="error-area" role="region" aria-labelledby="error-code error-title" aria-describedby="error-desc">
             <!-- Visible visual code is decorative; provide a single SR label instead -->
             <span id="error-code" class="sr-only">Error 404</span>
             <div class="error-404" aria-hidden="true">
-                4<span class="inline-flex items-center">
-                    <svg viewBox="{{ inlinesvg.gear.viewBox }}" xmlns="http://www.w3.org/2000/svg">
+                4<span class="error-gear">
+                    <svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.gear.viewBox }}">
                         <path d="{{ inlinesvg.gear.path }}" />
                     </svg>
                 </span>4
             </div>
-            
             <h1 id="error-title">
                 This is not the page you're looking for
             </h1>
-            
             <p id="error-desc">
                 Move along... Move along...
             </p>

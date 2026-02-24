@@ -24,7 +24,7 @@
 <link rel="icon" type="image/png" sizes="{{ iconsize }}x{{ iconsize }}" href="{% imageTransform siteconfig.favicon, iconsize, 'png' %}">
 {% endfor %}
 {% if siteconfig.webmanifestSizes %}<link rel="manifest" href="/site.webmanifest" crossorigin="use-credentials">{% endif %}
-<link rel="canonical" href="{{ page.url | absoluteUrl }}" />
+<link rel="canonical" href="{{ page.url | absoluteUrl }}">
 {% if siteelements.features.sitemap %}<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">{% endif %}
 {% if siteelements.features.rssFeed %}<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="{{ '/rss.xml' | absoluteUrl }}">{% endif %}
 {% if siteelements.features.atomFeed %}<link rel="alternate" type="application/atom+xml" title="Atom Feed" href="{{ '/atom.xml' | absoluteUrl }}">{% endif %}

@@ -25,7 +25,7 @@ export default {
     locale: "en_US",
     // Default language for HTML lang and post properties and site strings
     lang: "en",
- 
+
     // Default OpenGraph image (used if no image is specified in page frontmatter)
     openGraphDefaultImage: "/images/logo.png",
 
@@ -56,6 +56,6 @@ export default {
     pagination: {
         postsPerPage: 10,
         authorLinkPrefix: "/author/",
-        tagLinkPrefix: "/",
-    },
-}
+        tagLinkPrefix: "/"
+    }
+};

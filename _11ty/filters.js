@@ -1,16 +1,16 @@
-import { URL } from "url";
+import { URL } from "node:url";
 import siteconfig from "../content/_data/siteconfig.js";
 
-export default eleventyConfig => {
+export default (eleventyConfig) => {
     const isProduction = process.env.NODE_ENV === "production";
 
     // Returns CSS class for home page link
-    eleventyConfig.addNunjucksFilter("isHomeLink", function (url, pattern) {
-        return (pattern === "/" && url === "/") ? "active" : "";
+    eleventyConfig.addNunjucksFilter("isHomeLink", (url, pattern) => {
+        return pattern === "/" && url === "/" ? "active" : "";
     });
 
     // Returns CSS class for active page link
-    eleventyConfig.addNunjucksFilter("isActiveLink", function (url, pattern) {
+    eleventyConfig.addNunjucksFilter("isActiveLink", (url, pattern) => {
         return url.length > 1 && pattern.length > 0 && url.startsWith(pattern) ? "active" : "";
     });
 
@@ -18,7 +18,7 @@ export default eleventyConfig => {
     eleventyConfig.addNunjucksFilter("absoluteUrl", (path) => {
         return new URL(path, siteconfig.url).toString();
     });
-    
+
     // Add reading time filter (migrated from reading-info.js)
     eleventyConfig.addNunjucksFilter("readingTime", (wordcount) => {
         return Math.ceil(wordcount / 250);
@@ -40,7 +40,7 @@ export default eleventyConfig => {
     // Preserve pre/code/textarea/script/style blocks so internal spacing is not altered.
     // Do no minification when not in production.
     eleventyConfig.addNunjucksFilter("minifyFeedHtml", (input) => {
-        if (!isProduction) return (input === undefined || input === null) ? "" : String(input);
+        if (!isProduction) return input === undefined || input === null ? "" : String(input);
         if (input === undefined || input === null) return "";
         let s = String(input);
 
@@ -48,7 +48,7 @@ export default eleventyConfig => {
         const preserved = [];
         s = s.replace(/<(pre|code|textarea|script|style)[\s\S]*?<\/\1>/gi, (m) => {
             preserved.push(m);
-            return `__PRESERVE_${preserved.length - 1}__`;
+            return "__PRESERVE_" + (preserved.length - 1) + "__";
         });
 
         // remove HTML comments
@@ -67,10 +67,10 @@ export default eleventyConfig => {
 
         return s;
     });
-    
+
     // Minify a JSON string: parse and re-stringify to remove indentation/newlines.
     eleventyConfig.addNunjucksFilter("minifyJson", (value) => {
-        if (!isProduction) return (value === undefined || value === null) ? "" : String(value).trim();
+        if (!isProduction) return value === undefined || value === null ? "" : String(value).trim();
         if (value === undefined || value === null) return "";
         const s = String(value);
         return JSON.stringify(JSON.parse(s));

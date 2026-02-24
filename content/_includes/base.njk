@@ -5,17 +5,15 @@
         {% include "json-ld.njk" %}
     </head>
     <body>
-    {% if siteelements.features.base == "primitive" %}
-        {{ content | safe }}
-    {% else %}
+        {% if siteelements.features.base == "primitive" %}
+            {{ content | safe }}
+        {% else %}
         <div id="sidebar" class="is-closed">
             {% include "sidebar.njk" %}
         </div>
-        <div id="right-area" class="h-screen">
+        <div id="right-area">
             {% if siteelements.features.topbar %}
-            <div {% if siteelements.features.topbar == "dynamic" %}id="top-bar"{% endif %} class="top-bar">
                 {% include "topbar.njk" %}
-            </div>
             {% endif %}
             <div class="max-w-content">
                 <main>
@@ -29,6 +27,6 @@
         {% if siteelements.features.search %}
             {% include "search.njk" %}
         {% endif %}
-    {% endif %}
+        {% endif %}
     </body>
 </html>

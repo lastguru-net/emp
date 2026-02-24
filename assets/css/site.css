@@ -1,6 +1,6 @@
 /* This file will be overwritten by the build process (see /content/utils/css.njk).
-   It is here to ensure CSS can be built standalone and IntelliSense works in the editor.
-   Do not add custom styles here. Instead, add them to custom.css */
+It is here to ensure CSS can be built standalone and IntelliSense works in the editor.
+Do not add custom styles here. Instead, add them to custom.css */
 @import "tailwindcss";
 @source "./safelist.txt";
 @import "./theme.css";

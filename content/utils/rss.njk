@@ -2,7 +2,7 @@
 eleventyExcludeFromCollections: true
 permalink: /rss.xml
 eleventyImport:
-  collections: ["empPosts"]
+    collections: ["empPosts"]
 ---
 <?xml version="1.0" encoding="UTF-8"?>
 {% set items = collections.empPosts %}
@@ -11,58 +11,58 @@ eleventyImport:
 {% set publisherData = siteauthors[siteconfig.author] %}
 {% set publisherEmail = publisherData.email if (publisherData and publisherData.email) else false %}
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>{{ siteconfig.title }}</title>
-    <link>{{ siteconfig.url }}</link>
-    <description>{{ siteconfig.description }}</description>
-    <language>{{ siteconfig.lang }}</language>
-    <atom:link href="{{ '/rss.xml' | absoluteUrl }}" rel="self" type="application/rss+xml" />
-    {% if publisherEmail %}<managingEditor>{{ publisherEmail }} ({{ publisherName }})</managingEditor>{% endif %}
-    <image>
-      <url>{{ siteconfig.url }}{% imageTransform siteconfig.image, 512, 'png' %}</url>
-      <title>{{ siteconfig.title }}</title>
-      <link>{{ siteconfig.url }}</link>
-    </image>
-    {% if items and items[0] %}<lastBuildDate>{{ items[0].date | rssDate }}</lastBuildDate>{% endif %}
-    {% for item in items %}
-    {% set fallbackExcerpt -%}{% getExcerpt item %}{%- endset %}
-    {% set itemUrl = item.url | absoluteUrl %}
-    {% set itemExcerpt = item.data.excerpt or fallbackExcerpt %}
-    {% set activeAuthorId = item.data.author or siteconfig.author %}
-    {% set activeAuthorData = siteauthors[activeAuthorId] %}
-    {% set activeAuthorDisplayName = activeAuthorData.fullName if (activeAuthorData and activeAuthorData.fullName) else activeAuthorId %}
-    {% set itemKeywords = [] %}
-    {% if item.data.tags %}
-      {% for t in item.data.tags %}
-        {% if t not in sitetags.notag %}
-          {% set kw = sitestrings[siteconfig.lang][t] or t %}
-          {% set itemKeywords = itemKeywords.concat([kw]) %}
-        {% endif %}
-      {% endfor %}
-    {% endif %}
-    <item>
-      <title>{{ item.data.title }}</title>
-      <link>{{ itemUrl }}</link>
-      <guid isPermaLink="true">{{ itemUrl }}</guid>
-      <pubDate>{{ item.date | rssDate }}</pubDate>
-      {% if activeAuthorDisplayName %}
-        {% if activeAuthorData and activeAuthorData.email %}
-      <author>{{ activeAuthorData.email }} ({{ activeAuthorDisplayName }})</author>
-        {% else %}
-      <author>{{ activeAuthorDisplayName }}</author>
-        {% endif %}
-      {% endif %}
-      {% if siteelements.features.feedFullContent %}
-      <description>{{ item.templateContent | minifyFeedHtml | escape }}</description>
-      {% else %}
-      <description>{{ itemExcerpt | escape }}</description>
-      {% endif %}
-      {% if itemKeywords | length %}
-        {% for kw in itemKeywords %}
-      <category>{{ kw }}</category>
+    <channel>
+        <title>{{ siteconfig.title }}</title>
+        <link>{{ siteconfig.url }}</link>
+        <description>{{ siteconfig.description }}</description>
+        <language>{{ siteconfig.lang }}</language>
+        <atom:link href="{{ '/rss.xml' | absoluteUrl }}" rel="self" type="application/rss+xml" />
+        {% if publisherEmail %}<managingEditor>{{ publisherEmail }} ({{ publisherName }})</managingEditor>{% endif %}
+        <image>
+            <url>{{ siteconfig.url }}{% imageTransform siteconfig.image, 512, 'png' %}</url>
+            <title>{{ siteconfig.title }}</title>
+            <link>{{ siteconfig.url }}</link>
+        </image>
+        {% if items and items[0] %}<lastBuildDate>{{ items[0].date | rssDate }}</lastBuildDate>{% endif %}
+        {% for item in items %}
+            {% set fallbackExcerpt -%}{% getExcerpt item %}{%- endset %}
+            {% set itemUrl = item.url | absoluteUrl %}
+            {% set itemExcerpt = item.data.excerpt or fallbackExcerpt %}
+            {% set activeAuthorId = item.data.author or siteconfig.author %}
+            {% set activeAuthorData = siteauthors[activeAuthorId] %}
+            {% set activeAuthorDisplayName = activeAuthorData.fullName if (activeAuthorData and activeAuthorData.fullName) else activeAuthorId %}
+            {% set itemKeywords = [] %}
+            {% if item.data.tags %}
+                {% for t in item.data.tags %}
+                    {% if t not in sitetags.notag %}
+                        {% set kw = sitestrings[siteconfig.lang][t] or t %}
+                        {% set itemKeywords = itemKeywords.concat([kw]) %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            <item>
+                <title>{{ item.data.title }}</title>
+                <link>{{ itemUrl }}</link>
+                <guid isPermaLink="true">{{ itemUrl }}</guid>
+                <pubDate>{{ item.date | rssDate }}</pubDate>
+                {% if activeAuthorDisplayName %}
+                    {% if activeAuthorData and activeAuthorData.email %}
+                    <author>{{ activeAuthorData.email }} ({{ activeAuthorDisplayName }})</author>
+                    {% else %}
+                    <author>{{ activeAuthorDisplayName }}</author>
+                    {% endif %}
+                {% endif %}
+                {% if siteelements.features.feedFullContent %}
+                <description>{{ item.templateContent | minifyFeedHtml | escape }}</description>
+                {% else %}
+                <description>{{ itemExcerpt | escape }}</description>
+                {% endif %}
+                {% if itemKeywords | length %}
+                    {% for kw in itemKeywords %}
+                    <category>{{ kw }}</category>
+                    {% endfor %}
+                {% endif %}
+            </item>
         {% endfor %}
-      {% endif %}
-    </item>
-    {% endfor %}
-  </channel>
+    </channel>
 </rss>
