@@ -7,26 +7,10 @@ import { extractExcerpt } from "./excerpt.js";
 const stripTags = (value = "") => String(value).replace(/<[^>]*>/g, " ");
 const collapseWhitespace = (value = "") => String(value).replace(/\s+/g, " ").trim();
 const toArray = (value) => Array.isArray(value) ? value : (value ? [value] : []);
-const stripFrontMatter = (value = "") => String(value).replace(/^---\s*[\r\n]+[\s\S]*?[\r\n]+---\s*[\r\n]*/, "");
 const capitalize = (value = "") => {
     const text = String(value);
     return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
 };
-
-// Strip Markdown formatting to extract plain text for indexing
-const stripMarkdown = (value = "") => String(value)
-    .replace(/^```[\w-]*\s*$/gm, "")
-    .replace(/^~~~[\w-]*\s*$/gm, "")
-    .replace(/`([^`]*)`/g, "$1")
-    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-    .replace(/^\s{0,3}#{1,6}\s+/gm, "")
-    .replace(/(\*\*|__)(.*?)\1/g, "$2")
-    .replace(/(\*|_)(.*?)\1/g, "$2")
-    .replace(/==(.*?)==/g, "$1")
-    .replace(/~~(.*?)~~/g, "$1")
-    .replace(/^\s{0,3}>\s?/gm, "")
-    .replace(/^\s{0,3}([-*+]|\d+\.)\s+/gm, "");
 
 const indexOptions = {
     idField: "id",
@@ -49,9 +33,9 @@ const buildSearchIndex = async (allItems) => {
             const tags = toArray(item.data?.tags)
                 .filter((tag) => !sitetags.notag.includes(tag))
                 .map((tag) => capitalize(localizedStrings[tag] || tag));
-            const sourceContent = stripFrontMatter(item.rawInput).trim();
-            const excerpt = item.data.excerpt || extractExcerpt(stripMarkdown(sourceContent), 250);
-            const content = collapseWhitespace(stripMarkdown(stripTags(sourceContent)));
+            const sourceContent = item.templateContent.trim();
+            const excerpt = item.data.excerpt || extractExcerpt(sourceContent, 250);
+            const content = collapseWhitespace(stripTags(sourceContent));
             const date = item.date instanceof Date ? item.date.toISOString() : item.date;
 
             return {
@@ -71,7 +55,10 @@ const buildSearchIndex = async (allItems) => {
 
     return JSON.stringify({
         options: indexOptions,
-        searchOptions: { prefix: true, fuzzy: 0.2 },
+        searchOptions: {
+            prefix: true,
+            fuzzy: 0.2
+        },
         strings: {
             noResults: localizedStrings.search_no_results,
             placeholder: localizedStrings.search_placeholder

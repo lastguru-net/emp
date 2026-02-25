@@ -4,7 +4,7 @@ import siteconfig from "../content/_data/siteconfig.js";
 const stripTags = (value = "") => value.replace(/<[^>]*>/g, " ");
 const collapseWhitespace = (value = "") => value.replace(/\s+/g, " ").trim();
 export const extractExcerpt = (text = "", limit = 250) => {
-    const plain = stripTags(text);
+    const plain = stripTags(text).trim();
     if (!plain) return "";
     const newlineIndex = plain.indexOf("\n");
     const firstLineLimit = newlineIndex > 0 ? newlineIndex : plain.length;

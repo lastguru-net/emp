@@ -8,6 +8,7 @@
 {% set pageUrl = page.url | absoluteUrl %}
 {% set imageSrc = image or siteconfig.openGraphDefaultImage %}
 {% set isProfilePage = (not isPost and not isAuthorPage and profilePage) %}
+
 {# Detect events: any tag included in sitetags.events #}
 {% set isEvent = false %}
 {% if tags %}
