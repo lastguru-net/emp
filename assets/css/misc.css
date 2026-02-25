@@ -4,10 +4,6 @@
     @apply text-rightarea-text dark:text-rightarea-text-dark;
 }
 
-:-ms-input-placeholder {
-    @apply text-rightarea-text dark:text-rightarea-text-dark;
-}
-
 .auto-dark-bg {
     @apply bg-gray-200;
 }

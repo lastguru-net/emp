@@ -14,6 +14,17 @@
     @apply font-header text-sm font-normal text-footer-text;
 }
 
+.footer .footer-privacy {
+    @apply md:w-auto;
+    @apply text-center md:text-left;
+}
+
+.footer .footer-poweredby {
+    @apply w-full md:w-auto;
+    @apply md:ml-auto;
+    @apply text-center md:text-right;
+}
+
 .footer a {
     @apply text-footer-text hover:text-accent;
     @apply no-underline;
@@ -28,17 +39,4 @@
 
 .footer .footer-privacy-sep {
     @apply px-2;
-}
-
-.footer .footer-privacy {
-    @apply w-full md:w-auto;
-    @apply text-center md:text-left;
-    @apply font-header text-sm font-normal text-footer-text;
-}
-
-.footer .footer-poweredby {
-    @apply w-full md:w-auto;
-    @apply md:ml-auto;
-    @apply text-center md:text-right;
-    @apply font-header text-sm font-normal text-footer-text;
 }

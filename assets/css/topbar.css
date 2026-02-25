@@ -2,7 +2,7 @@
 
 .top-bar {
     @apply sm:hidden;
-    @apply top-0 z-10;
+    @apply sticky top-0 z-10;
     @apply h-12;
     @apply border-b border-border dark:border-border-dark;
     @apply bg-topbar-bg dark:bg-topbar-bg-dark;

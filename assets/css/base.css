@@ -1,32 +1,5 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
-@utility h-dvh {
-    height: 100vh;
-    @supports (height: 100dvh) {
-        height: 100dvh;
-    }
-}
-
-@utility max-h-dvh {
-    max-height: 100vh;
-    @supports (max-height: 100dvh) {
-        max-height: 100dvh;
-    }
-}
-
-/* Add: largest viewport height utility to avoid gaps on viewport changes */
-@utility h-lvh {
-    height: 100vh;
-    @supports (height: 100lvh) {
-        height: 100lvh;
-    }
-}
-
-.h-screen {
-    @apply overflow-x-hidden overflow-y-hidden;
-    @apply h-dvh;
-}
-
 /* Images */
 
 img {
@@ -42,9 +15,9 @@ img.siteheader {
 /* Content area */
 
 #right-area {
-    @apply h-screen;
+    @apply min-h-dvh;
     @apply flex flex-col;
-    @apply overflow-x-hidden overflow-y-auto;
+    @apply overflow-x-clip;
     @apply sm:ml-sidebar; /* sit beside the fixed sidebar on desktop */
     @apply bg-rightarea-bg dark:bg-rightarea-bg-dark;
 }

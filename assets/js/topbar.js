@@ -1,21 +1,18 @@
 // Bundled by content/utils/js.njk
-// Auto-hide top bar on scroll
+// Auto-hide top bar on scroll (document-level scroll everywhere)
 document.addEventListener("DOMContentLoaded", () => {
-    const areaEl = document.getElementById("right-area");
     const barEl = document.getElementById("top-bar");
-    if (!areaEl || !barEl) return;
+    if (!barEl) return;
 
     // rAF-based throttling to reduce work on frequent scroll events
     let ticking = false;
-    areaEl.addEventListener(
+    window.addEventListener(
         "scroll",
         () => {
             if (!ticking) {
                 ticking = true;
                 window.requestAnimationFrame(() => {
-                    // read scrollTop here so we get the latest value at frame time
-                    const scrollTop = areaEl.scrollTop;
-                    if (scrollTop >= 45) {
+                    if (window.scrollY >= 45) {
                         barEl.classList.add("hide");
                     } else {
                         barEl.classList.remove("hide");

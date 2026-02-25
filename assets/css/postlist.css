@@ -98,7 +98,7 @@
 /* Collection pagination */
 
 .postpagination {
-    @apply mx-4 mt-2 pb-8 lg:mx-20;
+    @apply mx-4 mt-2 pb-8 md:px-4 lg:mx-20;
 }
 
 ul.pagination {
