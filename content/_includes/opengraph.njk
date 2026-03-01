@@ -1,5 +1,3 @@
-{% set isPost = tags and ('posts' in tags) %}
-{% set isAuthorPage = tags and ('authorcard' in tags) %}
 <meta property="og:url" content="{{ page.url | absoluteUrl }}">
 <meta property="og:type" content="{% if isPost %}article{% elseif isAuthorPage %}profile{% else %}website{% endif %}">
 <meta property="og:site_name" content="{{ siteconfig.title }}">
@@ -11,16 +9,14 @@
 <meta property="profile:first_name" content="{{ siteauthors[author].fullName }}">
 {% endif %}
 {% if isPost %}
+    <meta property="article:published_time" content="{{ page.date | isoDateTime }}">
     {% set authorId = author or siteconfig.author %}
     {% if authorId and siteauthors[authorId] %}
-        {% set authorUrl = ('/author/' ~ (authorId | slugify) ~ '/') | absoluteUrl %}
+        {% set authorUrl = (siteconfig.pagination.authorLinkPrefix ~ (authorId | empSlugify) ~ '/') | absoluteUrl %}
+        <meta property="article:author" content="{{ authorUrl }}">
     {% endif %}
-    <meta property="article:published_time" content="{{ page.date | isoDateTime }}">
-    {% if authorUrl %}<meta property="article:author" content="{{ authorUrl }}">{% endif %}
-    {% for t in tags %}
-        {% if t not in sitetags.notag %}
-            <meta property="article:tag" content="{% if sitestrings[siteconfig.lang][t] %}{{ sitestrings[siteconfig.lang][t] | capitalize }}{% else %}{{ t | capitalize }}{% endif %}">
-        {% endif %}
+    {% for kw in tags | getKeywords %}
+        <meta property="article:tag" content="{{ kw | capitalize }}">
     {% endfor %}
 {% endif %}
 {% if siteconfig.pixels.fbApp %}<meta property="fb:app_id" content="{{ siteconfig.pixels.fbApp }}">{% endif %}

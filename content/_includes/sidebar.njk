@@ -1,5 +1,5 @@
 <div id="sidebar-contents" class="sidebar">
-    <svg class="sidebar-close" role="button" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.close.viewBox }}" aria-label="{{ sitestrings[siteconfig.lang].close_sidebar_menu }}" onclick="slideLeftSidebar()">
+    <svg class="sidebar-close" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.close.viewBox }}" aria-label="{{ sitestrings[siteconfig.lang].close_sidebar_menu }}" onclick="slideLeftSidebar()">
         <title>Close</title>
         <path d="{{ inlinesvg.close.path }}" />
     </svg>
@@ -30,7 +30,7 @@
     {% if siteelements.features.search %}
     <div class="sidebar-search">
         <button id="sidebar-search-open" class="sidebar-search-button" type="button" aria-haspopup="dialog" aria-controls="search-modal" aria-label="{{ sitestrings[siteconfig.lang].search_open }}" onclick="searchButton()">
-            <svg role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.search.viewBox }}">
+            <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.search.viewBox }}">
                 <path d="{{ inlinesvg.search.path }}" />
             </svg>
         </button>
@@ -45,10 +45,10 @@
         {% endif %}
         {% if siteelements.features.colorMode != "light" and siteelements.features.colorMode != "dark" %}
         <div id="sidebar-color-toggle" class="sidebar-colormode">
-            <svg class="lighttoggle" role="button" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.lightMode.viewBox }}" aria-label="{{ sitestrings[siteconfig.lang].color_mode }}" onclick="toggleDarkLightMode(false)">
+            <svg class="lighttoggle" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.lightMode.viewBox }}" aria-label="{{ sitestrings[siteconfig.lang].color_mode }}" onclick="toggleDarkLightMode(false)">
                 <path d="{{ inlinesvg.lightMode.path }}" />
             </svg>
-            <svg class="darktoggle" role="button" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.darkMode.viewBox }}" aria-label="{{ sitestrings[siteconfig.lang].color_mode }}" onclick="toggleDarkLightMode(false)">
+            <svg class="darktoggle" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.darkMode.viewBox }}" aria-label="{{ sitestrings[siteconfig.lang].color_mode }}" onclick="toggleDarkLightMode(false)">
                 <path d="{{ inlinesvg.darkMode.path }}" />
             </svg>
         </div>

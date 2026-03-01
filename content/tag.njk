@@ -1,7 +1,7 @@
 ---
 layout: base.njk
 sitemapPriority: 1
-permalink: "{{ siteconfig.pagination.tagLinkPrefix }}{{ tag.tagName }}/{% if tag.pageNumber %}{{ tag.pageNumber }}/{% endif %}"
+permalink: "{{ siteconfig.pagination.tagLinkPrefix }}{{ tag.tagName | empSlugify }}/{% if tag.pageNumber %}{{ tag.pageNumber }}/{% endif %}"
 pagination:
     data: collections.tagPagination
     size: 1

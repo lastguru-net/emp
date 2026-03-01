@@ -15,7 +15,7 @@
             <a href="{{ post.url | url }}" aria-label="{{ post.data.title }}">
                 {% if post.data.pinned %}
                 <span class="pinned-badge">
-                    <svg class="pin-icon" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.pin.viewBox }}">
+                    <svg class="pin-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.pin.viewBox }}">
                         <path d="{{ inlinesvg.pin.path }}" />
                     </svg>
                     <span class="sr-only">{{ sitestrings[siteconfig.lang].pinned_badge }}</span>

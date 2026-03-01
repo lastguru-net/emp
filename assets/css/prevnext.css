@@ -67,9 +67,3 @@
     @apply cursor-not-allowed;
     @apply opacity-50;
 }
-
-.prevnexttitle {
-    @apply block;
-    @apply my-1 px-2;
-    @apply text-xs font-semibold;
-}

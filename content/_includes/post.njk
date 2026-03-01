@@ -23,7 +23,7 @@ layout: base.njk
         <a {% if previousPost.url %}href="{{ previousPost.url }}"{% endif %} aria-label="{% if previousPost.url %}{{ sitestrings[siteconfig.lang].older }}: {{ previousPost.data.title }}{% endif %}">
             <div class="prevnextprev {% if previousPost.url %}prevnextyes{% else %}prevnextno{% endif %}">
                 {# chevron left + title, vertically centered #}
-                <svg class="chevron-icon" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.chevronLeft.viewBox }}">
+                <svg class="chevron-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.chevronLeft.viewBox }}">
                     <path d="{{ inlinesvg.chevronLeft.path }}" />
                 </svg>
                 <span class="prevnextlink">{% if not previousPost.url %} - {% else %}{{ previousPost.data.title | truncate(60, false, "…") }}{% endif %}</span>
@@ -33,7 +33,7 @@ layout: base.njk
             <div class="prevnextnext {% if nextPost.url %}prevnextyes{% else %}prevnextno{% endif %}">
                 {# title + chevron right, vertically centered and aligned to the right #}
                 <span class="prevnextlink">{% if not nextPost.url %} - {% else %}{{ nextPost.data.title | truncate(60, false, "…") }}{% endif %}</span>
-                <svg class="chevron-icon" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.chevronRight.viewBox }}">
+                <svg class="chevron-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.chevronRight.viewBox }}">
                     <path d="{{ inlinesvg.chevronRight.path }}" />
                 </svg>
             </div>

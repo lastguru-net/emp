@@ -64,6 +64,7 @@
     // - 'local': specify local font loading behavior
     //   - "none": do not load fonts locally (standard Google Fonts loading)
     //   - "css": embed Google's @font-face CSS in the site head (better performance and privacy)
+    //   - "full": download all font files locally and serve from the site (best privacy, no external requests)
     // - 'swap': controls 'font-display: swap' behavior
     //   - false by default to avoid flash unstyled text (FOUT)
     //   - if flash of invisible text (FOIT) is more disturbing, enable it

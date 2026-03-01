@@ -3,14 +3,7 @@ import MiniSearch from "minisearch";
 import siteconfig from "../content/_data/siteconfig.js";
 import { loadConfig } from "./config.js";
 import { extractExcerpt } from "./excerpt.js";
-
-const stripTags = (value = "") => String(value).replace(/<[^>]*>/g, " ");
-const collapseWhitespace = (value = "") => String(value).replace(/\s+/g, " ").trim();
-const toArray = (value) => Array.isArray(value) ? value : (value ? [value] : []);
-const capitalize = (value = "") => {
-    const text = String(value);
-    return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
-};
+import { stripTags, collapseWhitespace, toArray, capitalize } from "./collections.js";
 
 const indexOptions = {
     idField: "id",

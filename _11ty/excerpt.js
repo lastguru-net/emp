@@ -1,8 +1,7 @@
 // Excerpt extraction from content
 import siteconfig from "../content/_data/siteconfig.js";
+import { stripTags, collapseWhitespace } from "./collections.js";
 
-const stripTags = (value = "") => value.replace(/<[^>]*>/g, " ");
-const collapseWhitespace = (value = "") => value.replace(/\s+/g, " ").trim();
 export const extractExcerpt = (text = "", limit = 250) => {
     const plain = stripTags(text).trim();
     if (!plain) return "";

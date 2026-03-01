@@ -10,18 +10,16 @@ import markdownItSup from "markdown-it-sup";
 import markdownItTasklists from "markdown-it-task-lists";
 import syntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import embedEverything from "eleventy-plugin-embed-everything";
-import getExcerpt from "./_11ty/excerpt.js";
 import filters from "./_11ty/filters.js";
+import getExcerpt from "./_11ty/excerpt.js";
 import dates from "./_11ty/dates.js";
 import hash from "./_11ty/hash.js";
 import externalLinks from "./_11ty/external-links.js";
 import imageTransform from "./_11ty/image-transform.js";
-import minify from "./_11ty/minify.js";
-import tagPagination from "./_11ty/tag.js";
-import authorPagination from "./_11ty/author.js";
-import googleFontsPlugin from "./_11ty/google-fonts.js";
 import lqip from "./_11ty/lqip.js";
-import empPostsPlugin from "./_11ty/emp-posts.js";
+import minify from "./_11ty/minify.js";
+import collections from "./_11ty/collections.js";
+import googleFontsPlugin from "./_11ty/google-fonts.js";
 import searchIndex from "./_11ty/search-index.js";
 import tailwind from "./_11ty/tailwind.js";
 
@@ -66,7 +64,13 @@ export default (eleventyConfig) => {
         "png"
     ]);
 
-    // Plugins
+    // Syntax highlighting plugin
+    eleventyConfig.addPlugin(syntaxHighlight);
+
+    // Embed common media formats
+    eleventyConfig.addPlugin(embedEverything);
+
+    // General-purpose Nunjucks filters
     eleventyConfig.addPlugin(filters);
 
     // Generate excerpt from first paragraph
@@ -90,19 +94,11 @@ export default (eleventyConfig) => {
     // Minifying HTML
     eleventyConfig.addPlugin(minify);
 
-    // Syntax highlighting plugin
-    eleventyConfig.addPlugin(syntaxHighlight);
+    // Double pagination for tags and authors, curated posts
+    eleventyConfig.addPlugin(collections);
 
-    // Embed common media formats
-    eleventyConfig.addPlugin(embedEverything);
-
-    // Double pagination for tags and authors
-    eleventyConfig.addPlugin(tagPagination);
-    eleventyConfig.addPlugin(authorPagination);
+    // Inline Google Fonts CSS and font files
     eleventyConfig.addPlugin(googleFontsPlugin);
-
-    // empPosts collection (pinned-first, etc.)
-    eleventyConfig.addPlugin(empPostsPlugin);
 
     // Search docs collection and serialized Minisearch payload filter
     eleventyConfig.addPlugin(searchIndex);

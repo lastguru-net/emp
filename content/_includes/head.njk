@@ -12,6 +12,8 @@
 <meta name="description" content="{{ description }}">
 {% if siteelements.features.generator %}<meta name="generator" content="Eleventy">{% endif %}
 {% if image %}{% set image_src = image %}{% else %}{% set image_src = siteconfig.openGraphDefaultImage %}{% endif %}
+{% set isPost = tags and ('posts' in tags) %}
+{% set isAuthorPage = tags and ('authorcard' in tags) %}
 {% include "opengraph.njk" %}
 {% include "twittercard.njk" %}
 {% for name, item in meta %}

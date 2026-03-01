@@ -1,10 +1,20 @@
 // General-purpose Nunjucks filters
 import { URL } from "node:url";
 import siteconfig from "../content/_data/siteconfig.js";
+import { loadConfig } from "./config.js";
+
+const getKeywords = async (tags) => {
+    const sitetags = await loadConfig("sitetags");
+    const sitestrings = await loadConfig("sitestrings");
+    const notagList = sitetags.notag || [];
+    const localizedStrings = sitestrings[siteconfig.lang] || {};
+    const tagList = Array.isArray(tags) ? tags : (tags ? [tags] : []);
+    return tagList
+        .filter((t) => !notagList.includes(t))
+        .map((t) => localizedStrings[t] || t);
+};
 
 export default (eleventyConfig) => {
-    const isProduction = process.env.NODE_ENV === "production";
-
     // CSS class for home page link
     eleventyConfig.addNunjucksFilter("isHomeLink", (url, pattern) => {
         return pattern === "/" && url === "/" ? "active" : "";
@@ -35,5 +45,11 @@ export default (eleventyConfig) => {
         if (value === undefined || value === null) return "";
         // Remove surrounding quotes added by JSON.stringify
         return JSON.stringify(String(value)).slice(1, -1);
+    });
+
+    // Filter and localise tags into a keyword array (excludes notag entries)
+    // Usage: {{ tags | getKeywords }}
+    eleventyConfig.addNunjucksAsyncFilter("getKeywords", (tags, callback) => {
+        getKeywords(tags).then((result) => callback(null, result)).catch(callback);
     });
 };

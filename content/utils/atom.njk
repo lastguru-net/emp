@@ -34,14 +34,8 @@ eleventyImport:
         {% set activeAuthorId = item.data.author or siteconfig.author %}
         {% set activeAuthorData = siteauthors[activeAuthorId] %}
         {% set activeAuthorDisplayName = activeAuthorData.fullName or activeAuthorId %}
-        {% set authorPageUrl = ('/author/' ~ (activeAuthorId | slugify) ~ '/') | absoluteUrl %}
-        {% set itemKeywords = [] %}
-        {% for t in item.data.tags %}
-            {% if t not in sitetags.notag %}
-                {% set kw = sitestrings[siteconfig.lang][t] or t %}
-                {% set itemKeywords = itemKeywords.concat([kw]) %}
-            {% endif %}
-        {% endfor %}
+        {% set authorPageUrl = (siteconfig.pagination.authorLinkPrefix ~ (activeAuthorId | empSlugify) ~ '/') | absoluteUrl %}
+        {% set itemKeywords = item.data.tags | getKeywords %}
         <entry>
             <title>{{ item.data.title }}</title>
             <link rel="alternate" href="{{ itemUrl }}" />
