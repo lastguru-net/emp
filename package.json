@@ -1,6 +1,6 @@
 {
     "name": "eleventy-markdown-prime",
-    "version": "6.2.5",
+    "version": "6.2.6",
     "description": "A starter repository for a text-based blog site using the Eleventy site generator.",
     "type": "module",
     "license": "MIT",
@@ -20,14 +20,14 @@
         "dev:eleventy": "eleventy --serve"
     },
     "dependencies": {
-        "@11ty/eleventy": "^3.1.2",
-        "@11ty/eleventy-img": "^7.0.0-alpha.2",
+        "@11ty/eleventy": "^3.1.5",
+        "@11ty/eleventy-img": "^7.0.0-alpha.4",
         "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
-        "eleventy-plugin-embed-everything": "^1.21.1",
+        "eleventy-plugin-embed-everything": "^1.21.2",
         "xxhash-wasm": "^1.1.0",
         "json5": "^2.2.3",
         "luxon": "^3.7.2",
-        "html-minifier-next": "^5.1.5",
+        "html-minifier-next": "^6.2.0",
         "markdown-it": "^14.1.1",
         "markdown-it-anchor": "^9.2.0",
         "markdown-it-deflist": "^3.0.0",
@@ -38,8 +38,8 @@
         "markdown-it-sup": "^2.0.0",
         "markdown-it-task-lists": "^2.1.1",
         "minisearch": "^7.2.0",
-        "tailwindcss": "^4.2.1",
-        "@tailwindcss/node": "^4.2.1",
-        "@tailwindcss/oxide": "^4.2.1"
+        "tailwindcss": "^4.2.4",
+        "@tailwindcss/node": "^4.2.4",
+        "@tailwindcss/oxide": "^4.2.4"
     }
 }
