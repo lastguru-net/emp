@@ -28,7 +28,6 @@ content:
       type: date
     - name: updated
       label: Update date
-      required: true
       description: Optional last modification date in the same formats as the date field. When present, it is used in JSON-LD and in the sitemap.
       type: date
     - name: permalink
@@ -50,7 +49,7 @@ content:
       list: true
     - name: author
       label: Author
-      description: The author’s name. Used to generate author pages and displayed in post lists.
+      description: The author's name. Used to generate author pages and displayed in post lists.
       type: string
     - name: hidden
       label: Hidden
@@ -92,11 +91,11 @@ content:
       list: true
     - name: author
       label: Author
-      description: The author’s name. Used to generate author pages and displayed in post lists.
+      description: The author's name. Used to generate author pages and displayed in post lists.
       type: string
     - name: profilePage
       label: Profile page
-      description: When set to `true` on a page (not a post), generates ProfilePage JSON‑LD and a corresponding Person/Organization node describing the site publisher. Commonly used for pages like “About Us.”
+      description: When set to `true` on a page (not a post), generates ProfilePage JSON-LD and a corresponding Person/Organization node describing the site publisher. Commonly used for pages like "About Us".
       type: boolean
     - name: hidden
       label: Hidden

@@ -88,7 +88,7 @@
     @apply no-underline;
 }
 
-/* NOTE: The menu indicator uses intentional “magic numbers” to create an effect
+/* NOTE: The menu indicator uses intentional "magic numbers" to create an effect
     beside the active/hovered item. These offsets are tuned to the current line-height
     and spacing. Do not change without revisiting the visual effect (values
     like -right-29, -top-81, etc. are expected here). */

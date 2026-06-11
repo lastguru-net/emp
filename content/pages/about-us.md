@@ -5,7 +5,7 @@ profilePage: true
 
 ## Eleventy Markdown Prime starter repository by lastguru
 
-Eleventy Markdown Prime is a minimalistic, opinionated starter for text‑first blogs built with Eleventy 3 and Tailwind CSS 4. It is loosely based on [Eleventy Chirpy Blog Template](https://github.com/muenzpraeger/eleventy-chirpy-blog-template), inspired by the popular [Chirpy Jekyll Theme](https://github.com/cotes2020/jekyll-theme-chirpy), keeping a familiar look while significantly reworking and restructuring the implementation. It strives to be fast, accessible, and easy to customize, while remaining simple and visually similar. Some features are new, some are reimplemented, and additional ones will be reintroduced over time.
+Eleventy Markdown Prime is a minimalistic, opinionated starter for text-first blogs built with Eleventy 3 and Tailwind CSS 4. It is loosely based on [Eleventy Chirpy Blog Template](https://github.com/muenzpraeger/eleventy-chirpy-blog-template), inspired by the popular [Chirpy Jekyll Theme](https://github.com/cotes2020/jekyll-theme-chirpy), keeping a familiar look while significantly reworking and restructuring the implementation. It strives to be fast, accessible, and easy to customize, while remaining simple and visually similar. Some features are new, some are reimplemented, and additional ones will be reintroduced over time.
 
 ## [Current live demo](https://emp-starter.lastguru.dev)
 

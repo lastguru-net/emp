@@ -38,10 +38,10 @@ To build your website, you need your own copy of the EMP starter repository. Thi
 
 ### Fork vs Template: Which Should You Choose?
 
-- **Use this template**: Creates a new repository in your GitHub account with no connection to the original. Best if you want a clean start and don’t plan to sync updates from the EMP repository.
+- **Use this template**: Creates a new repository in your GitHub account with no connection to the original. Best if you want a clean start and don't plan to sync updates from the EMP repository.
 - **Fork**: Creates a copy of the repository in your GitHub account, keeping the full history and a link to the original (upstream). Ideal if you want to pull future updates from EMP or contribute back.
 
-> **Note**: Choosing “Use this template” gives you a one‑time snapshot with no upstream link or shared commit history. Clean, independent, lightweight: only your future commits. You will not see later fixes, features, security tweaks, or structural changes added to EMP, however; adopting them later means comparing files manually and selective copying. A “Fork” keeps full history plus a live upstream reference, so new changes remain visible and can be merged or rebased. The more you alter core layouts, config files, build scripts, data structures, or directory organization, the harder upstream changes become to apply. Past a certain depth of customization, meaningful syncing can turn fragile, extremely time‑consuming, or effectively impossible. To mitigate it, significant structural changes that may benefit others should be pushed upstream. Template favors ownership and independence; fork favors ongoing co-evolution and traceability.
+> **Note**: Choosing "Use this template" gives you a one-time snapshot with no upstream link or shared commit history. Clean, independent, lightweight: only your future commits. You will not see later fixes, features, security tweaks, or structural changes added to EMP, however; adopting them later means comparing files manually and selective copying. A "Fork" keeps full history plus a live upstream reference, so new changes remain visible and can be merged or rebased. The more you alter core layouts, config files, build scripts, data structures, or directory organization, the harder upstream changes become to apply. Past a certain depth of customization, meaningful syncing can turn fragile, extremely time-consuming, or effectively impossible. To mitigate it, significant structural changes that may benefit others should be pushed upstream. Template favors ownership and independence; fork favors ongoing co-evolution and traceability.
 
 ### Keeping Your Repository Updated
 
@@ -101,7 +101,7 @@ For more detailed guides on setting up Node.js and npm, check:
 
 ## Site Structure
 
-The EMP theme has a modular design. At first glance, you’ll notice the distinctive sidebar and main content area, each containing configurable elements. Let’s break down the screen structure:
+The EMP theme has a modular design. At first glance, you'll notice the distinctive sidebar and main content area, each containing configurable elements. Let's break down the screen structure:
 
 1. **Sidebar**: Always visible on larger screens and hidden on mobile devices. The sidebar is defined in the configuration files and includes:
    - Site logo or profile image
@@ -121,7 +121,7 @@ The EMP theme has a modular design. At first glance, you’ll notice the distinc
    - **Author Page**: Similar to the landing page but without a header image. Lists posts by a specific author (e.g., "lastguru").
      - Supports pagination and is generated automatically for each author.
      - When enabled, an author business card (photo, bio, website/email, socials) is displayed above the list.
-   - **Post**: The most common content type — a blog post.
+   - **Post**: The most common content type - a blog post.
      - Includes a title, date, and optional image. Additional properties like location, author, and tags can be added.
      - Below each post, share buttons and navigation buttons for newer/older posts are available.
    - **Page**: Special content like "About Us." Pages are not listed among blog posts and do not include dates, post properties, or navigation buttons. They are typically linked directly in the main menu or from other posts or pages.
@@ -129,7 +129,7 @@ The EMP theme has a modular design. At first glance, you’ll notice the distinc
 
 ## File Structure
 
-Now that we understand the site’s main components, let’s explore the file structure. Static site generators like Eleventy do not have admin panels (unlike platforms like WordPress), so everything is managed through files. Knowing the file structure helps locate settings, templates, and where to add new content.
+Now that we understand the site's main components, let's explore the file structure. Static site generators like Eleventy do not have admin panels (unlike platforms like WordPress), so everything is managed through files. Knowing the file structure helps locate settings, templates, and where to add new content.
 
 - Utility configuration files are located in the root folder (e.g., `/package.json`, `/eleventy.config.mjs`). Avoid modifying these unless necessary.
 - **/_11ty**: Contains custom components that enhance Eleventy. Scripts for tasks like image transformation, link transformation, and excerpt generation are located here. Modifications are rarely needed.
@@ -173,7 +173,7 @@ This file contains configuration for site-specific elements such as menu items, 
 - **Fonts**: Google Fonts configuration for body and header typography that can be later used in `theme.css`.
 - **Menu**: Labels and URLs for the home link and additional menu items.
 - **Header**: Header image for the landing page.
-- **Social Links**: Links to social media profiles (e.g., GitHub, LinkedIn, Mastodon). Also used for share attribution (e.g., X “via”).
+- **Social Links**: Links to social media profiles (e.g., GitHub, LinkedIn, Mastodon). Also used for share attribution (e.g., X "via").
 - **Privacy Policy**: Configuration for the privacy policy link.
 - **Powered by**: Powered by text and link.
 - **Copyright**: Settings for copyright year, link, and text.
@@ -187,7 +187,7 @@ This file defines text strings used throughout the site. It allows you to custom
 - **Labels**: Words like "Share," "Older," "Newer," and "Events."
 - **Tooltips**: Text for actions like "Copy page link to clipboard" and "Copied."
 
-You can add your own keys and reference them in templates. Use it to adapt the site’s language and tone. Note that multiple languages can be defined there. The language is selected by the `lang` option in the `siteconfig.js`.
+You can add your own keys and reference them in templates. Use it to adapt the site's language and tone. Note that multiple languages can be defined there. The language is selected by the `lang` option in the `siteconfig.js`.
 
 ### `/content/_data/sitetags.json5`
 
@@ -195,7 +195,7 @@ This file manages tag-related configurations for posts. It includes:
 
 - **notime**: Tags that hide post reading time in post properties (e.g., "events").
 - **notag**: Tags that are hidden in post properties (e.g., "article," "posts").
-- **events**: Tags that trigger Event JSON‑LD instead of BlogPosting.
+- **events**: Tags that trigger Event JSON-LD instead of BlogPosting.
 - **icons**: Overrides for the standard tag icon in post properties.
 - **aliases**: Overrides the link to the tag page.
 
@@ -203,7 +203,7 @@ This file helps control how tags are presented and used across the site.
 
 ### `/content/_data/siteauthors.json5`
 
-This file defines per‑author metadata used to render the author business card on author pages. Each top‑level key is the author identifier used in your post header variables (`author: "name"`). If an author has no entry here, the business card is not displayed. The card can show the author’s name, profile image, bio, and links to a website and social media.
+This file defines per-author metadata used to render the author business card on author pages. Each top-level key is the author identifier used in your post header variables (`author: "name"`). If an author has no entry here, the business card is not displayed. The card can show the author's name, profile image, bio, and links to a website and social media.
 
 ### `/assets/css/theme.css`
 
@@ -223,7 +223,7 @@ This file is processed by Tailwind CSS to generate the final `min.css` file, whi
 
 ## Posts and Pages
 
-Posts and pages are written in Markdown, a simple and widely-used markup language. You can learn more about Markdown’s features on the [Text and Typography](/text-and-typography) page. Each Markdown file has a `.md` extension and consists of two parts: a header and a content body.
+Posts and pages are written in Markdown, a simple and widely-used markup language. You can learn more about Markdown's features on the [Text and Typography](/text-and-typography) page. Each Markdown file has a `.md` extension and consists of two parts: a header and a content body.
 
 Example:
 
@@ -257,10 +257,10 @@ The header contains metadata for the post or page. Supported variables (all opti
 - **thumbnail**: Optional path for a thumbnail image to use in post lists instead of the title image. To hide thumbnail completely instead, use `thumbnail: false`.
 - **excerpt**: A description used in post lists. If defined, it has no length limit. If omitted, an excerpt is auto-generated from the content (capped at full words, first paragraph, up to 250 characters).
 - **tags**: One or more tags for the post. Depending on the configuration, some (or all) of the tags are displayed in the post lists.
-- **author**: The author’s name. Used to generate author pages and displayed in post lists.
+- **author**: The author's name. Used to generate author pages and displayed in post lists.
 - **place**: The location of the post. Displayed in post lists, commonly used for events.
 - **address**: The location address of the event. Displayed as a tooltip for **place** and in the Event JSON-LD structured data.
-- **profilePage**: When set to `true` on a page (not a post), generates ProfilePage JSON‑LD and a corresponding Person/Organization node describing the site publisher. Commonly used for pages like “About Us.”
+- **profilePage**: When set to `true` on a page (not a post), generates ProfilePage JSON-LD and a corresponding Person/Organization node describing the site publisher. Commonly used for pages like "About Us."
 - **hidden**: When set to `true` on a post or a page, hides the post/page from all the lists (landing pages, author/tag pages, sitemap and RSS feeds). Commonly used for drafts.
 - **pinned**: When set to `true` on post (no effect on pages), puts the post on top of all the lists (landing pages, author/tag pages, sitemap and RSS feeds).
 
@@ -270,13 +270,13 @@ The `posts.json` and `pages.json` files contain the default header variables. Th
 
 Once you have set up your repository and made changes to your site (either locally or directly on GitHub), the next step is to make your website accessible to others on the internet. Deployment is the process of taking your website files and hosting them on a server so they can be accessed via a web address (URL).
 
-Cloudflare Pages is a beginner-friendly platform that automates this process, allowing you to deploy your site directly from your GitHub repository. It is free for most sites, so you don’t need to worry about hosting costs. Additionally, Cloudflare Pages offers several benefits:
+Cloudflare Pages is a beginner-friendly platform that automates this process, allowing you to deploy your site directly from your GitHub repository. It is free for most sites, so you don't need to worry about hosting costs. Additionally, Cloudflare Pages offers several benefits:
 
 - **Automatic Builds and Continuous Deployment**: Your site is rebuilt and redeployed automatically whenever you push changes to your repository. This ensures your site is always up-to-date without any manual intervention.
-- **Global CDN**: Your site is served from Cloudflare’s global content delivery network, ensuring fast load times for visitors worldwide.
+- **Global CDN**: Your site is served from Cloudflare's global content delivery network, ensuring fast load times for visitors worldwide.
 - **Free HTTPS**: Cloudflare Pages provides free HTTPS for your site, ensuring secure connections for your visitors.
 
-This means you don’t need to manually upload files or configure servers — Cloudflare Pages handles everything for you.
+This means you don't need to manually upload files or configure servers - Cloudflare Pages handles everything for you.
 
 ### Steps to Deploy
 

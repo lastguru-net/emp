@@ -12,13 +12,13 @@ excerpt: "Examples of text, typography, lists, tables, pictures, videos, and mor
 
 ## Headings
 
-# H1 — heading
+# H1 - heading
 
-## H2 — heading
+## H2 - heading
 
-### H3 — heading
+### H3 - heading
 
-#### H4 — heading
+#### H4 - heading
 
 ## Paragraph
 

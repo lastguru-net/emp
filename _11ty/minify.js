@@ -27,7 +27,7 @@ const htmlOpts = {
     useShortDoctype: false
 };
 
-// Inline, dependency-free XML minifier — conservative and safe for typical feed XML:
+// Inline, dependency-free XML minifier - conservative and safe for typical feed XML:
 // - preserves CDATA blocks
 // - removes XML comments
 // - collapses whitespace between tags
