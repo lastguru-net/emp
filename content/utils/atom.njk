@@ -14,12 +14,12 @@ eleventyImport:
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>{{ siteconfig.title }}</title>
     <subtitle>{{ siteconfig.description }}</subtitle>
-    <link href="{{ siteconfig.url }}" />
+    <link href="{{ '/' | absoluteUrl }}" />
     <link href="{{ '/atom.xml' | absoluteUrl }}" rel="self" />
-    <link rel="alternate" type="text/html" href="{{ siteconfig.url }}" />
-    <id>{{ siteconfig.url }}/</id>
-    <icon>{{ siteconfig.url }}{% imageTransform siteconfig.favicon, 64, 'png' %}</icon>
-    <logo>{{ siteconfig.url }}{% imageTransform siteconfig.image, 512, 'png' %}</logo>
+    <link rel="alternate" type="text/html" href="{{ '/' | absoluteUrl }}" />
+    <id>{{ '/' | absoluteUrl }}</id>
+    <icon>{% imageTransformAbsoluteUrl siteconfig.favicon, 64, 'png' %}</icon>
+    <logo>{% imageTransformAbsoluteUrl siteconfig.image, 512, 'png' %}</logo>
     <author>
         <name>{{ publisherName }}</name>{% if publisherEmail %}
         <email>{{ publisherEmail }}</email>{% endif %}{% if publisherWebsite %}

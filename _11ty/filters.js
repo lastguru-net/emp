@@ -35,6 +35,15 @@ export default (eleventyConfig) => {
         return Math.ceil(wordcount / 250);
     });
 
+    // Locale-formatted reading time including the minute unit
+    eleventyConfig.addNunjucksFilter("formatReadingTime", (minutes) => {
+        return new Intl.NumberFormat(siteconfig.lang || "en", {
+            style: "unit",
+            unit: "minute",
+            unitDisplay: "long"
+        }).format(minutes);
+    });
+
     // Locale-formatted word count
     eleventyConfig.addNunjucksFilter("formatWords", (wordcount) => {
         return wordcount.toLocaleString(siteconfig.lang || "en");

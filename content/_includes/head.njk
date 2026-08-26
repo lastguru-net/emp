@@ -25,9 +25,9 @@
 {% for iconsize in siteconfig.faviconSizes %}
 <link rel="icon" type="image/png" sizes="{{ iconsize }}x{{ iconsize }}" href="{% imageTransform siteconfig.favicon, iconsize, 'png' %}">
 {% endfor %}
-{% if siteconfig.webmanifestSizes %}<link rel="manifest" href="/site.webmanifest" crossorigin="use-credentials">{% endif %}
+{% if siteconfig.webmanifestSizes %}<link rel="manifest" href="{{ '/site.webmanifest' | url }}" crossorigin="use-credentials">{% endif %}
 <link rel="canonical" href="{{ page.url | absoluteUrl }}">
-{% if siteelements.features.sitemap %}<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">{% endif %}
+{% if siteelements.features.sitemap %}<link rel="sitemap" type="application/xml" title="Sitemap" href="{{ '/sitemap.xml' | url }}">{% endif %}
 {% if siteelements.features.rssFeed %}<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="{{ '/rss.xml' | absoluteUrl }}">{% endif %}
 {% if siteelements.features.atomFeed %}<link rel="alternate" type="application/atom+xml" title="Atom Feed" href="{{ '/atom.xml' | absoluteUrl }}">{% endif %}
 {% if siteelements.features.jsonFeed %}<link rel="alternate" type="application/feed+json" title="JSON Feed" href="{{ '/feed.json' | absoluteUrl }}">{% endif %}
@@ -43,12 +43,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com">
 {% endif %}
 {% endif %}
-<link rel="preload" href="{{ '/assets/css/min.css' | addDirHash }}" as="style">
-<link rel="stylesheet" href="{{ '/assets/css/min.css' | addDirHash }}">
+<link rel="preload" href="{{ '/assets/css/min.css' | addDirHash | url }}" as="style">
+<link rel="stylesheet" href="{{ '/assets/css/min.css' | addDirHash | url }}">
 {% if siteelements.features.colorMode != "light" and siteelements.features.colorMode != "dark" %}
 {% include "colormode-js.njk" %}
 {% endif %}
-{% if siteelements.features.js %}<script defer src="{{ '/assets/js/min.js' | addDirHash }}" type="module"></script>{% endif %}
+{% if siteelements.features.js %}<script defer src="{{ '/assets/js/min.js' | addDirHash | url }}" type="module"></script>{% endif %}
 {% if siteconfig.pixels.googleTag %}
 {% include "google-tag.njk" %}
 {% endif %}

@@ -1,7 +1,7 @@
 <div class="postlist">
     {% if siteelements.header and siteheader %}
         {% if siteelements.headerLink %}
-        <a class="siteheaderlink" href="{{ siteelements.headerLink }}">
+        <a class="siteheaderlink" href="{{ siteelements.headerLink | url }}">
             <img class="siteheader" src="{{ siteelements.header }}" alt="{{ siteelements.headerAlt }}" fetchpriority="high" />
         </a>
         {% else %}

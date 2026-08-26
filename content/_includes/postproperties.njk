@@ -8,7 +8,7 @@
     {% if post.data.author %}
         {% if siteauthors[post.data.author] %}{% set postauthor = siteauthors[post.data.author].fullName %}{% else %}{% set postauthor = post.data.author %}{% endif %}
         <div class="postauthor">
-            <a href="{{ siteconfig.pagination.authorLinkPrefix }}{{ post.data.author | empSlugify }}/" aria-label="{{ sitestrings[siteconfig.lang].posts_by }} {{ postauthor }}">
+            <a href="{{ (siteconfig.pagination.authorLinkPrefix ~ (post.data.author | empSlugify) ~ '/') | url }}" aria-label="{{ sitestrings[siteconfig.lang].posts_by }} {{ postauthor }}">
                 <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.author.viewBox }}">
                     <path d="{{ inlinesvg.author.path }}" />
                 </svg>
@@ -33,7 +33,7 @@
             {# resolve alias: use sitetags.aliases[posttag] if present, otherwise the tag itself #}
             {% set targetTag = (sitetags.aliases and sitetags.aliases[posttag]) or posttag %}
             <div class="posttag">
-                <a href="{{ siteconfig.pagination.tagLinkPrefix }}{{ targetTag | empSlugify }}/" aria-label="{{ sitestrings[siteconfig.lang].posts_tagged }} {{ posttagtext | capitalize }}">
+                <a href="{{ (siteconfig.pagination.tagLinkPrefix ~ (targetTag | empSlugify) ~ '/') | url }}" aria-label="{{ sitestrings[siteconfig.lang].posts_tagged }} {{ posttagtext | capitalize }}">
                     <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ tagIcon.viewBox }}">
                         <path d="{{ tagIcon.path }}" />
                     </svg>
@@ -52,7 +52,7 @@
         <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.readingTime.viewBox }}">
             <path d="{{ inlinesvg.readingTime.path }}" />
         </svg>
-        {{ post.templateContent | striptags | wordcount | readingTime }} {{ sitestrings[siteconfig.lang].minutes }}
+        {{ post.templateContent | striptags | wordcount | readingTime | formatReadingTime }}
         <span></span>
     </div>
     {% endif %}

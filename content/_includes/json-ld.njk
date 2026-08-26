@@ -54,25 +54,25 @@
     "@graph": [
         {
             "@type": "WebSite",
-            "@id": "{{ siteconfig.url }}#website",
+            "@id": "{{ '/' | absoluteUrl }}#website",
             "name": "{{ siteconfig.title | jsonEscape | safe }}",
-            "url": "{{ siteconfig.url }}",
+            "url": "{{ '/' | absoluteUrl }}",
             "inLanguage": "{{ siteconfig.lang }}",
             "description": "{{ siteconfig.description | jsonEscape | safe }}",
             "logo": {
                 "@type": "ImageObject",
-                "url": "{{ siteconfig.url }}{% imageTransform siteconfig.image, 1200, 'webp' %}"
+                "url": "{% imageTransformAbsoluteUrl siteconfig.image, 1200, 'webp' %}"
             },
             "publisher": {
                 "@type": "{{ siteconfig.authorType }}",
                 "name": "{{ publisherName | jsonEscape | safe }}",
-                "url": "{{ siteconfig.url }}",
+                "url": "{{ '/' | absoluteUrl }}",
                 {% if publisherData.bio %}"description": "{{ publisherData.bio | jsonEscape | safe }}",{% endif %}
                 {% if publisherData.email %}"email": "{{ publisherData.email | jsonEscape | safe }}",{% endif %}
                 {% if publisherSameAs | length %}"sameAs": {{ publisherSameAs | dump | safe }},{% endif %}
                 "{{ 'image' if siteconfig.authorType == 'Person' else 'logo' }}": {
                     "@type": "ImageObject",
-                    "url": "{{ siteconfig.url }}{% imageTransform publisherImage, 1200, 'webp' %}"
+                    "url": "{% imageTransformAbsoluteUrl publisherImage, 1200, 'webp' %}"
                 }
             }
         }
@@ -82,11 +82,11 @@
             "@id": "{{ pageUrl }}#event",
             "name": "{{ title | jsonEscape | safe }}",
             "url": "{{ pageUrl }}",
-            "isPartOf": { "@id": "{{ siteconfig.url }}#website" },
+            "isPartOf": { "@id": "{{ '/' | absoluteUrl }}#website" },
             "inLanguage": "{{ siteconfig.lang }}",
             "description": "{{ description | jsonEscape | safe }}",
             "image": [
-                "{{ siteconfig.url }}{% imageTransform imageSrc, 1200, 'webp' %}"
+                "{% imageTransformAbsoluteUrl imageSrc, 1200, 'webp' %}"
             ],
             "startDate": "{{ page.date | isoDateTime }}",
             {% if place %}"location": {
@@ -97,13 +97,13 @@
             "organizer": {
                 "@type": "{{ siteconfig.authorType }}",
                 "name": "{{ publisherName | jsonEscape | safe }}",
-                "url": "{{ siteconfig.url }}",
+                "url": "{{ '/' | absoluteUrl }}",
                 {% if publisherData.bio %}"description": "{{ publisherData.bio | jsonEscape | safe }}",{% endif %}
                 {% if publisherData.email %}"email": "{{ publisherData.email | jsonEscape | safe }}",{% endif %}
                 {% if publisherSameAs | length %}"sameAs": {{ publisherSameAs | dump | safe }},{% endif %}
                 "{{ 'image' if siteconfig.authorType == 'Person' else 'logo' }}": {
                     "@type": "ImageObject",
-                    "url": "{{ siteconfig.url }}{% imageTransform publisherImage, 1200, 'webp' %}"
+                    "url": "{% imageTransformAbsoluteUrl publisherImage, 1200, 'webp' %}"
                 }
             }
         }
@@ -113,12 +113,12 @@
             "@id": "{{ pageUrl }}#blogposting",
             "headline": "{% if title %}{{ title | jsonEscape | safe }} - {% endif %}{{ siteconfig.title | jsonEscape | safe }}",
             "url": "{{ pageUrl }}",
-            "isPartOf": { "@id": "{{ siteconfig.url }}#website" },
+            "isPartOf": { "@id": "{{ '/' | absoluteUrl }}#website" },
             "mainEntityOfPage": "{{ pageUrl }}",
             "inLanguage": "{{ siteconfig.lang }}",
             "description": "{{ description | jsonEscape | safe }}",
             "image": [
-                "{{ siteconfig.url }}{% imageTransform imageSrc, 1200, 'webp' %}"
+                "{% imageTransformAbsoluteUrl imageSrc, 1200, 'webp' %}"
             ],
             "datePublished": "{{ page.date | isoDateTime }}",
             {% if updated %}"dateModified": "{{ updated | isoDateTime }}",{% endif %}
@@ -132,19 +132,19 @@
                 {% if sameAs | length %}"sameAs": {{ sameAs | dump | safe }},{% endif %}
                 "image": {
                     "@type": "ImageObject",
-                    "url": "{{ siteconfig.url }}{% imageTransform authorImage, 1200, 'webp' %}"
+                    "url": "{% imageTransformAbsoluteUrl authorImage, 1200, 'webp' %}"
                 }
             },
             "publisher": {
                 "@type": "{{ siteconfig.authorType }}",
                 "name": "{{ publisherName | jsonEscape | safe }}",
-                "url": "{{ siteconfig.url }}",
+                "url": "{{ '/' | absoluteUrl }}",
                 {% if publisherData.bio %}"description": "{{ publisherData.bio | jsonEscape | safe }}",{% endif %}
                 {% if publisherData.email %}"email": "{{ publisherData.email | jsonEscape | safe }}",{% endif %}
                 {% if publisherSameAs | length %}"sameAs": {{ publisherSameAs | dump | safe }},{% endif %}
                 "{{ 'image' if siteconfig.authorType == 'Person' else 'logo' }}": {
                     "@type": "ImageObject",
-                    "url": "{{ siteconfig.url }}{% imageTransform publisherImage, 1200, 'webp' %}"
+                    "url": "{% imageTransformAbsoluteUrl publisherImage, 1200, 'webp' %}"
                 }
             }
         }
@@ -154,7 +154,7 @@
             "@id": "{{ pageUrl }}#profilepage",
             "name": "{% if title %}{{ title | jsonEscape | safe }} - {% endif %}{{ siteconfig.title | jsonEscape | safe }}",
             "url": "{{ pageUrl }}",
-            "isPartOf": { "@id": "{{ siteconfig.url }}#website" },
+            "isPartOf": { "@id": "{{ '/' | absoluteUrl }}#website" },
             "mainEntity": { "@id": "{{ pageUrl }}#author" },
             "inLanguage": "{{ siteconfig.lang }}",
             "description": "{{ description | jsonEscape | safe }}"
@@ -169,7 +169,7 @@
             {% if sameAs | length %}"sameAs": {{ sameAs | dump | safe }},{% endif %}
             "image": {
                 "@type": "ImageObject",
-                "url": "{{ siteconfig.url }}{% imageTransform authorImage, 1200, 'webp' %}"
+                "url": "{% imageTransformAbsoluteUrl authorImage, 1200, 'webp' %}"
             }
         }
         {% elseif isProfilePage %}
@@ -178,7 +178,7 @@
             "@id": "{{ pageUrl }}#profilepage",
             "name": "{% if title %}{{ title | jsonEscape | safe }} - {% endif %}{{ siteconfig.title | jsonEscape | safe }}",
             "url": "{{ pageUrl }}",
-            "isPartOf": { "@id": "{{ siteconfig.url }}#website" },
+            "isPartOf": { "@id": "{{ '/' | absoluteUrl }}#website" },
             "mainEntity": { "@id": "{{ pageUrl }}#profile" },
             "inLanguage": "{{ siteconfig.lang }}",
             "description": "{{ description | jsonEscape | safe }}"
@@ -187,13 +187,13 @@
             "@type": "{{ siteconfig.authorType }}",
             "@id": "{{ pageUrl }}#profile",
             "name": "{{ publisherName | jsonEscape | safe }}",
-            "url": "{{ siteconfig.url }}",
+            "url": "{{ '/' | absoluteUrl }}",
             {% if publisherData.bio %}"description": "{{ publisherData.bio | jsonEscape | safe }}",{% endif %}
             {% if publisherData.email %}"email": "{{ publisherData.email | jsonEscape | safe }}",{% endif %}
             {% if publisherSameAs | length %}"sameAs": {{ publisherSameAs | dump | safe }},{% endif %}
             "{{ 'image' if siteconfig.authorType == 'Person' else 'logo' }}": {
                 "@type": "ImageObject",
-                "url": "{{ siteconfig.url }}{% imageTransform publisherImage, 1200, 'webp' %}"
+                "url": "{% imageTransformAbsoluteUrl publisherImage, 1200, 'webp' %}"
             }
         }
         {% else %}
@@ -202,7 +202,7 @@
             "@id": "{{ pageUrl }}#webpage",
             "name": "{% if title %}{{ title | jsonEscape | safe }} - {% endif %}{{ siteconfig.title | jsonEscape | safe }}",
             "url": "{{ pageUrl }}",
-            "isPartOf": { "@id": "{{ siteconfig.url }}#website" },
+            "isPartOf": { "@id": "{{ '/' | absoluteUrl }}#website" },
             "inLanguage": "{{ siteconfig.lang }}",
             "description": "{{ description | jsonEscape | safe }}"
         }

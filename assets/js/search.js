@@ -13,6 +13,8 @@ let searchStrings = {};
 let searchRoot = null;
 let searchInput = null;
 let searchResults = null;
+let searchStatus = null;
+let searchOpener = null;
 
 let isInitialized = false;
 let miniSearch = null;
@@ -22,6 +24,7 @@ const renderResults = (query) => {
 
     if (q.length < minQueryLength) {
         searchResults.innerHTML = "";
+        searchStatus.textContent = "";
         return;
     }
 
@@ -34,8 +37,13 @@ const renderResults = (query) => {
 
     if (!found.length) {
         searchResults.innerHTML = '<div class="search-empty">' + escapeHtml(searchStrings.noResults) + "</div>";
+        searchStatus.textContent = searchStrings.noResultsStatus.replace("{query}", q);
         return;
     }
+
+    searchStatus.textContent = (found.length === 1 ? searchStrings.result : searchStrings.results)
+        .replace("{count}", found.length)
+        .replace("{query}", q);
 
     searchResults.innerHTML = found.map((result) => {
         const title = result.title;
@@ -53,7 +61,7 @@ const renderResults = (query) => {
 };
 
 const loadIndex = async () => {
-    const miniSearchModule = await import("/assets/js/minisearch.js");
+    const miniSearchModule = await import(miniSearchUrl);
     const response = await fetch(indexUrl, { credentials: "same-origin" });
     const payload = await response.json();
     searchStrings = payload.strings;
@@ -66,6 +74,7 @@ const initSearch = async () => {
     searchRoot = document.getElementById("search-modal");
     searchInput = document.getElementById("search-input");
     searchResults = document.getElementById("search-results");
+    searchStatus = document.getElementById("search-status");
 
     await loadIndex();
     searchInput.setAttribute("placeholder", searchStrings.placeholder);
@@ -78,11 +87,19 @@ const initSearch = async () => {
 };
 
 window.closeSearchModal = () => {
+    if (!searchRoot || searchRoot.classList.contains("hidden")) return;
+
     searchRoot.classList.add("hidden");
     document.body.classList.remove("search-open");
+
+    if (searchOpener?.isConnected) {
+        searchOpener.focus();
+    }
+    searchOpener = null;
 };
 
 window.openSearchModal = () => {
+    searchOpener = document.activeElement;
     searchRoot.classList.remove("hidden");
     document.body.classList.add("search-open");
     searchInput.focus();
@@ -90,8 +107,35 @@ window.openSearchModal = () => {
 };
 
 document.addEventListener("keydown", (event) => {
+    if (!searchRoot || searchRoot.classList.contains("hidden")) return;
+
     if (event.key === "Escape") {
+        event.preventDefault();
         window.closeSearchModal();
+        return;
+    }
+
+    if (event.key === "Tab") {
+        const focusable = [...searchRoot.querySelectorAll(
+            'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )].filter((element) => !element.hidden && element.getClientRects().length);
+
+        if (!focusable.length) {
+            event.preventDefault();
+            return;
+        }
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        const active = document.activeElement;
+
+        if (event.shiftKey && (active === first || !searchRoot.contains(active))) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && (active === last || !searchRoot.contains(active))) {
+            event.preventDefault();
+            first.focus();
+        }
     }
 });
 

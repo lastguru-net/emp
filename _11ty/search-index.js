@@ -54,6 +54,9 @@ const buildSearchIndex = async (allItems) => {
         },
         strings: {
             noResults: localizedStrings.search_no_results,
+            noResultsStatus: localizedStrings.search_no_results_status,
+            result: localizedStrings.search_result,
+            results: localizedStrings.search_results,
             placeholder: localizedStrings.search_placeholder
         },
         index: miniSearch.toJSON()

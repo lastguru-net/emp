@@ -7,7 +7,7 @@
             <div class="authorcard-links">
                 {% if authorCard.aboutMe %}
                 <div class="authorcard-infoitem">
-                    <a class="authorcard-link" href="{{ authorCard.aboutMe }}">
+                    <a class="authorcard-link" href="{{ authorCard.aboutMe | url }}">
                         <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.web.viewBox }}">
                             <path d="{{ inlinesvg.web.path }}" />
                         </svg>
@@ -17,7 +17,7 @@
                 {% endif %}
                 {% if authorCard.website %}
                 <div class="authorcard-infoitem">
-                    <a class="authorcard-link" href="{{ authorCard.website }}" target="_blank" rel="noopener">
+                    <a class="authorcard-link" href="{{ authorCard.website | url }}" target="_blank" rel="noopener">
                         <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.web.viewBox }}">
                             <path d="{{ inlinesvg.web.path }}" />
                         </svg>

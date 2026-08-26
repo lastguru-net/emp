@@ -4,10 +4,10 @@
         <path d="{{ inlinesvg.close.path }}" />
     </svg>
     <div class="sitehero{% if siteelements.features.siteheroStyle == "rounded" %} sitehero-rounded{% endif %}">
-        <a href="/" aria-label="{{ siteelements.menuHome }}">
+        <a href="{{ '/' | url }}" aria-label="{{ siteelements.menuHome }}">
             <img class="nolqip" src="{{ siteconfig.image }}" alt="{{ siteconfig.imageAlt }}" loading="eager" eleventy:widths="160,320,480,640,960,1280" sizes="(max-width: 640px) 100vw, 480px" eleventy:pictureattr:sizes="(max-width: 640px) 100vw, 480px" />
         </a>
-        <a class="sitetitle" href="/" aria-label="{{ siteelements.menuHome }}">{{ siteconfig.title }}</a>
+        <a class="sitetitle" href="{{ '/' | url }}" aria-label="{{ siteelements.menuHome }}">{{ siteconfig.title }}</a>
         <div class="sitedesc">
             {{ siteconfig.description }}
         </div>
@@ -18,11 +18,11 @@
     <div class="menu">
         <ul>
             <li class="navitem {{ page.url | isHomeLink('/') }}">
-                <a href="/" aria-label="{{ siteelements.menuHome }}">{{ siteelements.menuHome }}</a>
+                <a href="{{ '/' | url }}" aria-label="{{ siteelements.menuHome }}">{{ siteelements.menuHome }}</a>
             </li>
             {% for name, link in siteelements.menuItems %}
             <li class="navitem {{ page.url | isActiveLink(link) }}">
-                <a href="{{ link }}" aria-label="{{ name }}">{{ name }}</a>
+                <a href="{{ link | url }}" aria-label="{{ name }}">{{ name }}</a>
             </li>
             {% endfor %}
         </ul>
@@ -41,7 +41,7 @@
     {% endif %}
     <div class="privacy-policy">
         {% if siteelements.features.privacyPolicy == "sidebar" %}
-        <a href="{{ siteelements.privacyPolicy.url }}" aria-label="{{ siteelements.privacyPolicy.name }}">{{ siteelements.privacyPolicy.name }}</a>
+        <a href="{{ siteelements.privacyPolicy.url | url }}" aria-label="{{ siteelements.privacyPolicy.name }}">{{ siteelements.privacyPolicy.name }}</a>
         {% endif %}
         {% if siteelements.features.colorMode != "light" and siteelements.features.colorMode != "dark" %}
         <div id="sidebar-color-toggle" class="sidebar-colormode">

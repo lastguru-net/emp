@@ -1,7 +1,6 @@
 {
     en: {
         words: "words",
-        minutes: "minutes",
         share: "Share",
         share_on: "Share on",
         copy_to_clipboard: "Copy page link to clipboard",
@@ -26,11 +25,13 @@
         search_close: "Close search",
         search_title: "Search",
         search_placeholder: "Type to search...",
-        search_no_results: "No results found"
+        search_no_results: "No results found",
+        search_no_results_status: "No results found for {query}",
+        search_result: "1 search result for {query}",
+        search_results: "{count} search results for {query}"
     },
     lv: {
         words: "vārdi",
-        minutes: "minūtes",
         share: "Dalīties",
         share_on: "Dalīties tīklā",
         copy_to_clipboard: "Kopēt saiti starpliktuvē",
@@ -55,6 +56,9 @@
         search_close: "Aizvērt meklēšanu",
         search_title: "Meklēšana",
         search_placeholder: "Rakstiet, lai meklētu...",
-        search_no_results: "Rezultāti netika atrasti"
+        search_no_results: "Rezultāti netika atrasti",
+        search_no_results_status: "Vaicājumam {query} rezultāti netika atrasti",
+        search_result: "Meklēšanas rezultāti vaicājumam {query}: 1",
+        search_results: "Meklēšanas rezultāti vaicājumam {query}: {count}"
     }
 }

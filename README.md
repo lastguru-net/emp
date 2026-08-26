@@ -35,6 +35,8 @@ More features are in the works...
 
 ## Installation
 
+Node.js 24 or newer is required.
+
 ```
 npm install
 ```

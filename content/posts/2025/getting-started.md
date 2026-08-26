@@ -72,7 +72,7 @@ If you want to preview and edit your site locally, follow these steps.
 ### Prerequisites
 
 1. Install **Git**: [Download Git](https://git-scm.com/downloads).
-2. Install **Node.js** ("Current" version) and npm:
+2. Install **Node.js 24 or newer** and npm:
    - Visit the [Node.js Download Page](https://nodejs.org/en/download/), which provides both prebuilt packages and instructions for setting up a version manager (e.g., nvm).
    - Using a version manager is recommended as it makes it easier to update Node.js in the future.
 3. Verify installation:

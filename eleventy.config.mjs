@@ -48,7 +48,7 @@ export default (eleventyConfig) => {
 
     // Passthrough assets and images
     eleventyConfig.addPassthroughCopy("assets");
-    eleventyConfig.addPassthroughCopy({ "content/images": "images" });
+    eleventyConfig.addPassthroughCopy("content/images/**/*.{avif,gif,ico,jpeg,jpg,png,svg,webp}");
 
     // Watch JS and CSS for dev-mode rebuilds
     eleventyConfig.addWatchTarget("./assets/js/");

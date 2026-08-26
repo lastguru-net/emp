@@ -6,7 +6,7 @@
                 <rect y="30" width="60" height="7" />
                 <rect y="60" width="60" height="7" />
             </svg>
-            <a href="/" aria-label="{{ siteelements.menuHome }}">{{ siteconfig.title }}</a>
+            <a href="{{ '/' | url }}" aria-label="{{ siteelements.menuHome }}">{{ siteconfig.title }}</a>
             {% if siteelements.features.colorMode != "light" and siteelements.features.colorMode != "dark" %}
             <svg class="lighttoggle" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.lightMode.viewBox }}" aria-label="{{ sitestrings[siteconfig.lang].color_mode }}" onclick="toggleDarkLightMode(false)">
                 <path d="{{ inlinesvg.lightMode.path }}" />

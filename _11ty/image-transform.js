@@ -1,8 +1,10 @@
 // Image optimization pipeline and manual transform shortcode
 import path from "node:path";
 import fs from "node:fs";
+import { URL } from "node:url";
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import Image from "@11ty/eleventy-img";
+import siteconfig from "../content/_data/siteconfig.js";
 
 const outputDir = ".cache/images/";
 const urlPath = "/images/";
@@ -66,9 +68,14 @@ const imageTransform = async (src, width, format) => {
     return metadata[format][0].url;
 };
 
+const imageTransformAbsoluteUrl = async (src, width, format) => {
+    return new URL(await imageTransform(src, width, format), siteconfig.url).toString();
+};
+
 export default (eleventyConfig) => {
     eleventyConfig.addPlugin(eleventyImageTransformPlugin, pluginOptions);
     eleventyConfig.addShortcode("imageTransform", imageTransform);
+    eleventyConfig.addShortcode("imageTransformAbsoluteUrl", imageTransformAbsoluteUrl);
 
     // Copy optimized images to the public folder after build
     eleventyConfig.on("eleventy.after", () => {

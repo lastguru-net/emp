@@ -4,7 +4,7 @@
         <div class="search-modal-header">
             <h2 id="search-modal-title">{{ sitestrings[siteconfig.lang].search_title }}</h2>
             <button id="search-modal-close" class="search-modal-close" type="button" aria-label="{{ sitestrings[siteconfig.lang].search_close }}" onclick="closeSearchModal()">
-                <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.close.viewBox }}">
+                <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.close.viewBox }}">
                     <path d="{{ inlinesvg.close.path }}" />
                 </svg>
             </button>
@@ -12,6 +12,7 @@
         <div class="search-modal-body">
             <label class="sr-only" for="search-input">{{ sitestrings[siteconfig.lang].search }}</label>
             <input id="search-input" class="search-input" type="search" autocomplete="off" placeholder="{{ sitestrings[siteconfig.lang].search_placeholder }}" />
+            <div id="search-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
             <div id="search-results" class="search-results"></div>
         </div>
     </div>
