@@ -114,6 +114,8 @@ Clicking the hook will locate the footnote[^footnote], and here is another footn
 
 ## Code blocks
 
+Every fenced code block includes a one-line header based on its language. Add `filename="..."` or `title="..."` after the language identifier to show more context alongside the language. If both fields are supplied, `title` takes precedence over `filename`. Long titles preserve their beginning and use a trailing ellipsis; long filenames preserve their end and use a leading ellipsis.
+
 ### Common
 
 ```text
@@ -122,12 +124,30 @@ This is a common code snippet, without syntax highlight and line numbers.
 
 ### Specific Language
 
-```bash
+```bash filename="status-check.sh"
 if [ $? -ne 0 ]; then
   echo "The command was not successful.";
   #do the needful / exit
 fi;
 ```
+
+### Raw HTML
+
+Raw HTML can be written directly in Markdown. This example first shows the source in a code block with a custom title:
+
+```html title="Expandable raw HTML"
+<details>
+  <summary>Show raw HTML content</summary>
+  <p>This content is rendered directly from HTML.</p>
+</details>
+```
+
+The same markup rendered as raw HTML:
+
+<details>
+  <summary>Show raw HTML content</summary>
+  <p>This content is rendered directly from HTML.</p>
+</details>
 
 ## Images
 

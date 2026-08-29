@@ -29,11 +29,71 @@ pre[class*="language-"] {
 }
 
 /* Code blocks */
+figure.code-block {
+    max-width: 100%;
+    margin: .5em 0;
+}
+
+.code-block-header {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    gap: 1em;
+    padding: .4em 1em;
+    color: #f8f8f2;
+    background: #1e1f1c;
+    border-radius: .3em .3em 0 0;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-size: .875em;
+    line-height: 1.5;
+}
+
+.code-block-metadata {
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.code-block-filename {
+    direction: rtl;
+    text-align: left;
+}
+
+.code-block-language {
+    flex: 0 1 auto;
+    min-width: 0;
+    margin-left: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 pre[class*="language-"] {
     padding: 1em;
     margin: .5em 0;
     overflow: auto;
     border-radius: 0.3em;
+}
+
+.code-block > pre[class*="language-"] {
+    margin: 0;
+    border-radius: 0 0 .3em .3em;
+}
+
+@media print {
+    figure.code-block {
+        break-inside: avoid;
+    }
+
+    .code-block-header {
+        color: #000;
+        background: #eee;
+        border: 1px solid #ccc;
+        border-bottom: 0;
+        text-shadow: none;
+    }
 }
 
 :not(pre) > code[class*="language-"],

@@ -28,7 +28,8 @@
         search_no_results: "No results found",
         search_no_results_status: "No results found for {query}",
         search_result: "1 search result for {query}",
-        search_results: "{count} search results for {query}"
+        search_results: "{count} search results for {query}",
+        code: "Code"
     },
     lv: {
         words: "vārdi",
@@ -59,6 +60,7 @@
         search_no_results: "Rezultāti netika atrasti",
         search_no_results_status: "Vaicājumam {query} rezultāti netika atrasti",
         search_result: "Meklēšanas rezultāti vaicājumam {query}: 1",
-        search_results: "Meklēšanas rezultāti vaicājumam {query}: {count}"
+        search_results: "Meklēšanas rezultāti vaicājumam {query}: {count}",
+        code: "Kods"
     }
 }

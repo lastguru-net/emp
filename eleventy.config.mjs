@@ -1,13 +1,4 @@
 import JSON5 from "json5";
-import markdownIt from "markdown-it";
-import markdownItAnchor from "markdown-it-anchor";
-import markdownItDeflist from "markdown-it-deflist";
-import { full as markdownItEmoji } from "markdown-it-emoji";
-import markdownItFootnote from "markdown-it-footnote";
-import markdownItMark from "markdown-it-mark";
-import markdownItSub from "markdown-it-sub";
-import markdownItSup from "markdown-it-sup";
-import markdownItTasklists from "markdown-it-task-lists";
 import syntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import embedEverything from "eleventy-plugin-embed-everything";
 import filters from "./_11ty/filters.js";
@@ -22,6 +13,7 @@ import collections from "./_11ty/collections.js";
 import googleFontsPlugin from "./_11ty/google-fonts.js";
 import searchIndex from "./_11ty/search-index.js";
 import tailwind from "./_11ty/tailwind.js";
+import { createMarkdownLibrary } from "./_11ty/markdown.js";
 
 export default (eleventyConfig) => {
     // JSON5 data files
@@ -30,20 +22,7 @@ export default (eleventyConfig) => {
     // Markdown library
     eleventyConfig.setLibrary(
         "md",
-        markdownIt({
-            html: true,
-            xhtmlOut: true,
-            linkify: true,
-            typographer: true
-        })
-        .use(markdownItAnchor)
-        .use(markdownItDeflist)
-        .use(markdownItEmoji)
-        .use(markdownItFootnote)
-        .use(markdownItMark)
-        .use(markdownItSub)
-        .use(markdownItSup)
-        .use(markdownItTasklists)
+        createMarkdownLibrary()
     );
 
     // Passthrough assets and images
