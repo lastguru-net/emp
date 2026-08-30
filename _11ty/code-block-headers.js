@@ -1,4 +1,4 @@
-const LANGUAGE_LABELS = {
+const languageLabels = {
     bash: "Bash",
     css: "CSS",
     html: "HTML",
@@ -22,17 +22,17 @@ const LANGUAGE_LABELS = {
     yml: "YAML"
 };
 
-const METADATA_PATTERN = /(?:^|\s)(title|filename)=(?:"([^"]*)"|'([^']*)'|(\S+))/g;
-const METADATA_PREFIX_PATTERN = /^(?:title|filename)=/;
+const metadataPattern = /(?:^|\s)(title|filename)=(?:"([^"]*)"|'([^']*)'|(\S+))/g;
+const metadataPrefixPattern = /^(?:title|filename)=/;
 
-export const parseFenceInfo = (value = "") => {
-    const info = String(value).trim();
+const parseFenceInfo = (value) => {
+    const info = value.trim();
     const firstToken = info.match(/^\S+/)?.[0] ?? "";
-    const languageSpec = METADATA_PREFIX_PATTERN.test(firstToken) ? "" : firstToken;
+    const languageSpec = metadataPrefixPattern.test(firstToken) ? "" : firstToken;
     const metadata = {};
 
-    for (const match of info.matchAll(METADATA_PATTERN)) {
-        metadata[match[1]] = (match[2] ?? match[3] ?? match[4] ?? "").trim();
+    for (const match of info.matchAll(metadataPattern)) {
+        metadata[match[1]] = (match[2] ?? match[3] ?? match[4]).trim();
     }
 
     return {
@@ -42,22 +42,17 @@ export const parseFenceInfo = (value = "") => {
     };
 };
 
-const getFallbackLabel = (env = {}) => {
-    const language = env.siteconfig?.lang;
-    return env.sitestrings?.[language]?.code ?? env.sitestrings?.en?.code ?? "Code";
-};
-
-export const getCodeBlockLanguageLabel = (info, env = {}) => {
+const getCodeBlockLanguageLabel = (info, codeLabel) => {
     const { language } = parseFenceInfo(info);
 
     if (!language) {
-        return getFallbackLabel(env);
+        return codeLabel;
     }
 
-    return LANGUAGE_LABELS[language.toLowerCase()] ?? language;
+    return languageLabels[language.toLowerCase()] ?? language;
 };
 
-export const getCodeBlockMetadata = (info) => {
+const getCodeBlockMetadata = (info) => {
     const { metadata } = parseFenceInfo(info);
 
     for (const type of ["title", "filename"]) {
@@ -69,28 +64,21 @@ export const getCodeBlockMetadata = (info) => {
     return null;
 };
 
-export const getCodeBlockMetadataLabel = (info) => getCodeBlockMetadata(info)?.label ?? "";
-
-export default (md) => {
+export default (md, { strings }) => {
     const renderFence = md.renderer.rules.fence;
 
     md.renderer.rules.fence = (tokens, index, options, env, renderer) => {
         const token = tokens[index];
         const originalInfo = token.info;
         const { languageSpec } = parseFenceInfo(originalInfo);
-        const languageLabel = getCodeBlockLanguageLabel(originalInfo, env);
+        const languageLabel = getCodeBlockLanguageLabel(originalInfo, strings.code);
         const metadataValue = getCodeBlockMetadata(originalInfo);
         const metadata = metadataValue
             ? `<span class="code-block-metadata code-block-${metadataValue.type}" title="${md.utils.escapeHtml(metadataValue.label)}">${md.utils.escapeHtml(metadataValue.label)}</span>\n`
             : "";
-        let code;
-
-        try {
-            token.info = languageSpec || "text";
-            code = renderFence(tokens, index, options, env, renderer).trimEnd();
-        } finally {
-            token.info = originalInfo;
-        }
+        token.info = languageSpec || "text";
+        const code = renderFence(tokens, index, options, env, renderer).trimEnd();
+        token.info = originalInfo;
 
         return `<figure class="code-block">\n<figcaption class="code-block-header">${metadata}<span class="code-block-language">${md.utils.escapeHtml(languageLabel)}</span></figcaption>\n${code}\n</figure>\n`;
     };

@@ -7,35 +7,26 @@ import markdownItMark from "markdown-it-mark";
 import markdownItSub from "markdown-it-sub";
 import markdownItSup from "markdown-it-sup";
 import markdownItTasklists from "markdown-it-task-lists";
+import siteconfig from "../content/_data/siteconfig.js";
 import codeBlockHeaders from "./code-block-headers.js";
+import { loadConfig } from "./config.js";
 
-export const markdownOptions = Object.freeze({
-    html: true,
-    xhtmlOut: true,
-    linkify: false,
-    typographer: true
-});
-
-const markdownPlugins = Object.freeze([
-    { name: "anchor", plugin: markdownItAnchor },
-    { name: "deflist", plugin: markdownItDeflist },
-    { name: "emoji", plugin: markdownItEmoji },
-    { name: "footnote", plugin: markdownItFootnote },
-    { name: "mark", plugin: markdownItMark },
-    { name: "sub", plugin: markdownItSub },
-    { name: "sup", plugin: markdownItSup },
-    { name: "task-lists", plugin: markdownItTasklists },
-    { name: "code-block-headers", plugin: codeBlockHeaders }
-]);
-
-export const markdownPluginNames = Object.freeze(markdownPlugins.map(({ name }) => name));
+const sitestrings = await loadConfig("sitestrings");
 
 export const createMarkdownLibrary = () => {
-    const md = markdownIt(markdownOptions);
-
-    for (const { plugin } of markdownPlugins) {
-        md.use(plugin);
-    }
-
-    return md;
+    return markdownIt({
+        html: true,
+        xhtmlOut: true,
+        linkify: false,
+        typographer: true
+    })
+        .use(markdownItAnchor)
+        .use(markdownItDeflist)
+        .use(markdownItEmoji)
+        .use(markdownItFootnote)
+        .use(markdownItMark)
+        .use(markdownItSub)
+        .use(markdownItSup)
+        .use(markdownItTasklists)
+        .use(codeBlockHeaders, { strings: sitestrings[siteconfig.lang] });
 };

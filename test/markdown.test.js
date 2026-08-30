@@ -1,41 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import {
-    createMarkdownLibrary,
-    markdownOptions,
-    markdownPluginNames
-} from "../_11ty/markdown.js";
+import { createMarkdownLibrary } from "../_11ty/markdown.js";
 
-const sitestrings = {
-    en: { code: "Code" },
-    lv: { code: "Kods" }
-};
-
-const render = (source, language = "en") => createMarkdownLibrary().render(source, {
-    siteconfig: { lang: language },
-    sitestrings
-});
-
-test("the configured option and plugin inventory is explicit", () => {
-    assert.deepEqual(markdownOptions, {
-        html: true,
-        xhtmlOut: true,
-        linkify: false,
-        typographer: true
-    });
-    assert.deepEqual(markdownPluginNames, [
-        "anchor",
-        "deflist",
-        "emoji",
-        "footnote",
-        "mark",
-        "sub",
-        "sup",
-        "task-lists",
-        "code-block-headers"
-    ]);
-    assert.notEqual(createMarkdownLibrary(), createMarkdownLibrary());
-});
+const render = (source) => createMarkdownLibrary().render(source);
 
 test("core block and inline structures render semantic HTML", () => {
     const html = render(`
@@ -176,7 +143,7 @@ test("task lists distinguish checked, unchecked, and ordinary items", () => {
     assert.match(html, /<li>\s*<p>Ordinary<\/p>\s*<\/li>/);
 });
 
-test("the production code-block plugin integrates with English and Latvian contexts", () => {
+test("the production code-block plugin integrates with the configured language", () => {
     const source = `
 \`inline\`
 
@@ -188,18 +155,13 @@ const result = 1 < 2;
 plain text
 \`\`\`
 `;
-    const english = render(source, "en");
-    const latvian = render(source, "lv");
+    const html = render(source);
 
-    for (const html of [english, latvian]) {
-        assert.match(html, /<p><code>inline<\/code><\/p>/);
-        assert.match(html, /<span class="code-block-metadata code-block-filename" title="src\/app\.js">src\/app\.js<\/span>/);
-        assert.match(html, /<span class="code-block-language">JavaScript<\/span>/);
-        assert.match(html, /<code class="language-js">const result = 1 &lt; 2;/);
-    }
-
-    assert.match(english, /<span class="code-block-language">Code<\/span>/);
-    assert.match(latvian, /<span class="code-block-language">Kods<\/span>/);
+    assert.match(html, /<p><code>inline<\/code><\/p>/);
+    assert.match(html, /<span class="code-block-metadata code-block-filename" title="src\/app\.js">src\/app\.js<\/span>/);
+    assert.match(html, /<span class="code-block-language">JavaScript<\/span>/);
+    assert.match(html, /<code class="language-js">const result = 1 &lt; 2;/);
+    assert.match(html, /<span class="code-block-language">Code<\/span>/);
 });
 
 test("a mixed document exercises the assembled plugin order", () => {

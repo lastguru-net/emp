@@ -42,3 +42,8 @@ assets/js/min.*
 
 # Local VSCode folder
 .vscode
+
+# Local formatting and linting configuration
+/.markdownlint.json
+/.prettierignore
+/.prettierrc

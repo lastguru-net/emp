@@ -87,14 +87,11 @@ const initSearch = async () => {
 };
 
 window.closeSearchModal = () => {
-    if (!searchRoot || searchRoot.classList.contains("hidden")) return;
+    if (searchRoot.classList.contains("hidden")) return;
 
     searchRoot.classList.add("hidden");
     document.body.classList.remove("search-open");
-
-    if (searchOpener?.isConnected) {
-        searchOpener.focus();
-    }
+    searchOpener.focus();
     searchOpener = null;
 };
 
@@ -119,11 +116,6 @@ document.addEventListener("keydown", (event) => {
         const focusable = [...searchRoot.querySelectorAll(
             'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
         )].filter((element) => !element.hidden && element.getClientRects().length);
-
-        if (!focusable.length) {
-            event.preventDefault();
-            return;
-        }
 
         const first = focusable[0];
         const last = focusable[focusable.length - 1];

@@ -1,12 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import markdownIt from "markdown-it";
-import codeBlockHeaders, {
-    getCodeBlockLanguageLabel,
-    getCodeBlockMetadata,
-    getCodeBlockMetadataLabel,
-    parseFenceInfo
-} from "../_11ty/code-block-headers.js";
+import codeBlockHeaders from "../_11ty/code-block-headers.js";
 
 const sitestrings = {
     en: { code: "Code" },
@@ -18,67 +13,10 @@ const render = (source, language = "en", highlighter) => {
         highlight: highlighter ?? ((content, codeLanguage) => (
             `<pre class="language-${codeLanguage}"><code class="language-${codeLanguage}">${md.utils.escapeHtml(content.trimEnd())}</code></pre>`
         ))
-    }).use(codeBlockHeaders);
+    }).use(codeBlockHeaders, { strings: sitestrings[language] });
 
-    return md.render(source, {
-        siteconfig: { lang: language },
-        sitestrings
-    }).trim();
+    return md.render(source).trim();
 };
-
-test("fence information separates Prism language syntax from header metadata", () => {
-    assert.deepEqual(parseFenceInfo('js/1,3 filename="src/example.js" title="Example"'), {
-        languageSpec: "js/1,3",
-        language: "js",
-        metadata: {
-            filename: "src/example.js",
-            title: "Example"
-        }
-    });
-
-    assert.deepEqual(parseFenceInfo('title="Configuration example"'), {
-        languageSpec: "",
-        language: "",
-        metadata: { title: "Configuration example" }
-    });
-
-    assert.deepEqual(parseFenceInfo("yaml filename='site config.yml' title=Example"), {
-        languageSpec: "yaml",
-        language: "yaml",
-        metadata: {
-            filename: "site config.yml",
-            title: "Example"
-        }
-    });
-});
-
-test("metadata labels prefer title, then filename", () => {
-    assert.deepEqual(getCodeBlockMetadata('js title="Example" filename="app.js"'), {
-        type: "title",
-        label: "Example"
-    });
-    assert.deepEqual(getCodeBlockMetadata('js filename="app.js"'), {
-        type: "filename",
-        label: "app.js"
-    });
-    assert.equal(getCodeBlockMetadata("js"), null);
-    assert.equal(getCodeBlockMetadataLabel('js title="Example" filename="app.js"'), "Example");
-    assert.equal(getCodeBlockMetadataLabel('js filename="app.js"'), "app.js");
-    assert.equal(getCodeBlockMetadataLabel("js"), "");
-});
-
-test("language labels remain independent from metadata", () => {
-    assert.equal(getCodeBlockLanguageLabel('js filename="app.js"'), "JavaScript");
-    assert.equal(getCodeBlockLanguageLabel("njk"), "Nunjucks");
-    assert.equal(getCodeBlockLanguageLabel("custom-language"), "custom-language");
-});
-
-test("language-less blocks use the localized generic label", () => {
-    assert.equal(getCodeBlockLanguageLabel("", { siteconfig: { lang: "en" }, sitestrings }), "Code");
-    assert.equal(getCodeBlockLanguageLabel("", { siteconfig: { lang: "lv" }, sitestrings }), "Kods");
-    assert.equal(getCodeBlockLanguageLabel("", { siteconfig: { lang: "missing" }, sitestrings }), "Code");
-    assert.equal(getCodeBlockLanguageLabel(""), "Code");
-});
 
 test("every fenced block receives a header while inline code remains inline", () => {
     const html = render("Before `inline` after.\n\n```\nplain text\n```");
@@ -90,8 +28,8 @@ test("every fenced block receives a header while inline code remains inline", ()
     assert.equal(html.match(/code-block-header/g)?.length, 1);
 });
 
-test("metadata-only fences show metadata and the generic language label", () => {
-    const html = render('```title="Configuration example"\nkey = value\n```');
+test("metadata-only fences show the preferred title and generic language label", () => {
+    const html = render('```filename="config.txt" title="Configuration example"\nkey = value\n```');
 
     assert.match(html, /<span class="code-block-metadata code-block-title" title="Configuration example">Configuration example<\/span>/);
     assert.match(html, /<span class="code-block-language">Code<\/span>/);

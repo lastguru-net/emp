@@ -1,10 +1,10 @@
 <div class="social">
-    <a class="link" href="#" aria-label="{{ sitestrings[siteconfig.lang].copy_to_clipboard }}" data-copied="{{ sitestrings[siteconfig.lang].copied }}" onclick="copyUrlToClipboard()">
+    <button class="link" type="button" aria-label="{{ sitestrings[siteconfig.lang].copy_to_clipboard }}" aria-describedby="copy-link-status" data-copy-url data-copy-success="{{ sitestrings[siteconfig.lang].copied }}" data-copy-error="{{ sitestrings[siteconfig.lang].copy_failed }}" onclick="copyUrlToClipboard(this)" hidden>
         <span></span>
-        <svg class="share" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.share.viewBox }}">
+        <svg class="share" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.share.viewBox }}">
             <path d="{{ inlinesvg.share.path }}" />
         </svg>
-    </a>
+    </button>
     <a class="fill" href="https://bsky.app/intent/compose?text={{ title | urlencode }}+{{ page.url | absoluteUrl }}" aria-label="{{ sitestrings[siteconfig.lang].share_on }} Bluesky">
         <span></span>
         <svg class="bluesky" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.bluesky.viewBox }}">
@@ -35,5 +35,6 @@
             <path d="{{ inlinesvg.linkedin.path }}" />
         </svg>
     </a>
+    <span id="copy-link-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></span>
     <span class="social-label">{{ sitestrings[siteconfig.lang].share }}: </span>
 </div>

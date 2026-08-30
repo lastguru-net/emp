@@ -49,11 +49,22 @@ svg.share {
     @apply mr-1;
 }
 
-.social a {
+.social a,
+.social button {
     @apply relative;
 }
 
-.social a:hover::before {
+.social button {
+    @apply p-0;
+    @apply border-0;
+    @apply bg-transparent;
+    @apply cursor-pointer;
+}
+
+.social a:hover::before,
+.social a:focus-visible::before,
+.social button:hover::before,
+.social button:focus-visible::before {
     @apply block absolute -top-8 -left-36;
     @apply w-54;
     @apply p-2.5;
@@ -65,7 +76,11 @@ svg.share {
     content: attr(aria-label);
 }
 
-.social a.link:active::before {
-    @apply -top-8;
-    content: attr(data-copied);
+.social button[data-feedback]:hover::before,
+.social button[data-feedback]:focus-visible::before {
+    content: attr(data-feedback);
+}
+
+.social button:focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
 }

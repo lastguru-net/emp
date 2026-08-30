@@ -1,6 +1,7 @@
 /**
  * okaidia theme for JavaScript, CSS and HTML
  * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * Modified for Eleventy Markdown Prime code-block presentation.
  * @author ocodia
  */
 
@@ -40,12 +41,12 @@ figure.code-block {
     align-items: baseline;
     gap: 1em;
     padding: .4em 1em;
-    color: #f8f8f2;
-    background: #1e1f1c;
     border-radius: .3em .3em 0 0;
+    background: #1e1f1c;
     font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
     font-size: .875em;
     line-height: 1.5;
+    color: #f8f8f2;
 }
 
 .code-block-metadata {
@@ -88,10 +89,10 @@ pre[class*="language-"] {
     }
 
     .code-block-header {
-        color: #000;
-        background: #eee;
         border: 1px solid #ccc;
         border-bottom: 0;
+        background: #eee;
+        color: #000;
         text-shadow: none;
     }
 }
