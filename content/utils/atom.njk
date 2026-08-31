@@ -25,7 +25,7 @@ eleventyImport:
         <email>{{ publisherEmail }}</email>{% endif %}{% if publisherWebsite %}
         <uri>{{ publisherWebsite }}</uri>{% endif %}
     </author>
-    {% if items | length %}<updated>{{ items[0].date | isoDateTime }}</updated>{% endif %}
+    {% if items | length %}<updated>{{ items | latestModifiedDate | isoDateTime }}</updated>{% endif %}
     {% for item in items %}
         {# Per-item metadata #}
         {% set fallbackExcerpt -%}{% getExcerpt item %}{%- endset %}
@@ -40,7 +40,8 @@ eleventyImport:
             <title>{{ item.data.title }}</title>
             <link rel="alternate" href="{{ itemUrl }}" />
             <id>{{ itemUrl }}</id>
-            <updated>{{ item.date | isoDateTime }}</updated>
+            <published>{{ item.date | isoDateTime }}</published>
+            <updated>{{ (item.data.updated or item.date) | isoDateTime }}</updated>
             <author>
                 <name>{{ activeAuthorDisplayName }}</name>{% if activeAuthorData.email %}
                 <email>{{ activeAuthorData.email }}</email>{% endif %}

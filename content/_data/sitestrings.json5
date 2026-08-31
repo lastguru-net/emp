@@ -30,7 +30,10 @@
         search_no_results_status: "No results found for {query}",
         search_result: "1 search result for {query}",
         search_results: "{count} search results for {query}",
-        code: "Code"
+        code: "Code",
+        copy_code_to_clipboard: "Copy code to clipboard",
+        code_copied: "Code copied",
+        code_copy_failed: "The code could not be copied"
     },
     lv: {
         words: "vārdi",
@@ -63,6 +66,9 @@
         search_no_results_status: "Vaicājumam {query} rezultāti netika atrasti",
         search_result: "Meklēšanas rezultāti vaicājumam {query}: 1",
         search_results: "Meklēšanas rezultāti vaicājumam {query}: {count}",
-        code: "Kods"
+        code: "Kods",
+        copy_code_to_clipboard: "Kopēt kodu starpliktuvē",
+        code_copied: "Kods ir nokopēts",
+        code_copy_failed: "Kodu neizdevās nokopēt"
     }
 }

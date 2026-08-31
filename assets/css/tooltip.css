@@ -1,0 +1,30 @@
+/* Tooltips for share links and copy controls */
+
+.social a,
+[data-copy-success] {
+    @apply relative;
+}
+
+.social a:hover::before,
+.social a:focus-visible::before,
+[data-copy-success]:hover::before,
+[data-copy-success]:focus-visible::before {
+    @apply block absolute -top-8 -left-36;
+    @apply w-54;
+    @apply p-2.5;
+    @apply border border-solid border-border dark:border-border-dark rounded-md;
+    @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
+    @apply text-xs font-semibold text-center;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
+    @apply -translate-y-1/2;
+    content: attr(aria-label);
+}
+
+[data-copy-success][data-feedback]:hover::before,
+[data-copy-success][data-feedback]:focus-visible::before {
+    content: attr(data-feedback);
+}
+
+[data-copy-success]:focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+}

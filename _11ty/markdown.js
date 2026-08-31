@@ -11,6 +11,7 @@ import siteconfig from "../content/_data/siteconfig.js";
 import codeBlockHeaders from "./code-block-headers.js";
 import { loadConfig } from "./config.js";
 
+const inlinesvg = await loadConfig("inlinesvg");
 const sitestrings = await loadConfig("sitestrings");
 
 export const createMarkdownLibrary = () => {
@@ -28,5 +29,8 @@ export const createMarkdownLibrary = () => {
         .use(markdownItSub)
         .use(markdownItSup)
         .use(markdownItTasklists)
-        .use(codeBlockHeaders, { strings: sitestrings[siteconfig.lang] });
+        .use(codeBlockHeaders, {
+            copyIcon: inlinesvg.copy,
+            strings: sitestrings[siteconfig.lang]
+        });
 };

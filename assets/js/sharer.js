@@ -4,18 +4,27 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("[data-copy-url]").hidden = false;
 });
 
+let copyUrlFeedbackTimer;
+
 window.copyUrlToClipboard = async (button) => {
     const status = document.getElementById("copy-link-status");
 
+    window.clearTimeout(copyUrlFeedbackTimer);
     status.textContent = "";
-    button.removeAttribute("data-feedback");
+    delete button.dataset.feedback;
+    let message;
 
     try {
         await navigator.clipboard.writeText(location.href);
-        status.textContent = button.dataset.copySuccess;
-        button.setAttribute("data-feedback", button.dataset.copySuccess);
+        message = button.dataset.copySuccess;
     } catch {
-        status.textContent = button.dataset.copyError;
-        button.setAttribute("data-feedback", button.dataset.copyError);
+        message = button.dataset.copyError;
     }
+
+    status.textContent = message;
+    button.dataset.feedback = message;
+    copyUrlFeedbackTimer = window.setTimeout(() => {
+        status.textContent = "";
+        delete button.dataset.feedback;
+    }, 2000);
 };

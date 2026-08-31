@@ -64,8 +64,14 @@ const getCodeBlockMetadata = (info) => {
     return null;
 };
 
-export default (md, { strings }) => {
+export default (md, { copyIcon, strings }) => {
     const renderFence = md.renderer.rules.fence;
+    const copyControls = `<button class="code-block-copy" type="button" aria-label="${md.utils.escapeHtml(strings.copy_code_to_clipboard)}" data-copy-success="${md.utils.escapeHtml(strings.code_copied)}" data-copy-error="${md.utils.escapeHtml(strings.code_copy_failed)}" hidden>
+<svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="${copyIcon.viewBox}">
+<path d="${copyIcon.path}" />
+</svg>
+</button>
+<span class="sr-only" role="status" aria-live="polite" aria-atomic="true"></span>`;
 
     md.renderer.rules.fence = (tokens, index, options, env, renderer) => {
         const token = tokens[index];
@@ -80,6 +86,6 @@ export default (md, { strings }) => {
         const code = renderFence(tokens, index, options, env, renderer).trimEnd();
         token.info = originalInfo;
 
-        return `<figure class="code-block">\n<figcaption class="code-block-header">${metadata}<span class="code-block-language">${md.utils.escapeHtml(languageLabel)}</span></figcaption>\n${code}\n</figure>\n`;
+        return `<figure class="code-block">\n<figcaption class="code-block-header">${metadata}<span class="code-block-language">${md.utils.escapeHtml(languageLabel)}</span>\n${copyControls}</figcaption>\n${code}\n</figure>\n`;
     };
 };

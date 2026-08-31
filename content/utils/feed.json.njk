@@ -53,6 +53,7 @@ eleventyImport:
                     {%- endfor %}
                 ],
                 "date_published": "{{ (item.date | isoDateTime) }}",
+                {% if item.data.updated %}"date_modified": "{{ (item.data.updated | isoDateTime) }}",{% endif %}
                 "authors": [
                     {
                         "name": "{{ activeAuthorDisplayName | jsonEscape | safe }}",

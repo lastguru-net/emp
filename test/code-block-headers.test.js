@@ -3,17 +3,23 @@ import test from "node:test";
 import markdownIt from "markdown-it";
 import codeBlockHeaders from "../_11ty/code-block-headers.js";
 
-const sitestrings = {
-    en: { code: "Code" },
-    lv: { code: "Kods" }
+const copyStrings = {
+    copy_code_to_clipboard: "Copy code to clipboard",
+    code_copied: "Code copied",
+    code_copy_failed: "The code could not be copied"
 };
+const sitestrings = {
+    en: { ...copyStrings, code: "Code" },
+    lv: { ...copyStrings, code: "Kods" }
+};
+const copyIcon = { viewBox: "0 0 24 24", path: "" };
 
 const render = (source, language = "en", highlighter) => {
     const md = markdownIt({
         highlight: highlighter ?? ((content, codeLanguage) => (
             `<pre class="language-${codeLanguage}"><code class="language-${codeLanguage}">${md.utils.escapeHtml(content.trimEnd())}</code></pre>`
         ))
-    }).use(codeBlockHeaders, { strings: sitestrings[language] });
+    }).use(codeBlockHeaders, { copyIcon, strings: sitestrings[language] });
 
     return md.render(source).trim();
 };
@@ -23,7 +29,7 @@ test("every fenced block receives a header while inline code remains inline", ()
 
     assert.match(html, /<p>Before <code>inline<\/code> after\.<\/p>/);
     assert.match(html, /<figure class="code-block">/);
-    assert.match(html, /<figcaption class="code-block-header"><span class="code-block-language">Code<\/span><\/figcaption>/);
+    assert.match(html, /<figcaption class="code-block-header"><span class="code-block-language">Code<\/span>/);
     assert.match(html, /<pre class="language-text"><code class="language-text">plain text<\/code><\/pre>/);
     assert.equal(html.match(/code-block-header/g)?.length, 1);
 });

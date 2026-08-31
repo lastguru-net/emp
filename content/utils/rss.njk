@@ -23,7 +23,7 @@ eleventyImport:
             <title>{{ siteconfig.title }}</title>
             <link>{{ '/' | absoluteUrl }}</link>
         </image>
-        {% if items | length %}<lastBuildDate>{{ items[0].date | rssDate }}</lastBuildDate>{% endif %}
+        {% if items | length %}<lastBuildDate>{{ items | latestModifiedDate | rssDate }}</lastBuildDate>{% endif %}
         {% for item in items %}
             {# Per-item metadata #}
             {% set fallbackExcerpt -%}{% getExcerpt item %}{%- endset %}

@@ -71,6 +71,33 @@ figure.code-block {
     white-space: nowrap;
 }
 
+.code-block-copy {
+    position: relative;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    height: 1.5em;
+    width: 1.5em;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #f8f8f2;
+    cursor: pointer;
+}
+
+.code-block-copy svg {
+    height: 1em;
+    width: 1em;
+    fill: currentColor;
+}
+
+.code-block-copy:hover,
+.code-block-copy:focus-visible {
+    color: #66d9ef;
+}
+
 pre[class*="language-"] {
     padding: 1em;
     margin: .5em 0;
@@ -94,6 +121,10 @@ pre[class*="language-"] {
         background: #eee;
         color: #000;
         text-shadow: none;
+    }
+
+    .code-block-copy {
+        display: none;
     }
 }
 

@@ -10,6 +10,7 @@ eleventyComputed:
     title: "{% if siteauthors[tag.tagName] %}{{ siteauthors[tag.tagName].fullName }}{% else %}{{ tag.tagName }}{% endif %}"
     author: "{{ tag.tagName }}"
     excerpt: "{% if siteauthors[tag.tagName] %}{{ siteauthors[tag.tagName].bio }}{% else %}{{ sitestrings[siteconfig.lang].posts_by }} {{ tag.tagName }}{% endif %}"
+    date: "{% if tag.items | length %}{{ tag.items | latestModifiedDate | isoDateTime }}{% endif %}"
 tags: authorcard
 ---
 

@@ -9,6 +9,13 @@ const toDate = (value) => {
     return date;
 };
 
+const getLatestModifiedDate = (items = []) => {
+    return items.reduce((latest, item) => {
+        const date = toDate(item.data.updated || item.date);
+        return !latest || date > latest ? date : latest;
+    }, undefined);
+};
+
 const formatYear = (date) => {
     const year = date.getFullYear();
     if (year >= 0 && year <= 9999) return pad(year, 4);
@@ -63,6 +70,9 @@ export default (eleventyConfig) => {
 
     // RFC 2822 date for RSS feeds
     eleventyConfig.addNunjucksFilter("rssDate", (value) => formatRssDate(toDate(value)));
+
+    // Latest effective modification date across content items
+    eleventyConfig.addNunjucksFilter("latestModifiedDate", getLatestModifiedDate);
 
     // Current year shortcode
     eleventyConfig.addShortcode("year", () => new Date().getFullYear());

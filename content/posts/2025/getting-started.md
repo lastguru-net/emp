@@ -251,7 +251,7 @@ The header contains metadata for the post or page. Supported variables (all opti
 
 - **title** (*required*): The title of the post or page. The URL is based on the title unless overridden in the header.
 - **date** (*required for posts*): The date in `YYYY-MM-DD` format or with time in `YYYY-MM-DD HH:MM:SS` or `YYYY-MM-DD HH:MM:SS +/-TTTT` format.
-- **updated**: Optional last modification date in the same formats as **date**. When present, it is used in JSON-LD and in the sitemap.
+- **updated**: Optional last modification date in the same formats as **date**. When present, it is used in JSON-LD, the sitemap, and the Atom and JSON feeds.
 - **permalink**: Overrides the default URL for the post/page.
 - **image**: Path to the title image, relative to the `content` folder.
 - **thumbnail**: Optional path for a thumbnail image to use in post lists instead of the title image. To hide thumbnail completely instead, use `thumbnail: false`.

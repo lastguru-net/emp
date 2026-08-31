@@ -51,6 +51,11 @@ if (process.env.EMP_DATE_TEST_FIXTURE === "1") {
     const transforms = Object.fromEntries(
         Object.entries(inputs).map(([name, value]) => [name, renderAll(filters, value)])
     );
+    const latestModifiedDate = filters.latestModifiedDate([
+        { date: "2025-05-23 12:34:56 +0300", data: {} },
+        { date: "2025-05-24 12:34:56 +0300", data: { updated: "2025-06-01 12:34:56 -0700" } },
+        { date: "2025-05-25 12:34:56 +0300", data: {} }
+    ]);
     const errorName = (callback) => {
         try {
             callback();
@@ -62,6 +67,7 @@ if (process.env.EMP_DATE_TEST_FIXTURE === "1") {
 
     process.stdout.write(JSON.stringify({
         transforms,
+        latestModifiedDate: latestModifiedDate.toISOString(),
         errors: {
             isoDate: errorName(() => filters.isoDate("not-a-date")),
             isoDateTime: errorName(() => filters.isoDateTime(new Date(Number.NaN))),
@@ -275,6 +281,18 @@ if (process.env.EMP_DATE_TEST_FIXTURE === "1") {
             readableDate: "RangeError",
             rssDate: "RangeError"
         });
+    });
+
+    test("latest modified date prefers updates and ignores collection order", () => {
+        for (const timezone of Object.keys(expectedByTimezone)) {
+            assert.equal(renderFixture(timezone).latestModifiedDate, "2025-06-01T19:34:56.000Z", timezone);
+        }
+    });
+
+    test("latest modified date leaves empty collections undated", () => {
+        const { filters } = registerTransforms();
+        assert.equal(filters.latestModifiedDate(), undefined);
+        assert.equal(filters.latestModifiedDate([]), undefined);
     });
 
     test("overflow calendar dates are normalized rather than rejected", () => {

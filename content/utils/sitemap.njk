@@ -17,9 +17,12 @@ permalink: /sitemap.xml
 {% endfor %}
 {% set items = postItems.concat(nonPosts) %}
 {% for item in items %}
+    {% set lastModified = item.data.updated or item.data.date %}
     <url>
         <loc>{{ item.url | absoluteUrl }}</loc>
-        <lastmod>{% if item.data.updated %}{{ item.data.updated | isoDate }}{% else %}{{ item.date | isoDate }}{% endif %}</lastmod>
+        {% if lastModified %}
+        <lastmod>{{ lastModified | isoDate }}</lastmod>
+        {% endif %}
         <changefreq>{{ item.data.sitemapChangefreq | default("daily") }}</changefreq>
         <priority>{{ item.data.sitemapPriority | default(0.8) }}</priority>
     </url>

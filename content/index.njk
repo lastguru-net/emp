@@ -5,6 +5,8 @@ pagination:
     data: collections.empPosts
     alias: posts
     reverse: false
+eleventyComputed:
+    date: "{% if posts | length %}{{ posts | latestModifiedDate | isoDateTime }}{% endif %}"
 ---
 {% if siteelements.header %}{% set siteheader = true %}{% endif %}
 {% if siteelements.features.index == "postlist" %}{% include "postlist.njk" %}{% endif %}
