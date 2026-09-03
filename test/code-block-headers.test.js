@@ -30,6 +30,8 @@ test("every fenced block receives a header while inline code remains inline", ()
     assert.match(html, /<p>Before <code>inline<\/code> after\.<\/p>/);
     assert.match(html, /<figure class="code-block">/);
     assert.match(html, /<figcaption class="code-block-header"><span class="code-block-language">Code<\/span>/);
+    assert.match(html, /class="code-block-copy code-block-copy-pending"[^>]+disabled aria-hidden="true"/);
+    assert.doesNotMatch(html, /class="code-block-copy[^>]+ hidden/);
     assert.match(html, /<pre class="language-text"><code class="language-text">plain text<\/code><\/pre>/);
     assert.equal(html.match(/code-block-header/g)?.length, 1);
 });

@@ -31,9 +31,13 @@
     @apply font-header tracking-wider text-center;
 }
 
-.sidebar svg.sidebar-close {
+.sidebar .sidebar-close {
     @apply sm:hidden;
     @apply absolute top-2 right-2 h-6 w-6;
+}
+
+.sidebar .sidebar-close svg {
+    @apply block h-6 w-6;
 }
 
 .sidebar .sitehero {

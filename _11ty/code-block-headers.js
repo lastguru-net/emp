@@ -66,7 +66,7 @@ const getCodeBlockMetadata = (info) => {
 
 export default (md, { copyIcon, strings }) => {
     const renderFence = md.renderer.rules.fence;
-    const copyControls = `<button class="code-block-copy" type="button" aria-label="${md.utils.escapeHtml(strings.copy_code_to_clipboard)}" data-copy-success="${md.utils.escapeHtml(strings.code_copied)}" data-copy-error="${md.utils.escapeHtml(strings.code_copy_failed)}" hidden>
+    const copyControls = `<button class="code-block-copy code-block-copy-pending" type="button" aria-label="${md.utils.escapeHtml(strings.copy_code_to_clipboard)}" data-copy-success="${md.utils.escapeHtml(strings.code_copied)}" data-copy-error="${md.utils.escapeHtml(strings.code_copy_failed)}" disabled aria-hidden="true">
 <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="${copyIcon.viewBox}">
 <path d="${copyIcon.path}" />
 </svg>

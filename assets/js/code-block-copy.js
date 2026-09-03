@@ -7,7 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const code = header.parentElement.querySelector("pre code");
         let feedbackTimer;
 
-        button.hidden = false;
+        button.disabled = false;
+        button.removeAttribute("aria-hidden");
+        button.classList.remove("code-block-copy-pending");
 
         button.addEventListener("click", async () => {
             window.clearTimeout(feedbackTimer);

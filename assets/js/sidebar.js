@@ -1,15 +1,24 @@
 // Bundled by content/utils/js.njk
 // Sidebar toggle and swipe-to-close gesture
-window.slideLeftSidebar = () => {
-    const elSidebar = document.getElementById("sidebar");
-    if (elSidebar) {
-        elSidebar.classList.toggle("is-closed");
-    }
-};
-
 document.addEventListener("DOMContentLoaded", () => {
     const elSidebar = document.getElementById("sidebar");
     if (!elSidebar) return;
+
+    const elOpener = document.getElementById("sidebar-open");
+    const elCloser = document.getElementById("sidebar-close");
+    const mediaQuery = window.matchMedia("(max-width: 639px)");
+
+    const syncState = () => {
+        const hidden = mediaQuery.matches && elSidebar.classList.contains("is-closed");
+        elSidebar.inert = hidden;
+        elOpener?.setAttribute("aria-expanded", String(!hidden));
+    };
+
+    window.slideLeftSidebar = () => {
+        const closed = elSidebar.classList.toggle("is-closed");
+        syncState();
+        (closed ? elOpener : elCloser)?.focus();
+    };
 
     const SWIPE_THRESHOLD = 50;
     let startX = 0;
@@ -37,11 +46,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const dy = Math.abs(t.clientY - startY);
         if (dx < -SWIPE_THRESHOLD && dy < SWIPE_THRESHOLD) {
             tracking = false;
-            elSidebar.classList.add("is-closed");
+            window.slideLeftSidebar();
         }
     }, { passive: true });
 
     elSidebar.addEventListener("touchend", () => {
         tracking = false;
     }, { passive: true });
+
+    mediaQuery.addEventListener("change", syncState);
+    syncState();
 });

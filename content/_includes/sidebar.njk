@@ -1,13 +1,16 @@
 <div id="sidebar-contents" class="sidebar">
-    <svg class="sidebar-close" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.close.viewBox }}" aria-label="{{ sitestrings[siteconfig.lang].close_sidebar_menu }}" onclick="slideLeftSidebar()">
-        <title>Close</title>
-        <path d="{{ inlinesvg.close.path }}" />
-    </svg>
+    <button id="sidebar-close" class="sidebar-close" type="button" aria-label="{{ sitestrings[siteconfig.lang].close_sidebar_menu }}" onclick="slideLeftSidebar()">
+        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.close.viewBox }}">
+            <path d="{{ inlinesvg.close.path }}" />
+        </svg>
+    </button>
     <div class="sitehero{% if siteelements.features.siteheroStyle == "rounded" %} sitehero-rounded{% endif %}">
         <a href="{{ '/' | url }}" aria-label="{{ siteelements.menuHome }}">
             <img class="nolqip" src="{{ siteconfig.image }}" alt="{{ siteconfig.imageAlt }}" loading="eager" eleventy:widths="160,320,480,640,960,1280" sizes="(max-width: 640px) 100vw, 480px" eleventy:pictureattr:sizes="(max-width: 640px) 100vw, 480px" />
         </a>
-        <a class="sitetitle" href="{{ '/' | url }}" aria-label="{{ siteelements.menuHome }}">{{ siteconfig.title }}</a>
+        {% if isIndexPage %}<h1>{% endif %}
+        <a class="sitetitle" href="{{ '/' | url }}">{{ siteconfig.title }}</a>
+        {% if isIndexPage %}</h1>{% endif %}
         <div class="sitedesc">
             {{ siteconfig.description }}
         </div>
@@ -15,7 +18,7 @@
     {% if siteelements.features.sitesocial == "above" %}
         {% include "sitesocial.njk" %}
     {% endif %}
-    <div class="menu">
+    <nav class="menu" aria-label="{{ sitestrings[siteconfig.lang].primary_navigation }}">
         <ul>
             <li class="navitem {{ page.url | isHomeLink('/') }}">
                 <a href="{{ '/' | url }}" aria-label="{{ siteelements.menuHome }}">{{ siteelements.menuHome }}</a>
@@ -26,11 +29,11 @@
             </li>
             {% endfor %}
         </ul>
-    </div>
+    </nav>
     {% if siteelements.features.search %}
     <div class="sidebar-search">
         <button id="sidebar-search-open" class="sidebar-search-button" type="button" aria-haspopup="dialog" aria-controls="search-modal" aria-label="{{ sitestrings[siteconfig.lang].search_open }}" onclick="searchButton()">
-            <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.search.viewBox }}">
+            <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.search.viewBox }}">
                 <path d="{{ inlinesvg.search.path }}" />
             </svg>
         </button>
@@ -45,12 +48,14 @@
         {% endif %}
         {% if siteelements.features.colorMode != "light" and siteelements.features.colorMode != "dark" %}
         <div id="sidebar-color-toggle" class="sidebar-colormode">
-            <svg class="lighttoggle" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.lightMode.viewBox }}" aria-label="{{ sitestrings[siteconfig.lang].color_mode }}" onclick="toggleDarkLightMode(false)">
-                <path d="{{ inlinesvg.lightMode.path }}" />
-            </svg>
-            <svg class="darktoggle" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.darkMode.viewBox }}" aria-label="{{ sitestrings[siteconfig.lang].color_mode }}" onclick="toggleDarkLightMode(false)">
-                <path d="{{ inlinesvg.darkMode.path }}" />
-            </svg>
+            <button type="button" aria-label="{{ sitestrings[siteconfig.lang].color_mode }}" onclick="toggleDarkLightMode(false)">
+                <svg class="lighttoggle" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.lightMode.viewBox }}">
+                    <path d="{{ inlinesvg.lightMode.path }}" />
+                </svg>
+                <svg class="darktoggle" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.darkMode.viewBox }}">
+                    <path d="{{ inlinesvg.darkMode.path }}" />
+                </svg>
+            </button>
         </div>
         {% endif %}
     </div>

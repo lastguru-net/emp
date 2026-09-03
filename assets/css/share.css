@@ -55,3 +55,7 @@ svg.share {
     @apply bg-transparent;
     @apply cursor-pointer;
 }
+
+.social .copy-url-pending {
+    visibility: hidden;
+}

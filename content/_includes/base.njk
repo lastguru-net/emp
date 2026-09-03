@@ -8,9 +8,9 @@
         {% if siteelements.features.base == "primitive" %}
             {{ content | safe }}
         {% else %}
-        <div id="sidebar" class="is-closed">
+        <aside id="sidebar" class="is-closed">
             {% include "sidebar.njk" %}
-        </div>
+        </aside>
         <div id="right-area">
             {% if siteelements.features.topbar %}
                 {% include "topbar.njk" %}

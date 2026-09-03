@@ -1,7 +1,13 @@
 // Bundled by content/utils/js.njk
 // Share button: copy current URL to clipboard with accessible feedback
 document.addEventListener("DOMContentLoaded", () => {
-    document.querySelector("[data-copy-url]").hidden = false;
+    const button = document.querySelector("[data-copy-url]");
+
+    if (button) {
+        button.disabled = false;
+        button.removeAttribute("aria-hidden");
+        button.classList.remove("copy-url-pending");
+    }
 });
 
 let copyUrlFeedbackTimer;
