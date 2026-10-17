@@ -1,6 +1,53 @@
 # Changelog
 
-Release history based on the [published GitHub release notes](https://github.com/lastguru-net/emp/releases). Dates are publication dates in UTC.
+Notable changes to Eleventy Markdown Prime. Released versions link to the [public release notes](https://github.com/lastguru-net/emp/releases); dates are publication dates in UTC.
+
+## 7.0.0
+
+Version 7.0 brings a pluggable extension architecture, optional sign-in, richer posts and JSON-backed lists. Configuration has been reorganized to support these features; review the breaking changes below before upgrading.
+
+### Breaking changes
+
+Configuration paths below refer to files in `content/_data/`.
+
+- Moved `siteelements.fonts` to `siteconfig.plugins["google-fonts"]`. Move the whole object; `local`, `swap`, font families and weights keep their existing meanings.
+- Moved `siteelements.features.syntaxHighlighting` to `siteconfig.plugins["syntax-highlighting"]`. Use `true` to enable or `false` to disable. Disabling now turns off both highlighting and its CSS, rather than just the CSS.
+- Replaced `siteconfig.pixels` with plugin configuration:
+  - `pixels.googleTag` -> `plugins.google.tagId`.
+  - `pixels.fbApp` -> `plugins.meta.appId`.
+  - `pixels.fbPixel` -> `plugins.meta.pixelId`.
+- Moved feed content and link settings from `siteelements.features` to `siteelements.feeds`:
+  - `rssFeed` -> `rss`.
+  - `atomFeed` -> `atom`.
+  - `jsonFeed` -> `json`.
+  - `feedFullContent` -> `fullContent`.
+  - `rssInFooter` keeps its name in the new section.
+- Changed `siteelements.features.postproperties` to default to `"below"` the post image. `true` also means `"below"`; use `"above"` to retain the previous placement, or `false` to hide properties.
+- Changed the excerpt shortcode `{% getExcerpt post %}` to a filter `{{ post | getExcerpt }}`.
+- Removed `jsonEscape`. Replace `"{{ value | jsonEscape | safe }}"` with `{{ value | jsonScript | safe }}`, without surrounding quotes.
+
+### Added
+
+- Configured plugins and authentication providers load from `extensions/plugins/<name>/index.js` and `extensions/authentication/<name>/index.js`, without registration lists. Plugins can provide build setup, HTML and CSS hooks; Google Fonts, syntax highlighting, Google Tag and Meta settings use this system.
+- Optional sidebar user menu with GitLab and GitHub sign-in, session restoration and sign-out, plus a local test provider. GitHub authentication includes a Cloudflare Worker code-exchange handler.
+- Local-file post attachments and dated Markdown updates below the parent post, with updates shown newest first. Updates advance the parent's modification date; attachments and updates stay out of feed bodies, search text and reading counts.
+- Frontmatter-defined post decorations: badges, metrics, progress bars and action links/buttons.
+- JSON-backed home, tag and author post lists with browser pagination and history navigation, plus optional JSON-loaded metrics/actions. `siteconfig.jsonReadPrefix` supports a separate JSON read source.
+- Optional top-bar logo and footer placement for site social links.
+
+### Changed
+
+- Replaced the search overlay with a native dialog and shared user-menu styling.
+
+### Fixed
+
+- Preserved deployment subpaths from `siteconfig.url` in generated links, optimized images, metadata, feeds and search results.
+- Corrected JSON-LD, JSON Feed and webmanifest serialization for special characters and image URLs.
+- Preserved inline words and decoded HTML entities in excerpts and search text; preserved authored whitespace around inline code in production HTML.
+- Prevented overlapping search openings from registering duplicate input handlers.
+- Corrected URL encoding in sharing links and feedback timing for repeated clipboard actions.
+- Corrected active navigation matching and initialized the dynamic top bar correctly on already-scrolled pages.
+- Fixed asset-cache invalidation across rebuilds and honored the configured output directory for generated images and fonts.
 
 ## [6.3.0](https://github.com/lastguru-net/emp/releases/tag/v6.3.0) - 2026-09-05
 
