@@ -1,0 +1,101 @@
+/* Markdown-authored badges, metrics and actions */
+
+.postdecorations {
+    @apply flex flex-col gap-3 pb-4;
+    @apply font-header text-sm font-normal;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
+}
+
+.postbadges,
+.postactions {
+    @apply flex flex-wrap items-center gap-2;
+}
+
+.postbadge,
+.postdecorations .postaction,
+.postdecorations .postaction:hover {
+    @apply inline-flex items-center justify-center gap-2;
+    @apply max-w-full rounded-sm border border-transparent;
+    @apply bg-neutral-200 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100;
+    @apply whitespace-normal break-words;
+}
+
+.postbadge {
+    @apply px-2 py-0.5;
+}
+
+.postdecorations .postaction {
+    @apply px-3 py-2;
+    @apply font-semibold text-center no-underline;
+}
+
+.postdecorations .postaction span {
+    @apply min-w-0;
+}
+
+.postdecorations .postaction svg {
+    @apply h-5 w-5 shrink-0 fill-current;
+}
+
+.postdecorations [data-variant="primary"],
+.postdecorations [data-variant="primary"]:hover {
+    @apply bg-accent text-white dark:bg-accent dark:text-white;
+}
+
+.postdecorations [data-variant="success"],
+.postdecorations [data-variant="success"]:hover {
+    @apply bg-emerald-100 text-emerald-900 dark:bg-emerald-900 dark:text-emerald-100;
+}
+
+.postdecorations [data-variant="warning"],
+.postdecorations [data-variant="warning"]:hover {
+    @apply bg-amber-100 text-amber-900 dark:bg-amber-900 dark:text-amber-100;
+}
+
+.postdecorations .postaction:not(:disabled) {
+    @apply cursor-pointer;
+}
+
+.postdecorations .postaction:not(:disabled):hover {
+    @apply border-current;
+}
+
+.postdecorations .postaction:focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+}
+
+.postdecorations .postaction:disabled {
+    @apply cursor-not-allowed border-dashed border-current;
+}
+
+.postmetrics {
+    @apply flex flex-wrap gap-x-6 gap-y-3;
+}
+
+.postmetric {
+    @apply min-w-0 max-w-full break-words;
+}
+
+.postmetric:has(progress) {
+    @apply w-full;
+}
+
+.postdecorations .postmetric dt {
+    @apply font-normal;
+}
+
+.postdecorations .postmetric dd {
+    @apply p-0 font-semibold text-base;
+}
+
+.postmetric progress {
+    @apply block h-2 w-full mt-1 accent-accent;
+}
+
+.postmetric progress::-webkit-progress-value {
+    @apply bg-accent;
+}
+
+.postmetric progress::-moz-progress-bar {
+    @apply bg-accent;
+}

@@ -68,6 +68,10 @@ export default (eleventyConfig) => {
     // Localized readable date
     eleventyConfig.addNunjucksFilter("readableDate", (value) => readableDateFormatter.format(toDate(value)));
 
+    // Localized readable date and time
+    eleventyConfig.addNunjucksFilter("readableDateTime", (value, lang = siteconfig.lang || "en") =>
+        new Intl.DateTimeFormat(lang, { dateStyle: "medium", timeStyle: "short", hourCycle: "h23" }).format(toDate(value)));
+
     // RFC 2822 date for RSS feeds
     eleventyConfig.addNunjucksFilter("rssDate", (value) => formatRssDate(toDate(value)));
 

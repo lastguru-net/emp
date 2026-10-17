@@ -1,83 +1,17 @@
 {% set data = social or siteelements.social %}
+{% set iconAliases = {fbPage: "facebookInverse", fbProfile: "facebook"} %}
 <div class="{% if social %}authorsocial{% else %}sitesocial{% endif %} grid grid-cols-{{ data | length }}">
-    {% if data.linkedin %}
-    <a href="{{ socialconfig.linkedin.prefix }}{{ data.linkedin }}" aria-label="{{ socialconfig.linkedin.aria }}">
-        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.linkedin.viewBox }}">
-            <title>{{ socialconfig.linkedin.title }}</title>
-            <path d="{{ inlinesvg.linkedin.path }}" />
+    {% for name in ["linkedin", "github", "twitter_x", "youtube", "fbPage", "fbProfile", "instagram", "threads", "mastodon", "bluesky"] %}
+    {% if data[name] %}
+    {% set config = socialconfig[name] %}
+    {% set icon = inlinesvg[iconAliases[name] or name] %}
+    {% set fullUrl = name == "mastodon" or name == "bluesky" %}
+    <a href="{{ '' if fullUrl else config.prefix }}{{ data[name] }}" aria-label="{{ config.aria }}"{% if fullUrl %} rel="me"{% endif %}>
+        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ icon.viewBox }}">
+            <title>{{ config.title }}</title>
+            <path d="{{ icon.path }}" />
         </svg>
     </a>
     {% endif %}
-    {% if data.github %}
-    <a href="{{ socialconfig.github.prefix }}{{ data.github }}" aria-label="{{ socialconfig.github.aria }}">
-        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.github.viewBox }}">
-            <title>{{ socialconfig.github.title }}</title>
-            <path d="{{ inlinesvg.github.path }}" />
-        </svg>
-    </a>
-    {% endif %}
-    {% if data.twitter_x %}
-    <a href="{{ socialconfig.twitter_x.prefix }}{{ data.twitter_x }}" aria-label="{{ socialconfig.twitter_x.aria }}">
-        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.twitter_x.viewBox }}">
-            <title>{{ socialconfig.twitter_x.title }}</title>
-            <path d="{{ inlinesvg.twitter_x.path }}" />
-        </svg>
-    </a>
-    {% endif %}
-    {% if data.youtube %}
-    <a href="{{ socialconfig.youtube.prefix }}{{ data.youtube }}" aria-label="{{ socialconfig.youtube.aria }}">
-        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.youtube.viewBox }}">
-            <title>{{ socialconfig.youtube.title }}</title>
-            <path d="{{ inlinesvg.youtube.path }}" />
-        </svg>
-    </a>
-    {% endif %}
-    {% if data.fbPage %}
-    <a href="{{ socialconfig.fbPage.prefix }}{{ data.fbPage }}" aria-label="{{ socialconfig.fbPage.aria }}">
-        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.facebookInverse.viewBox }}">
-            <title>{{ socialconfig.fbPage.title }}</title>
-            <path d="{{ inlinesvg.facebookInverse.path }}" />
-        </svg>
-    </a>
-    {% endif %}
-    {% if data.fbProfile %}
-    <a href="{{ socialconfig.fbProfile.prefix }}{{ data.fbProfile }}" aria-label="{{ socialconfig.fbProfile.aria }}">
-        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.facebook.viewBox }}">
-            <title>{{ socialconfig.fbProfile.title }}</title>
-            <path d="{{ inlinesvg.facebook.path }}" />
-        </svg>
-    </a>
-    {% endif %}
-    {% if data.instagram %}
-    <a href="{{ socialconfig.instagram.prefix }}{{ data.instagram }}" aria-label="{{ socialconfig.instagram.aria }}">
-        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.instagram.viewBox }}">
-            <title>{{ socialconfig.instagram.title }}</title>
-            <path d="{{ inlinesvg.instagram.path }}" />
-        </svg>
-    </a>
-    {% endif %}
-    {% if data.threads %}
-    <a href="{{ socialconfig.threads.prefix }}{{ data.threads }}" aria-label="{{ socialconfig.threads.aria }}">
-        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.threads.viewBox }}">
-            <title>{{ socialconfig.threads.title }}</title>
-            <path d="{{ inlinesvg.threads.path }}" />
-        </svg>
-    </a>
-    {% endif %}
-    {% if data.mastodon %}
-    <a href="{{ data.mastodon }}" aria-label="{{ socialconfig.mastodon.aria }}" rel="me">
-        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.mastodon.viewBox }}">
-            <title>{{ socialconfig.mastodon.title }}</title>
-            <path d="{{ inlinesvg.mastodon.path }}" />
-        </svg>
-    </a>
-    {% endif %}
-    {% if data.bluesky %}
-    <a href="{{ data.bluesky }}" aria-label="{{ socialconfig.bluesky.aria }}" rel="me">
-        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.bluesky.viewBox }}">
-            <title>{{ socialconfig.bluesky.title }}</title>
-            <path d="{{ inlinesvg.bluesky.path }}" />
-        </svg>
-    </a>
-    {% endif %}
+    {% endfor %}
 </div>

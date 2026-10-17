@@ -5,7 +5,7 @@ import { minify as minifyJs } from "terser";
 const isProduction = process.env.NODE_ENV === "production";
 
 // html-minifier-next options
-const htmlOpts = {
+const htmlOptions = {
     collapseWhitespace: true,
     conservativeCollapse: false,
     collapseInlineTagWhitespace: true,
@@ -27,11 +27,11 @@ const htmlOpts = {
     useShortDoctype: false
 };
 
-// Inline, dependency-free XML minifier - conservative and safe for typical feed XML:
+// Inline, dependency-free XML minifier:
 // - preserves CDATA blocks
 // - removes XML comments
 // - collapses whitespace between tags
-const simpleXmlMinify = (xml) => {
+const minifyXml = (xml) => {
     if (!xml || typeof xml !== "string") return xml;
 
     // extract CDATA blocks
@@ -56,59 +56,49 @@ const simpleXmlMinify = (xml) => {
     return xml;
 };
 
-// Minify HTML for feed content (preserves pre/code/script/style blocks)
-const simpleHtmlMinify = (html) => {
+// Minify HTML for feed content (preserves pre/code/textarea/script/style blocks)
+const minifyFeedHtml = (html) => {
     if (html === undefined || html === null) return "";
     if (!isProduction) return String(html);
-    let s = String(html);
+    let output = String(html);
 
     // preserve pre/code/textarea/script/style blocks entirely
     const preserved = [];
-    s = s.replace(/<(pre|code|textarea|script|style)[\s\S]*?<\/\1>/gi, (m) => {
+    output = output.replace(/<(pre|code|textarea|script|style)[\s\S]*?<\/\1>/gi, (m) => {
         preserved.push(m);
         return "__PRESERVE_" + (preserved.length - 1) + "__";
     });
 
     // remove HTML comments
-    s = s.replace(/<!--[\s\S]*?-->/g, "");
+    output = output.replace(/<!--[\s\S]*?-->/g, "");
 
     // collapse whitespace between tags
-    s = s.replace(/>\s+</g, "><");
+    output = output.replace(/>\s+</g, "><");
 
     // collapse multiple spaces to one (only outside preserved blocks)
-    s = s.replace(/ {2,}/g, " ");
+    output = output.replace(/ {2,}/g, " ");
 
-    s = s.trim();
+    output = output.trim();
 
     // restore preserved blocks
-    s = s.replace(/__PRESERVE_(\d+)__/g, (m, idx) => preserved[Number(idx)]);
+    output = output.replace(/__PRESERVE_(\d+)__/g, (m, idx) => preserved[Number(idx)]);
 
-    return s;
+    return output;
 };
 
-const minifyContent = async (content, path) => {
-    if (!path || !isProduction) return content;
+const minifyContent = async (content, outputPath) => {
+    if (!outputPath || !isProduction) return content;
 
-    if (path.endsWith(".html")) {
-        const s = String(content);
-        content = await minifyHtml(s, htmlOpts);
-    } else if (path.endsWith(".xml")) {
-        // use inline minifier
-        content = simpleXmlMinify(content);
-    } else if (path.endsWith(".json") || path.endsWith(".webmanifest")) {
-        // use strict JSON parse/stringify to produce compact, valid JSON
-        const s = String(content);
-        content = JSON.stringify(JSON.parse(s));
-    } else if (path.endsWith(".js")) {
-        const s = String(content);
-        const m = await minifyJs(s);
-        content = m.code;
+    if (outputPath.endsWith(".html")) return minifyHtml(String(content), htmlOptions);
+    if (outputPath.endsWith(".xml")) return minifyXml(content);
+    if (outputPath.endsWith(".json") || outputPath.endsWith(".webmanifest")) {
+        return JSON.stringify(JSON.parse(String(content)));
     }
-
+    if (outputPath.endsWith(".js")) return (await minifyJs(String(content))).code;
     return content;
 };
 
 export default (eleventyConfig) => {
     eleventyConfig.addTransform("minifyContent", minifyContent);
-    eleventyConfig.addNunjucksFilter("minifyFeedHtml", simpleHtmlMinify);
+    eleventyConfig.addNunjucksFilter("minifyFeedHtml", minifyFeedHtml);
 };

@@ -28,9 +28,8 @@ eleventyImport:
     {% if items | length %}<updated>{{ items | latestModifiedDate | isoDateTime }}</updated>{% endif %}
     {% for item in items %}
         {# Per-item metadata #}
-        {% set fallbackExcerpt -%}{% getExcerpt item %}{%- endset %}
         {% set itemUrl = item.url | absoluteUrl %}
-        {% set itemExcerpt = item.data.excerpt or fallbackExcerpt %}
+        {% set itemExcerpt = item.data.excerpt or (item | getExcerpt) %}
         {% set activeAuthorId = item.data.author or siteconfig.author %}
         {% set activeAuthorData = siteauthors[activeAuthorId] %}
         {% set activeAuthorDisplayName = activeAuthorData.fullName or activeAuthorId %}
@@ -53,8 +52,8 @@ eleventyImport:
                 {% endfor %}
             {% endif %}
             <summary type="html">{{ itemExcerpt | escape }}</summary>
-            {% if siteelements.features.feedFullContent %}
-            <content type="html">{{ item.templateContent | minifyFeedHtml | escape }}</content>
+            {% if siteelements.feeds.fullContent %}
+            <content type="html">{{ item.templateContent | feedImageUrls | minifyFeedHtml | escape }}</content>
             {% endif %}
         </entry>
     {% endfor %}

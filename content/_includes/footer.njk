@@ -1,41 +1,45 @@
 <footer class="footer">
     <div class="footer-content max-w-content">
-        {% if siteelements.features.rssInFooter %}
-        <a class="footer-rss" href="{{ '/rss.xml' | url }}" aria-label="RSS Feed">
-            <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.rss.viewBox }}">
-                <title>RSS</title>
-                <path d="{{ inlinesvg.rss.path }}" />
-            </svg>
-        </a>
-        {% endif %}
-        {% set copyright = siteelements.copyright %}
-        <div class="footer-copyright">
-            <span class="footer-copyright-text">
-                &copy; {% if copyright.year %}{{ copyright.year }}{% else %}{% year %}{% endif %}
-            </span>
-            {% if copyright.link %}
-            <a class="footer-copyright-author" href="{{ copyright.link | url }}">
-                {{ siteauthors[siteconfig.author].fullName if siteauthors[siteconfig.author] else siteconfig.author }}
+        <div class="footer-identity">
+            {% if siteelements.feeds.rssInFooter %}
+            <a class="footer-rss" href="{{ '/rss.xml' | url }}" aria-label="RSS Feed">
+                <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.rss.viewBox }}">
+                    <title>RSS</title>
+                    <path d="{{ inlinesvg.rss.path }}" />
+                </svg>
             </a>
-            {% else %}
-            <span class="footer-copyright-author">
-                {{ siteauthors[siteconfig.author].fullName if siteauthors[siteconfig.author] else siteconfig.author }}
-            </span>
             {% endif %}
-            <span class="footer-copyright-text">
-                {{ copyright.text }}
-            </span>
+            {% set copyright = siteelements.copyright %}
+            {% set publisherData = siteauthors[siteconfig.author] %}
+            {% set publisherName = publisherData.fullName if publisherData else siteconfig.author %}
+            <div class="footer-copyright">
+                <span class="footer-copyright-text">
+                    &copy; {% if copyright.year %}{{ copyright.year }}{% else %}{% year %}{% endif %}
+                </span>
+                {% if copyright.link %}
+                <a class="footer-copyright-author" href="{{ copyright.link | url }}">
+                    {{ publisherName }}
+                </a>
+                {% else %}
+                <span class="footer-copyright-author">
+                    {{ publisherName }}
+                </span>
+                {% endif %}
+                <span class="footer-copyright-text">
+                    {{ copyright.text }}
+                </span>
+            </div>
         </div>
         {% if siteelements.features.privacyPolicy == "footer" %}
-        <div class="footer-privacy">
-            <span class="footer-privacy-sep">&middot;</span>
-            <a class="footer-privacy-policy" href="{{ siteelements.privacyPolicy.url | url }}" aria-label="{{ siteelements.privacyPolicy.name }}">
-                {{ siteelements.privacyPolicy.name }}
-            </a>
-        </div>
+        <a class="footer-privacy-policy" href="{{ siteelements.privacyPolicy.url | url }}" aria-label="{{ siteelements.privacyPolicy.name }}">
+            {{ siteelements.privacyPolicy.name }}
+        </a>
+        {% endif %}
+        {% if siteelements.features.sitesocial == "footer" and (siteelements.social | length) %}
+        {% include "sitesocial.njk" %}
         {% endif %}
         {% if siteelements.features.poweredBy %}
-        <div class="footer-poweredby">
+        <span class="footer-poweredby">
             <span class="footer-poweredby-prefix">
                 {{ siteelements.poweredBy.text }}
             </span>
@@ -48,7 +52,7 @@
                 {{ siteelements.poweredBy.name }}
             </span>
             {% endif %}
-        </div>
+        </span>
         {% endif %}
     </div>
 </footer>

@@ -14,9 +14,7 @@ let searchRoot = null;
 let searchInput = null;
 let searchResults = null;
 let searchStatus = null;
-let searchOpener = null;
-
-let isInitialized = false;
+let initialization = null;
 let miniSearch = null;
 
 const renderResults = (query) => {
@@ -52,86 +50,49 @@ const renderResults = (query) => {
         const tags = result.tags;
         const meta = tags.length ? tags.join(" · ") : "";
 
-        return '<a class="search-result-item" href="' + escapeHtml(url) + '">' +
-                '<div class="search-result-title">' + escapeHtml(title) + "</div>" +
+        return '<a class="dialog-item" href="' + escapeHtml(url) + '">' + escapeHtml(title) +
                 (excerpt ? '<div class="search-result-excerpt">' + escapeHtml(excerpt) + "</div>" : "") +
                 (meta ? '<div class="search-result-meta">' + escapeHtml(meta) + "</div>" : "") +
             "</a>";
     }).join("");
 };
 
-const loadIndex = async () => {
-    const miniSearchModule = await import(miniSearchUrl);
-    const response = await fetch(indexUrl, { credentials: "same-origin" });
-    const payload = await response.json();
-    searchStrings = payload.strings;
-    miniSearch = miniSearchModule.default.loadJS(payload.index, payload.options);
-};
+const initSearch = () => {
+    if (initialization) return initialization;
 
-const initSearch = async () => {
-    if (isInitialized) return;
+    initialization = (async () => {
+        searchRoot = document.getElementById("search-modal");
+        searchInput = document.getElementById("search-input");
+        searchResults = document.getElementById("search-results");
+        searchStatus = document.getElementById("search-status");
 
-    searchRoot = document.getElementById("search-modal");
-    searchInput = document.getElementById("search-input");
-    searchResults = document.getElementById("search-results");
-    searchStatus = document.getElementById("search-status");
-
-    await loadIndex();
-    searchInput.setAttribute("placeholder", searchStrings.placeholder);
-
-    searchInput.addEventListener("input", (event) => {
-        renderResults(event.target.value);
+        const [miniSearchModule, response] = await Promise.all([
+            import(miniSearchUrl),
+            fetch(indexUrl, { credentials: "same-origin" }),
+        ]);
+        const payload = await response.json();
+        searchStrings = payload.strings;
+        miniSearch = miniSearchModule.default.loadJS(payload.index, payload.options);
+        searchInput.setAttribute("placeholder", searchStrings.placeholder);
+        searchInput.addEventListener("input", (event) => {
+            renderResults(event.target.value);
+        });
+        // Search inputs otherwise consume Escape to clear the query first.
+        searchInput.addEventListener("keydown", (event) => {
+            if (event.key !== "Escape") return;
+            event.preventDefault();
+            searchRoot.close();
+        });
+    })().catch((error) => {
+        initialization = null;
+        throw error;
     });
-
-    isInitialized = true;
+    return initialization;
 };
-
-window.closeSearchModal = () => {
-    if (searchRoot.classList.contains("hidden")) return;
-
-    searchRoot.classList.add("hidden");
-    document.body.classList.remove("search-open");
-    searchOpener.focus();
-    searchOpener = null;
-};
-
-window.openSearchModal = () => {
-    searchOpener = document.activeElement;
-    searchRoot.classList.remove("hidden");
-    document.body.classList.add("search-open");
-    searchInput.focus();
-    searchInput.select();
-};
-
-document.addEventListener("keydown", (event) => {
-    if (!searchRoot || searchRoot.classList.contains("hidden")) return;
-
-    if (event.key === "Escape") {
-        event.preventDefault();
-        window.closeSearchModal();
-        return;
-    }
-
-    if (event.key === "Tab") {
-        const focusable = [...searchRoot.querySelectorAll(
-            'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
-        )].filter((element) => !element.hidden && element.getClientRects().length);
-
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        const active = document.activeElement;
-
-        if (event.shiftKey && (active === first || !searchRoot.contains(active))) {
-            event.preventDefault();
-            last.focus();
-        } else if (!event.shiftKey && (active === last || !searchRoot.contains(active))) {
-            event.preventDefault();
-            first.focus();
-        }
-    }
-});
 
 window.searchButton = async () => {
     await initSearch();
-    window.openSearchModal();
+    if (searchRoot.open) return;
+    searchRoot.showModal();
+    searchInput.select();
 };

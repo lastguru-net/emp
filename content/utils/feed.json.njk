@@ -11,25 +11,24 @@ eleventyImport:
     {% set publisherName = publisherData.fullName or siteconfig.author %}
     {% set publisherWebsite = publisherData.website %}
     "version": "https://jsonfeed.org/version/1.1",
-    "title": "{{ siteconfig.title | jsonEscape | safe }}",
-    "home_page_url": "{{ '/' | absoluteUrl }}",
-    "feed_url": "{{ ("/feed.json" | absoluteUrl) }}",
-    "description": "{{ siteconfig.description | jsonEscape | safe }}",
-    "language": "{{ siteconfig.lang }}",
-    "icon": "{% imageTransformAbsoluteUrl siteconfig.image, 512, 'png' %}",
-    "favicon": "{% imageTransformAbsoluteUrl siteconfig.favicon, 64, 'png' %}",
+    "title": {{ siteconfig.title | jsonScript | safe }},
+    "home_page_url": {{ '/' | absoluteUrl | jsonScript | safe }},
+    "feed_url": {{ ("/feed.json" | absoluteUrl) | jsonScript | safe }},
+    "description": {{ siteconfig.description | jsonScript | safe }},
+    "language": {{ siteconfig.lang | jsonScript | safe }},
+    "icon": {% set transformedImage %}{% imageTransformAbsoluteUrl siteconfig.image, 512, 'png' %}{% endset %}{{ transformedImage | jsonScript | safe }},
+    "favicon": {% set transformedImage %}{% imageTransformAbsoluteUrl siteconfig.favicon, 64, 'png' %}{% endset %}{{ transformedImage | jsonScript | safe }},
     "authors": [
         {
-            "name": "{{ publisherName | jsonEscape | safe }}"{% if publisherWebsite %},
-            "url": "{{ publisherWebsite }}"{% endif %}
+            "name": {{ publisherName | jsonScript | safe }}{% if publisherWebsite %},
+            "url": {{ publisherWebsite | jsonScript | safe }}{% endif %}
         }
     ],
     "items": [
         {% for item in items %}
             {# Per-item metadata #}
-            {% set fallbackExcerpt -%}{% getExcerpt item %}{%- endset %}
             {% set itemUrl = item.url | absoluteUrl %}
-            {% set itemExcerpt = item.data.excerpt or fallbackExcerpt %}
+            {% set itemExcerpt = item.data.excerpt or (item | getExcerpt) %}
             {% set activeAuthorId = item.data.author or siteconfig.author %}
             {% set activeAuthorData = siteauthors[activeAuthorId] %}
             {% set activeAuthorDisplayName = activeAuthorData.fullName or activeAuthorId %}
@@ -37,30 +36,26 @@ eleventyImport:
             {% set itemKeywords = item.data.tags | getKeywords %}
             {% set itemImageSrc = item.data.image or siteconfig.openGraphDefaultImage %}
             {
-                "id": "{{ itemUrl }}",
-                "url": "{{ itemUrl }}",
-                "title": "{{ (item.data.title or "") | jsonEscape | safe }}",
-                {% if siteelements.features.feedFullContent %}
-                "content_html": "{{ item.templateContent | minifyFeedHtml | jsonEscape | safe }}",
+                "id": {{ itemUrl | jsonScript | safe }},
+                "url": {{ itemUrl | jsonScript | safe }},
+                "title": {{ (item.data.title or "") | jsonScript | safe }},
+                {% if siteelements.feeds.fullContent %}
+                "content_html": {{ item.templateContent | feedImageUrls | minifyFeedHtml | jsonScript | safe }},
                 {% else %}
-                "content_html": "{{ itemExcerpt | jsonEscape | safe }}",
+                "content_html": {{ itemExcerpt | jsonScript | safe }},
                 {% endif %}
-                "summary": "{{ itemExcerpt | jsonEscape | safe }}",
-                "image": "{% imageTransformAbsoluteUrl itemImageSrc, 1200, 'webp' %}",
-                "tags": [{% set comma = joiner() %}
-                    {% for tag in itemKeywords -%}
-                        {{ comma() }} "{{ tag | jsonEscape | safe }}"
-                    {%- endfor %}
-                ],
-                "date_published": "{{ (item.date | isoDateTime) }}",
-                {% if item.data.updated %}"date_modified": "{{ (item.data.updated | isoDateTime) }}",{% endif %}
+                "summary": {{ itemExcerpt | jsonScript | safe }},
+                "image": {% set transformedImage %}{% imageTransformAbsoluteUrl itemImageSrc, 1200, 'webp' %}{% endset %}{{ transformedImage | jsonScript | safe }},
+                "tags": {{ itemKeywords | jsonScript | safe }},
+                "date_published": {{ (item.date | isoDateTime) | jsonScript | safe }},
+                {% if item.data.updated %}"date_modified": {{ (item.data.updated | isoDateTime) | jsonScript | safe }},{% endif %}
                 "authors": [
                     {
-                        "name": "{{ activeAuthorDisplayName | jsonEscape | safe }}",
-                        "url": "{{ authorPageUrl }}"
+                        "name": {{ activeAuthorDisplayName | jsonScript | safe }},
+                        "url": {{ authorPageUrl | jsonScript | safe }}
                     }
                 ]
             }{% if not loop.last %},{% endif %}
-            {% endfor %}
+        {% endfor %}
     ]
 }

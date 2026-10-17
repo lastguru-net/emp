@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { extractExcerpt } from "../_11ty/excerpt.js";
+import { createMarkdownLibrary } from "../_11ty/markdown.js";
 
 test("empty and whitespace-only content produces no excerpt", () => {
     assert.equal(extractExcerpt(), "");
@@ -9,11 +10,9 @@ test("empty and whitespace-only content produces no excerpt", () => {
     assert.equal(extractExcerpt("<p> </p>"), "");
 });
 
-test("HTML is stripped and remaining whitespace is collapsed", () => {
-    assert.equal(
-        extractExcerpt("<p>Hello <strong>world</strong>.</p>   <p>Next sentence.</p>"),
-        "Hello world . Next sentence."
-    );
+test("rendered Markdown excerpts preserve visible characters and inline words", () => {
+    const html = createMarkdownLibrary().render('Fish & chips with **salt**, un**believ**able &copy; and `x < y`.');
+    assert.equal(extractExcerpt(html), "Fish & chips with salt, unbelievable © and x < y.");
 });
 
 test("only the first source line is used when one is present", () => {

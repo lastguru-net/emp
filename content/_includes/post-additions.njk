@@ -1,0 +1,22 @@
+{% if postAttachments | length %}
+<section class="postattachments">
+    <h2>{{ sitestrings[siteconfig.lang].post_attachments }}</h2>
+    <ul>
+        {% for file in postAttachments %}
+        <li><a href="{{ file.path | url }}">{{ file.name }}</a></li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}
+{% if postUpdates | length %}
+<section class="postupdates">
+    <h2>{{ sitestrings[siteconfig.lang].post_updates }}</h2>
+    {% for update in postUpdates %}
+    <section class="postupdate">
+        {% if update.data.title %}<h3>{{ update.data.title }}</h3>{% endif %}
+        <p class="postupdate-date"><time datetime="{{ update.date.toISOString() }}">{{ update.date | readableDateTime(siteconfig.lang) }}</time></p>
+        {{ update.templateContent | safe }}
+    </section>
+    {% endfor %}
+</section>
+{% endif %}

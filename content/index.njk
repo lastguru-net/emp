@@ -4,15 +4,18 @@ sitemapPriority: 1
 isIndexPage: true
 pagination:
     data: collections.empPosts
-    alias: posts
     reverse: false
 eleventyComputed:
-    date: "{% if posts | length %}{{ posts | latestModifiedDate | isoDateTime }}{% endif %}"
+    date: "{% if pagination.items | length %}{{ pagination.items | latestModifiedDate | isoDateTime }}{% endif %}"
 ---
 {% if siteelements.header %}{% set siteheader = true %}{% endif %}
-{% if siteelements.features.index == "postlist" %}{% include "postlist.njk" %}{% endif %}
+{% set posts = pagination.items %}
+{% if siteelements.features.index == "postlist" or siteelements.features.index == "json" %}{% include "postlist.njk" %}{% endif %}
 {% if siteelements.features.index == "singlepost" %}
 <div class="{% if siteelements.features.base != "primitive" %}content {% endif %}post">
     {% set cp = collections.all | getCollectionItem(posts[0]) %}{{ cp.templateContent | safe }}
+    {% set postAttachments = cp.data.postAttachments %}
+    {% set postUpdates = cp.data.postUpdates %}
+    {% include "post-additions.njk" %}
 </div>
 {% endif %}

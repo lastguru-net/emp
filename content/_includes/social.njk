@@ -1,36 +1,31 @@
+{% set shareUrl = page.url | absoluteUrl | urlencode %}
 <div class="social">
-    <button class="link copy-url-pending" type="button" aria-label="{{ sitestrings[siteconfig.lang].copy_to_clipboard }}" aria-describedby="copy-link-status" data-copy-url data-copy-success="{{ sitestrings[siteconfig.lang].copied }}" data-copy-error="{{ sitestrings[siteconfig.lang].copy_failed }}" onclick="copyUrlToClipboard(this)" disabled aria-hidden="true">
-        <span></span>
+    <button class="link copy-url-pending" type="button" aria-label="{{ sitestrings[siteconfig.lang].copy_to_clipboard }}" aria-describedby="copy-link-status" data-copy-url data-copy-success="{{ sitestrings[siteconfig.lang].copied }}" data-copy-error="{{ sitestrings[siteconfig.lang].copy_failed }}" disabled aria-hidden="true">
         <svg class="share" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.share.viewBox }}">
             <path d="{{ inlinesvg.share.path }}" />
         </svg>
     </button>
-    <a class="fill" href="https://bsky.app/intent/compose?text={{ title | urlencode }}+{{ page.url | absoluteUrl }}" aria-label="{{ sitestrings[siteconfig.lang].share_on }} Bluesky">
-        <span></span>
+    <a class="fill" href="https://bsky.app/intent/compose?text={{ title | urlencode }}+{{ shareUrl }}" aria-label="{{ sitestrings[siteconfig.lang].share_on }} Bluesky">
         <svg class="bluesky" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.bluesky.viewBox }}">
             <path d="{{ inlinesvg.bluesky.path }}" />
         </svg>
     </a>
-    <a class="fill" href="https://threads.net/intent/post?text={{ page.url | absoluteUrl }}" aria-label="{{ sitestrings[siteconfig.lang].share_on }} Threads">
-        <span></span>
+    <a class="fill" href="https://threads.net/intent/post?text={{ shareUrl }}" aria-label="{{ sitestrings[siteconfig.lang].share_on }} Threads">
         <svg class="threads" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.threads.viewBox }}">
             <path d="{{ inlinesvg.threads.path }}" />
         </svg>
     </a>
-    <a class="fill" href="https://www.facebook.com/sharer/sharer.php?u={{ page.url | absoluteUrl }}&display=popup&app_id={{ siteconfig.pixels.fbApp }}" aria-label="{{ sitestrings[siteconfig.lang].share_on }} Facebook">
-        <span></span>
+    <a class="fill" href="https://www.facebook.com/sharer/sharer.php?u={{ shareUrl }}&display=popup" aria-label="{{ sitestrings[siteconfig.lang].share_on }} Facebook">
         <svg class="facebook" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.facebook.viewBox }}">
             <path d="{{ inlinesvg.facebook.path }}" />
         </svg>
     </a>
-    <a class="fill" href="https://x.com/intent/post?text={{ title | urlencode }}&url={{ page.url | absoluteUrl }}&via={{ siteelements.social.twitter_x }}" aria-label="{{ sitestrings[siteconfig.lang].share_on }} X">
-        <span></span>
+    <a class="fill" href="https://x.com/intent/post?text={{ title | urlencode }}&url={{ shareUrl }}&via={{ siteelements.social.twitter_x }}" aria-label="{{ sitestrings[siteconfig.lang].share_on }} X">
         <svg class="twitter_x" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.twitter_x.viewBox }}">
             <path d="{{ inlinesvg.twitter_x.path }}" />
         </svg>
     </a>
-    <a class="fill" href="https://www.linkedin.com/sharing/share-offsite/?url={{ page.url | absoluteUrl }}" aria-label="{{ sitestrings[siteconfig.lang].share_on }} LinkedIn">
-        <span></span>
+    <a class="fill" href="https://www.linkedin.com/sharing/share-offsite/?url={{ shareUrl }}" aria-label="{{ sitestrings[siteconfig.lang].share_on }} LinkedIn">
         <svg class="linkedin" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.linkedin.viewBox }}">
             <path d="{{ inlinesvg.linkedin.path }}" />
         </svg>

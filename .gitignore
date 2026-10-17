@@ -28,10 +28,15 @@ $RECYCLE.BIN/
 # Local .env file
 .env
 
-# Static content
+# Generated site and build cache
 _site/
-# Uncomment the following line if you want to commit all images to source control. This will def speed up build time.
-# !_site/assets/images
+/.cache/
+
+# Generated Cloudflare deployment configuration and local state
+/wrangler.generated.json
+/.wrangler/
+/.dev.vars
+/.dev.vars.*
 
 # Locally built assets
 assets/css/*-build.css

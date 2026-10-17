@@ -1,8 +1,11 @@
 import JSON5 from "json5";
-import syntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
+import siteconfig from "./content/_data/siteconfig.js";
 import embedEverything from "eleventy-plugin-embed-everything";
 import filters from "./_11ty/filters.js";
-import getExcerpt from "./_11ty/excerpt.js";
+import plugins from "./_11ty/plugins.js";
+import authentication from "./_11ty/authentication.js";
+import cloudflare from "./_11ty/cloudflare.js";
+import excerpt from "./_11ty/excerpt.js";
 import dates from "./_11ty/dates.js";
 import hash from "./_11ty/hash.js";
 import externalLinks from "./_11ty/external-links.js";
@@ -10,8 +13,10 @@ import imageTransform from "./_11ty/image-transform.js";
 import lqip from "./_11ty/lqip.js";
 import minify from "./_11ty/minify.js";
 import collections from "./_11ty/collections.js";
-import googleFontsPlugin from "./_11ty/google-fonts.js";
 import searchIndex from "./_11ty/search-index.js";
+import postCard from "./_11ty/post-card.js";
+import postlist from "./_11ty/postlist.js";
+import postAdditions from "./_11ty/post-additions.js";
 import tailwind from "./_11ty/tailwind.js";
 import { createMarkdownLibrary } from "./_11ty/markdown.js";
 
@@ -22,7 +27,7 @@ export default (eleventyConfig) => {
     // Markdown library
     eleventyConfig.setLibrary(
         "md",
-        createMarkdownLibrary()
+        createMarkdownLibrary((url) => eleventyConfig.getFilter("url")(url))
     );
 
     // Passthrough assets and images
@@ -32,6 +37,7 @@ export default (eleventyConfig) => {
     // Watch JS and CSS for dev-mode rebuilds
     eleventyConfig.addWatchTarget("./assets/js/");
     eleventyConfig.addWatchTarget("./assets/css/");
+    eleventyConfig.addWatchTarget("./extensions/**", { resetConfig: true });
 
     // Template formats
     eleventyConfig.setTemplateFormats([
@@ -43,17 +49,19 @@ export default (eleventyConfig) => {
         "png"
     ]);
 
-    // Syntax highlighting plugin
-    eleventyConfig.addPlugin(syntaxHighlight);
-
     // Embed common media formats
     eleventyConfig.addPlugin(embedEverything);
 
     // General-purpose Nunjucks filters
     eleventyConfig.addPlugin(filters);
 
-    // Generate excerpt from first paragraph
-    eleventyConfig.addPlugin(getExcerpt);
+    // Plugins and authentication
+    eleventyConfig.addPlugin(plugins);
+    eleventyConfig.addPlugin(authentication);
+    eleventyConfig.addPlugin(cloudflare);
+
+    // Excerpts for post lists, feeds and metadata
+    eleventyConfig.addPlugin(excerpt);
 
     // Getting and formatting dates
     eleventyConfig.addPlugin(dates);
@@ -64,8 +72,11 @@ export default (eleventyConfig) => {
     // Setting _blank and rel=noopener on external links in markdown content
     eleventyConfig.addPlugin(externalLinks);
 
-    // Transforming images
+    // Images and post cards
     eleventyConfig.addPlugin(imageTransform);
+    eleventyConfig.addPlugin(postCard);
+    eleventyConfig.addPlugin(postlist);
+    eleventyConfig.addPlugin(postAdditions);
 
     // Lean Rada CSS-only LQIP
     eleventyConfig.addPlugin(lqip);
@@ -76,18 +87,16 @@ export default (eleventyConfig) => {
     // Double pagination for tags and authors, curated posts
     eleventyConfig.addPlugin(collections);
 
-    // Inline Google Fonts CSS and font files
-    eleventyConfig.addPlugin(googleFontsPlugin);
-
-    // Search docs collection and serialized Minisearch payload filter
+    // Serialize the MiniSearch index for the search-index.json template
     eleventyConfig.addPlugin(searchIndex);
 
     // Tailwind CSS processing
     eleventyConfig.addPlugin(tailwind);
 
     return {
+        pathPrefix: new URL(siteconfig.url).pathname,
         dir: {
-            // Consolidating everything below the `content` folder
+            // Source content directory
             input: "content"
         }
     };

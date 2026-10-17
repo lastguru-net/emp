@@ -19,7 +19,7 @@ content:
     - name: title
       label: Title
       required: true
-      description: The title of the page. The URL is based on the title unless overriden in the header.
+      description: The title, also used for its URL unless a permalink is set.
       type: string
     - name: date
       label: Post date
@@ -28,7 +28,7 @@ content:
       type: date
     - name: updated
       label: Update date
-      description: Optional last modification date in the same formats as the date field. When present, it is used in JSON-LD and in the sitemap.
+      description: Optional last modification date in the same formats as the date field. Used in JSON-LD, the sitemap, and Atom and JSON feeds.
       type: date
     - name: permalink
       label: Permalink
@@ -40,7 +40,7 @@ content:
       type: image
     - name: excerpt
       label: Excerpt
-      description: A description used in post lists. If defined, it has no length limit. If omitted, an excerpt is auto-generated from the content (capped at full words, first paragraph, up to 250 characters).
+      description: Optional excerpt for lists and feeds. If omitted, EMP strips HTML from the first line of rendered content and truncates at 250 characters, preferably at a word boundary, followed by an ellipsis.
       type: text
     - name: tags
       label: Tags
@@ -49,15 +49,15 @@ content:
       list: true
     - name: author
       label: Author
-      description: The author's name. Used to generate author pages and displayed in post lists.
+      description: Author key from siteauthors.json5, or a name. Used for author archive URLs and the displayed author.
       type: string
     - name: hidden
       label: Hidden
-      description: When set to `true` on a post or a page, hides the post/page from all the lists (landing pages, author/tag pages, sitemap and RSS feeds). Commonly used for drafts.
+      description: Excludes the item from lists, feeds, search and the sitemap. Its URL is still public.
       type: boolean
     - name: pinned
       label: Pinned
-      description: When set to `true` on post (no effect on pages), puts the post on top of all the lists (landing pages, author/tag pages, sitemap and RSS feeds).
+      description: Places the post before unpinned posts in lists and feeds. Posts within each group are sorted newest first.
       type: boolean
     - name: body
       label: Post
@@ -70,7 +70,7 @@ content:
     - name: title
       label: Title
       required: true
-      description: The title of the page. The URL is based on the title unless overriden in the header.
+      description: The title, also used for its URL unless a permalink is set.
       type: string
     - name: permalink
       label: Permalink
@@ -82,16 +82,16 @@ content:
       type: image
     - name: excerpt
       label: Excerpt
-      description: A description used in post lists. If defined, it has no length limit. If omitted, an excerpt is auto-generated from the content (capped at full words, first paragraph, up to 250 characters).
+      description: Optional description for metadata and lists. If omitted, EMP derives it from the rendered content.
       type: text
     - name: tags
       label: Tags
-      description: One or more tags for the post. Depending on the configuration, some (or all) of the tags are displayed in the post lists.
+      description: Tags that include the page in tag archives.
       type: string
       list: true
     - name: author
       label: Author
-      description: The author's name. Used to generate author pages and displayed in post lists.
+      description: Author key from siteauthors.json5, or a name. Used for author archive URLs and the displayed author.
       type: string
     - name: profilePage
       label: Profile page
@@ -99,10 +99,10 @@ content:
       type: boolean
     - name: hidden
       label: Hidden
-      description: When set to `true` on a post or a page, hides the post/page from all the lists (landing pages, author/tag pages, sitemap and RSS feeds). Commonly used for drafts.
+      description: Excludes the item from lists, feeds, search and the sitemap. Its URL is still public.
       type: boolean
     - name: body
-      label: Post
+      label: Page
       type: rich-text
   - name: authors
     label: Authors

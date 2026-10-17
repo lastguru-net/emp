@@ -8,7 +8,14 @@
                     <rect y="60" width="60" height="7" />
                 </svg>
             </button>
-            <a href="{{ '/' | url }}" aria-label="{{ siteelements.menuHome }}">{{ siteconfig.title }}</a>
+            <a{% if siteelements.features.topbarLogo %} class="topbar-with-logo"{% endif %} href="{{ '/' | url }}" aria-label="{{ siteelements.menuHome }}">
+                {% if siteelements.features.topbarLogo %}
+                <img class="topbar-logo nolqip" src="{{ siteconfig.image }}" alt="" loading="eager" eleventy:widths="32,64,96" sizes="32px" eleventy:pictureattr:sizes="32px" />
+                <span>{{ siteconfig.title }}</span>
+                {% else %}
+                {{ siteconfig.title }}
+                {% endif %}
+            </a>
             {% if siteelements.features.colorMode != "light" and siteelements.features.colorMode != "dark" %}
             <button type="button" aria-label="{{ sitestrings[siteconfig.lang].color_mode }}" onclick="toggleDarkLightMode(false)">
                 <svg class="lighttoggle" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.lightMode.viewBox }}">

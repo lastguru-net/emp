@@ -5,6 +5,7 @@
         {% include "json-ld.njk" %}
     </head>
     <body>
+        {% pluginsBodyStart %}
         {% if siteelements.features.base == "primitive" %}
             {{ content | safe }}
         {% else %}
@@ -24,7 +25,10 @@
                 {% include "footer.njk" %}
             {% endif %}
         </div>
-        {% if siteelements.features.search %}
+        {% if siteelements.features.userMenu and siteelements.features.js %}
+            {% include "user-menu.njk" %}
+        {% endif %}
+        {% if siteelements.features.search and siteelements.features.js %}
             {% include "search.njk" %}
         {% endif %}
         {% endif %}

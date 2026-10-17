@@ -1,13 +1,10 @@
 // Image optimization pipeline and manual transform shortcode
 import path from "node:path";
-import fs from "node:fs";
-import { URL } from "node:url";
-import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
-import Image from "@11ty/eleventy-img";
-import siteconfig from "../content/_data/siteconfig.js";
+import { cp } from "node:fs/promises";
+import Image, { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 
 const outputDir = ".cache/images/";
-const urlPath = "/images/";
+export const urlPath = "/images/";
 
 const filenameFormat = (id, src, width, format) => {
     const name = path.basename(src, path.extname(src));
@@ -55,30 +52,40 @@ const pluginOptions = {
     ...sharpOptions
 };
 
+const resolveImageSource = (src) => {
+    const value = String(src || "");
+    if (/^https?:\/\//i.test(value)) return value;
+    return path.join("content", value.replace(/^\/+/, ""));
+};
+
+export const generateImageMetadata = async (src, options = {}) => Image(resolveImageSource(src), {
+    outputDir,
+    urlPath,
+    filenameFormat,
+    ...sharpOptions,
+    ...options
+});
+
 // Manual image transform shortcode (used in feeds and meta tags)
 const imageTransform = async (src, width, format) => {
-    const metadata = await Image(path.join("content", src), {
-        outputDir,
-        urlPath,
-        filenameFormat,
+    const metadata = await generateImageMetadata(src, {
         formats: [format],
-        widths: [width],
-        ...sharpOptions
+        widths: [width]
     });
     return metadata[format][0].url;
 };
 
-const imageTransformAbsoluteUrl = async (src, width, format) => {
-    return new URL(await imageTransform(src, width, format), siteconfig.url).toString();
-};
-
 export default (eleventyConfig) => {
-    eleventyConfig.addPlugin(eleventyImageTransformPlugin, pluginOptions);
-    eleventyConfig.addShortcode("imageTransform", imageTransform);
-    eleventyConfig.addShortcode("imageTransformAbsoluteUrl", imageTransformAbsoluteUrl);
+    eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
+        ...pluginOptions,
+        urlPath: path.posix.join(eleventyConfig.pathPrefix, urlPath)
+    });
+    eleventyConfig.addShortcode("imageTransform", async (...args) =>
+        eleventyConfig.getFilter("url")(await imageTransform(...args)));
+    eleventyConfig.addShortcode("imageTransformAbsoluteUrl", async (...args) =>
+        eleventyConfig.getFilter("absoluteUrl")(await imageTransform(...args)));
 
     // Copy optimized images to the public folder after build
-    eleventyConfig.on("eleventy.after", () => {
-        fs.cpSync(outputDir, "_site/images/", { recursive: true });
-    });
+    eleventyConfig.on("eleventy.after", ({ directories }) =>
+        cp(outputDir, path.join(directories.output, "images"), { recursive: true }));
 };

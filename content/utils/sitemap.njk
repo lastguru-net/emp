@@ -4,19 +4,8 @@ permalink: /sitemap.xml
 ---
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{# Posts first, then remaining pages (order is cosmetic) #}
-{% set postItems = collections.empPosts %}
-{% set postUrls = [] %}
-{% for p in postItems %}{% set postUrls = postUrls.concat([p.url]) %}{% endfor %}
-{% set nonPosts = [] %}
 {% for item in collections.all %}
-    {# prevent hidden content from getting into sitemap via collections.all #}
-    {% if (item.data.hidden !== true) and (item.url not in postUrls) %}
-        {% set nonPosts = nonPosts.concat([item]) %}
-    {% endif %}
-{% endfor %}
-{% set items = postItems.concat(nonPosts) %}
-{% for item in items %}
+    {% if item.data.hidden !== true %}
     {% set lastModified = item.data.updated or item.data.date %}
     <url>
         <loc>{{ item.url | absoluteUrl }}</loc>
@@ -26,5 +15,6 @@ permalink: /sitemap.xml
         <changefreq>{{ item.data.sitemapChangefreq | default("daily") }}</changefreq>
         <priority>{{ item.data.sitemapPriority | default(0.8) }}</priority>
     </url>
+    {% endif %}
 {% endfor %}
 </urlset>

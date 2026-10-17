@@ -4,14 +4,14 @@ import siteconfig from "../content/_data/siteconfig.js";
 const isExternalHref = (href) => {
     if (!href) return false;
 
-    // local anchors, relative paths and about:blank are not external
+    // Slash-prefixed URLs, local anchors and about:blank are not marked as external
     if (
         href.startsWith("/") ||
         href.startsWith("#") ||
         href.startsWith("about:blank")
     ) return false;
 
-    // ignore non-navigation schemes
+    // Leave email, telephone, JavaScript and data URLs unchanged
     if (
         href.startsWith("mailto:") ||
         href.startsWith("tel:") ||

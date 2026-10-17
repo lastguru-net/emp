@@ -3,15 +3,15 @@ eleventyExcludeFromCollections: true
 permalink: /site.webmanifest
 ---
 {
-    "name": "{{ siteconfig.title }}",
+    "name": {{ siteconfig.title | jsonScript | safe }},
     "theme_color": "#000000",
     "background_color": "#000000",
     "display": "standalone",
     "icons": [
     {% for iconsize in siteconfig.webmanifestSizes %}
         {
-            "src": "{% imageTransform siteconfig.favicon, iconsize, 'png' %}",
-            "sizes": "{{ iconsize }}x{{ iconsize }}",
+            "src": {% set transformedImage %}{% imageTransform siteconfig.favicon, iconsize, 'png' %}{% endset %}{{ transformedImage | jsonScript | safe }},
+            "sizes": {{ (iconsize ~ "x" ~ iconsize) | jsonScript | safe }},
             "type": "image/png"
         }{% if not loop.last %},{% endif %}
     {% endfor %}

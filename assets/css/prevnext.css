@@ -1,10 +1,5 @@
 /* Previous - Next navigation block */
 
-.postbreak {
-    @apply block h-1 w-full;
-    @apply border-b border-solid border-border dark:border-border-dark;
-}
-
 .additions {
     @apply flex flex-col gap-3 md:flex-row;
     @apply w-full;
@@ -26,17 +21,19 @@
     @apply no-underline hover:no-underline;
 }
 
-.prevnextprev {
+.prevnextprev,
+.prevnextnext {
     /* center chevron and title vertically */
     @apply flex items-center;
     @apply gap-3;
+}
+
+.prevnextprev {
     @apply text-left;
 }
 
 .prevnextnext {
-    /* center chevron and title vertically and keep content to the right */
-    @apply flex items-center justify-end;
-    @apply gap-3;
+    @apply justify-end;
     @apply text-right;
 }
 

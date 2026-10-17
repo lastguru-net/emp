@@ -4,10 +4,33 @@ permalink: /assets/js/min.js
 ---
 {% if siteelements.features.topbar == "dynamic" %}{% include "../../assets/js/topbar.js" %}{% endif %}
 {% if siteelements.features.base == "regular" %}{% include "../../assets/js/sidebar.js" %}{% endif %}
-{% include "../../assets/js/code-block-copy.js" %}
-{% if siteelements.features.sharer %}{% include "../../assets/js/sharer.js" %}{% endif %}
+{% if siteelements.features.base == "regular" and (siteelements.features.search or siteelements.features.userMenu) %}{% include "../../assets/js/dialog-focus.js" %}{% endif %}
+{% if siteelements.features.base == "regular" and siteelements.features.userMenu and siteelements.features.js and siteconfig.authentication.method %}{% authenticationMethod siteconfig.authentication, siteconfig.url %}{% include "../../assets/js/user-menu.js" %}{% endif %}
+{% include "../../assets/js/clipboard.js" %}
 {% if siteelements.features.search %}
 const indexUrl = "{{ '/search-index.json' | url }}";
 const miniSearchUrl = "{{ '/assets/js/minisearch.js' | url }}";
 {% include "../../assets/js/search.js" %}
+{% endif %}
+
+{% if siteelements.features.postproperties and siteelements.features.liveMetricsActions %}
+{% include "../../assets/js/post-metrics-actions.js" %}
+const metricsActionsContext = {{ {siteconfig: {lang: siteconfig.lang, url: siteconfig.url, internalUrls: siteconfig.internalUrls}, inlinesvg: inlinesvg} | jsonScript | safe }};
+async function initializeMetricsActions() {
+    const regions = document.querySelectorAll("[data-metrics-actions-url]");
+    if (!regions.length) return;
+    try {
+        const { renderMetricsActions } = await import("{{ '/assets/js/post-card.js' | addDirHash | url }}");
+        for (const region of regions) mountMetricsActions(region, renderMetricsActions, metricsActionsContext);
+    } catch {
+        // Leave content readable if the renderer cannot be loaded.
+    }
+}
+initializeMetricsActions();
+{% endif %}
+
+{% if siteelements.features.index == "json" %}
+import { renderCard, renderPagination } from "{{ '/assets/js/post-card.js' | addDirHash | url }}";
+import { mountPostlist } from "{{ '/assets/js/postlist.js' | addDirHash | url }}";
+for (const root of document.querySelectorAll(".json-postlist")) mountPostlist(root, renderCard, renderPagination);
 {% endif %}

@@ -1,0 +1,18 @@
+<dialog id="user-menu-dialog" class="dialog user-menu-dialog" aria-labelledby="user-menu-title" closedby="any">
+    <div class="dialog-header">
+        <h2 id="user-menu-title">{{ sitestrings[siteconfig.lang].user }}</h2>
+        <button id="user-menu-close" class="dialog-close" type="button" commandfor="user-menu-dialog" command="close" aria-label="{{ sitestrings[siteconfig.lang].user_menu_close }}">
+            <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.close.viewBox }}">
+                <path d="{{ inlinesvg.close.path }}" />
+            </svg>
+        </button>
+    </div>
+    <div class="dialog-items">
+        <button id="user-menu-sign-in" class="dialog-item" type="button">{{ sitestrings[siteconfig.lang].sign_in }}</button>
+        <button id="user-menu-sign-out" class="dialog-item" type="button" hidden>{{ sitestrings[siteconfig.lang].sign_out }}</button>
+        {% if siteelements.features.privacyPolicy == "sidebar" %}
+        <a class="dialog-item" href="{{ siteelements.privacyPolicy.url | url }}">{{ siteelements.privacyPolicy.name }}</a>
+        {% endif %}
+    </div>
+    <p id="user-menu-status" class="user-menu-status" role="status" aria-live="polite" hidden>{{ sitestrings[siteconfig.lang].user_menu_error }}</p>
+</dialog>

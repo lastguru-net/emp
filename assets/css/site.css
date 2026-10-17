@@ -1,4 +1,4 @@
-/* This file will be overwritten by the build process (see /content/utils/css.njk).
+/* The site build assembles CSS through /content/utils/css.njk instead of this file.
 It is here to ensure CSS can be built standalone and IntelliSense works in the editor.
 Do not add custom styles here. Instead, add them to custom.css */
 @import "tailwindcss";
@@ -6,15 +6,20 @@ Do not add custom styles here. Instead, add them to custom.css */
 @import "./theme.css";
 @import "./base.css";
 @import "./custom.css";
-@import "./prism-okaidia.css";
+@import "./code-block.css";
+@import "../../extensions/plugins/syntax-highlighting/prism-okaidia.css";
 @import "./topbar.css";
 @import "./sidebar.css";
+@import "./dialog.css";
+@import "./user-menu.css";
 @import "./postlist.css";
 @import "./footer.css";
 @import "./postproperties.css";
+@import "./postdecorations.css";
 @import "./author-card.css";
 @import "./lqip.css";
 @import "./content.css";
+@import "./tooltip.css";
 @import "./share.css";
 @import "./prevnext.css";
 @import "./error.css";

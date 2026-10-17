@@ -115,10 +115,10 @@
 }
 
 /* Content table styles */
-/* Intentionally left blank for future zebra-striping adjustments on even rows. */
+/* Even rows use the default table background */
 .content table tbody tr:nth-child(even) {
 }
-/* Zebra striping uses odd rows for now; even rows may be styled later. */
+/* Zebra striping on odd rows */
 .content table tbody tr:nth-child(odd) {
     @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
 }
@@ -138,6 +138,45 @@
 .content :not(pre) > code:not([class*="language-"]) {
     @apply p-px;
     @apply border border-border dark:border-border-dark rounded-sm;
+}
+
+/* Attachments and dated updates appended to a post */
+
+.postbreak {
+    @apply block h-1 w-full;
+    @apply border-b border-solid border-border dark:border-border-dark;
+}
+
+.postattachments,
+.postupdates {
+    @apply mt-10 pt-6;
+    @apply border-t border-border dark:border-border-dark;
+}
+
+.postbreak + .incontent > :is(.postattachments, .postupdates):first-child {
+    @apply my-6 pt-0 border-t-0;
+}
+
+.postattachments > h2,
+.postupdates > h2,
+.postupdate > h3 {
+    @apply pt-0;
+}
+
+.postattachments a {
+    @apply wrap-anywhere;
+}
+
+.postupdate {
+    @apply mt-4 p-4 sm:p-6;
+    @apply border-l-2 border-accent rounded-sm;
+    @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
+}
+
+.postupdate > .postupdate-date {
+    @apply pt-1 pb-3 text-sm;
+    @apply text-rightarea-text dark:text-rightarea-subtext-dark;
 }
 
 /* Initial letter (drop cap) */

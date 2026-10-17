@@ -1,0 +1,37 @@
+/* Sidebar user menu modal */
+
+.sidebar:has(.sidebar-user-menu-button) {
+    @apply overflow-y-auto;
+}
+
+.sidebar .sidebar-user-menu-button {
+    @apply inline-flex min-w-0 items-center gap-1.5;
+    @apply text-sidebar-text hover:text-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.sidebar .sidebar-user-menu-button svg {
+    @apply block h-4.5 w-4.5 shrink-0;
+}
+
+.sidebar .sidebar-user-menu-button span {
+    @apply truncate;
+}
+
+.sidebar:has(.sidebar-user-menu-button) .sidebar-colormode {
+    @apply shrink-0;
+}
+
+.user-menu-dialog {
+    position: fixed;
+    inset: auto auto 3.25rem 0.5rem;
+    margin: 0;
+    width: min(calc(100vw - 1rem), calc(var(--spacing-sidebar) - 1rem));
+    max-height: calc(100dvh - 4rem);
+    @apply overflow-y-auto;
+}
+
+.user-menu-status {
+    @apply m-0 px-4 pb-3;
+    @apply text-sm;
+}

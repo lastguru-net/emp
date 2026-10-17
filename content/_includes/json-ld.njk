@@ -5,6 +5,7 @@
 {% set isPost = tags and ('posts' in tags) %}
 {% set isAuthorPage = tags and ('authorcard' in tags) %}
 {% set pageUrl = page.url | absoluteUrl %}
+{% set pageTitle = (title ~ " - " if title else "") ~ siteconfig.title %}
 {% set imageSrc = image or siteconfig.openGraphDefaultImage %}
 {% set isProfilePage = (not isPost and not isAuthorPage and profilePage) %}
 
@@ -48,163 +49,140 @@
 {% set publisherName = publisherData.fullName or siteconfig.author %}
 {% set publisherImage = publisherData.photo or siteconfig.image %}
 
+{% set publisherFields %}
+    "@type": {{ siteconfig.authorType | jsonScript | safe }},
+    "name": {{ publisherName | jsonScript | safe }},
+    "url": {{ '/' | absoluteUrl | jsonScript | safe }},
+    {% if publisherData.bio %}"description": {{ publisherData.bio | jsonScript | safe }},{% endif %}
+    {% if publisherData.email %}"email": {{ publisherData.email | jsonScript | safe }},{% endif %}
+    {% if publisherSameAs | length %}"sameAs": {{ publisherSameAs | jsonScript | safe }},{% endif %}
+    {{ ('image' if siteconfig.authorType == 'Person' else 'logo') | jsonScript | safe }}: {
+        "@type": "ImageObject",
+        "url": {% set transformedImage %}{% imageTransformAbsoluteUrl publisherImage, 1200, 'webp' %}{% endset %}{{ transformedImage | jsonScript | safe }}
+    }
+{% endset %}
+
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
     "@graph": [
         {
             "@type": "WebSite",
-            "@id": "{{ '/' | absoluteUrl }}#website",
-            "name": "{{ siteconfig.title | jsonEscape | safe }}",
-            "url": "{{ '/' | absoluteUrl }}",
-            "inLanguage": "{{ siteconfig.lang }}",
-            "description": "{{ siteconfig.description | jsonEscape | safe }}",
+            "@id": {{ ('/' | absoluteUrl ~ "#website") | jsonScript | safe }},
+            "name": {{ siteconfig.title | jsonScript | safe }},
+            "url": {{ '/' | absoluteUrl | jsonScript | safe }},
+            "inLanguage": {{ siteconfig.lang | jsonScript | safe }},
+            "description": {{ siteconfig.description | jsonScript | safe }},
             "logo": {
                 "@type": "ImageObject",
-                "url": "{% imageTransformAbsoluteUrl siteconfig.image, 1200, 'webp' %}"
+                "url": {% set transformedImage %}{% imageTransformAbsoluteUrl siteconfig.image, 1200, 'webp' %}{% endset %}{{ transformedImage | jsonScript | safe }}
             },
             "publisher": {
-                "@type": "{{ siteconfig.authorType }}",
-                "name": "{{ publisherName | jsonEscape | safe }}",
-                "url": "{{ '/' | absoluteUrl }}",
-                {% if publisherData.bio %}"description": "{{ publisherData.bio | jsonEscape | safe }}",{% endif %}
-                {% if publisherData.email %}"email": "{{ publisherData.email | jsonEscape | safe }}",{% endif %}
-                {% if publisherSameAs | length %}"sameAs": {{ publisherSameAs | dump | safe }},{% endif %}
-                "{{ 'image' if siteconfig.authorType == 'Person' else 'logo' }}": {
-                    "@type": "ImageObject",
-                    "url": "{% imageTransformAbsoluteUrl publisherImage, 1200, 'webp' %}"
-                }
+                {{ publisherFields | safe }}
             }
         }
         {% if isEvent %}
         ,{
             "@type": "Event",
-            "@id": "{{ pageUrl }}#event",
-            "name": "{{ title | jsonEscape | safe }}",
-            "url": "{{ pageUrl }}",
-            "isPartOf": { "@id": "{{ '/' | absoluteUrl }}#website" },
-            "inLanguage": "{{ siteconfig.lang }}",
-            "description": "{{ description | jsonEscape | safe }}",
+            "@id": {{ (pageUrl ~ "#event") | jsonScript | safe }},
+            "name": {{ title | jsonScript | safe }},
+            "url": {{ pageUrl | jsonScript | safe }},
+            "isPartOf": { "@id": {{ ('/' | absoluteUrl ~ "#website") | jsonScript | safe }} },
+            "inLanguage": {{ siteconfig.lang | jsonScript | safe }},
+            "description": {{ description | jsonScript | safe }},
             "image": [
-                "{% imageTransformAbsoluteUrl imageSrc, 1200, 'webp' %}"
+                {% set transformedImage %}{% imageTransformAbsoluteUrl imageSrc, 1200, 'webp' %}{% endset %}{{ transformedImage | jsonScript | safe }}
             ],
-            "startDate": "{{ page.date | isoDateTime }}",
+            "startDate": {{ page.date | isoDateTime | jsonScript | safe }},
             {% if place %}"location": {
                 "@type": "Place",
-                "name": "{{ place | jsonEscape | safe }}"{% if address %},
-                "address": "{{ address | jsonEscape | safe }}"{% endif %}
+                "name": {{ place | jsonScript | safe }}{% if address %},
+                "address": {{ address | jsonScript | safe }}{% endif %}
             },{% endif %}
             "organizer": {
-                "@type": "{{ siteconfig.authorType }}",
-                "name": "{{ publisherName | jsonEscape | safe }}",
-                "url": "{{ '/' | absoluteUrl }}",
-                {% if publisherData.bio %}"description": "{{ publisherData.bio | jsonEscape | safe }}",{% endif %}
-                {% if publisherData.email %}"email": "{{ publisherData.email | jsonEscape | safe }}",{% endif %}
-                {% if publisherSameAs | length %}"sameAs": {{ publisherSameAs | dump | safe }},{% endif %}
-                "{{ 'image' if siteconfig.authorType == 'Person' else 'logo' }}": {
-                    "@type": "ImageObject",
-                    "url": "{% imageTransformAbsoluteUrl publisherImage, 1200, 'webp' %}"
-                }
+                {{ publisherFields | safe }}
             }
         }
         {% elseif isPost %}
         ,{
             "@type": "BlogPosting",
-            "@id": "{{ pageUrl }}#blogposting",
-            "headline": "{% if title %}{{ title | jsonEscape | safe }} - {% endif %}{{ siteconfig.title | jsonEscape | safe }}",
-            "url": "{{ pageUrl }}",
-            "isPartOf": { "@id": "{{ '/' | absoluteUrl }}#website" },
-            "mainEntityOfPage": "{{ pageUrl }}",
-            "inLanguage": "{{ siteconfig.lang }}",
-            "description": "{{ description | jsonEscape | safe }}",
+            "@id": {{ (pageUrl ~ "#blogposting") | jsonScript | safe }},
+            "headline": {{ pageTitle | jsonScript | safe }},
+            "url": {{ pageUrl | jsonScript | safe }},
+            "isPartOf": { "@id": {{ ('/' | absoluteUrl ~ "#website") | jsonScript | safe }} },
+            "mainEntityOfPage": {{ pageUrl | jsonScript | safe }},
+            "inLanguage": {{ siteconfig.lang | jsonScript | safe }},
+            "description": {{ description | jsonScript | safe }},
             "image": [
-                "{% imageTransformAbsoluteUrl imageSrc, 1200, 'webp' %}"
+                {% set transformedImage %}{% imageTransformAbsoluteUrl imageSrc, 1200, 'webp' %}{% endset %}{{ transformedImage | jsonScript | safe }}
             ],
-            "datePublished": "{{ page.date | isoDateTime }}",
-            {% if updated %}"dateModified": "{{ updated | isoDateTime }}",{% endif %}
-            "keywords": {{ keywords | dump | safe }},
+            "datePublished": {{ page.date | isoDateTime | jsonScript | safe }},
+            {% if updated %}"dateModified": {{ updated | isoDateTime | jsonScript | safe }},{% endif %}
+            "keywords": {{ keywords | jsonScript | safe }},
             "author": {
                 "@type": "Person",
-                "name": "{{ activeAuthorDisplayName | jsonEscape | safe }}",
-                "url": "{{ authorPageUrl }}",
-                {% if activeAuthorData.bio %}"description": "{{ activeAuthorData.bio | jsonEscape | safe }}",{% endif %}
-                {% if activeAuthorData.email %}"email": "{{ activeAuthorData.email | jsonEscape | safe }}",{% endif %}
-                {% if sameAs | length %}"sameAs": {{ sameAs | dump | safe }},{% endif %}
+                "name": {{ activeAuthorDisplayName | jsonScript | safe }},
+                "url": {{ authorPageUrl | jsonScript | safe }},
+                {% if activeAuthorData.bio %}"description": {{ activeAuthorData.bio | jsonScript | safe }},{% endif %}
+                {% if activeAuthorData.email %}"email": {{ activeAuthorData.email | jsonScript | safe }},{% endif %}
+                {% if sameAs | length %}"sameAs": {{ sameAs | jsonScript | safe }},{% endif %}
                 "image": {
                     "@type": "ImageObject",
-                    "url": "{% imageTransformAbsoluteUrl authorImage, 1200, 'webp' %}"
+                    "url": {% set transformedImage %}{% imageTransformAbsoluteUrl authorImage, 1200, 'webp' %}{% endset %}{{ transformedImage | jsonScript | safe }}
                 }
             },
             "publisher": {
-                "@type": "{{ siteconfig.authorType }}",
-                "name": "{{ publisherName | jsonEscape | safe }}",
-                "url": "{{ '/' | absoluteUrl }}",
-                {% if publisherData.bio %}"description": "{{ publisherData.bio | jsonEscape | safe }}",{% endif %}
-                {% if publisherData.email %}"email": "{{ publisherData.email | jsonEscape | safe }}",{% endif %}
-                {% if publisherSameAs | length %}"sameAs": {{ publisherSameAs | dump | safe }},{% endif %}
-                "{{ 'image' if siteconfig.authorType == 'Person' else 'logo' }}": {
-                    "@type": "ImageObject",
-                    "url": "{% imageTransformAbsoluteUrl publisherImage, 1200, 'webp' %}"
-                }
+                {{ publisherFields | safe }}
             }
         }
         {% elseif isAuthorPage %}
         ,{
             "@type": "ProfilePage",
-            "@id": "{{ pageUrl }}#profilepage",
-            "name": "{% if title %}{{ title | jsonEscape | safe }} - {% endif %}{{ siteconfig.title | jsonEscape | safe }}",
-            "url": "{{ pageUrl }}",
-            "isPartOf": { "@id": "{{ '/' | absoluteUrl }}#website" },
-            "mainEntity": { "@id": "{{ pageUrl }}#author" },
-            "inLanguage": "{{ siteconfig.lang }}",
-            "description": "{{ description | jsonEscape | safe }}"
+            "@id": {{ (pageUrl ~ "#profilepage") | jsonScript | safe }},
+            "name": {{ pageTitle | jsonScript | safe }},
+            "url": {{ pageUrl | jsonScript | safe }},
+            "isPartOf": { "@id": {{ ('/' | absoluteUrl ~ "#website") | jsonScript | safe }} },
+            "mainEntity": { "@id": {{ (pageUrl ~ "#author") | jsonScript | safe }} },
+            "inLanguage": {{ siteconfig.lang | jsonScript | safe }},
+            "description": {{ description | jsonScript | safe }}
         },
         {
             "@type": "Person",
-            "@id": "{{ pageUrl }}#author",
-            "name": "{{ activeAuthorDisplayName | jsonEscape | safe }}",
-            "url": "{{ pageUrl }}",
-            {% if activeAuthorData.bio %}"description": "{{ activeAuthorData.bio | jsonEscape | safe }}",{% endif %}
-            {% if activeAuthorData.email %}"email": "{{ activeAuthorData.email | jsonEscape | safe }}",{% endif %}
-            {% if sameAs | length %}"sameAs": {{ sameAs | dump | safe }},{% endif %}
+            "@id": {{ (pageUrl ~ "#author") | jsonScript | safe }},
+            "name": {{ activeAuthorDisplayName | jsonScript | safe }},
+            "url": {{ pageUrl | jsonScript | safe }},
+            {% if activeAuthorData.bio %}"description": {{ activeAuthorData.bio | jsonScript | safe }},{% endif %}
+            {% if activeAuthorData.email %}"email": {{ activeAuthorData.email | jsonScript | safe }},{% endif %}
+            {% if sameAs | length %}"sameAs": {{ sameAs | jsonScript | safe }},{% endif %}
             "image": {
                 "@type": "ImageObject",
-                "url": "{% imageTransformAbsoluteUrl authorImage, 1200, 'webp' %}"
+                "url": {% set transformedImage %}{% imageTransformAbsoluteUrl authorImage, 1200, 'webp' %}{% endset %}{{ transformedImage | jsonScript | safe }}
             }
         }
         {% elseif isProfilePage %}
         ,{
             "@type": "ProfilePage",
-            "@id": "{{ pageUrl }}#profilepage",
-            "name": "{% if title %}{{ title | jsonEscape | safe }} - {% endif %}{{ siteconfig.title | jsonEscape | safe }}",
-            "url": "{{ pageUrl }}",
-            "isPartOf": { "@id": "{{ '/' | absoluteUrl }}#website" },
-            "mainEntity": { "@id": "{{ pageUrl }}#profile" },
-            "inLanguage": "{{ siteconfig.lang }}",
-            "description": "{{ description | jsonEscape | safe }}"
+            "@id": {{ (pageUrl ~ "#profilepage") | jsonScript | safe }},
+            "name": {{ pageTitle | jsonScript | safe }},
+            "url": {{ pageUrl | jsonScript | safe }},
+            "isPartOf": { "@id": {{ ('/' | absoluteUrl ~ "#website") | jsonScript | safe }} },
+            "mainEntity": { "@id": {{ (pageUrl ~ "#profile") | jsonScript | safe }} },
+            "inLanguage": {{ siteconfig.lang | jsonScript | safe }},
+            "description": {{ description | jsonScript | safe }}
         },
         {
-            "@type": "{{ siteconfig.authorType }}",
-            "@id": "{{ pageUrl }}#profile",
-            "name": "{{ publisherName | jsonEscape | safe }}",
-            "url": "{{ '/' | absoluteUrl }}",
-            {% if publisherData.bio %}"description": "{{ publisherData.bio | jsonEscape | safe }}",{% endif %}
-            {% if publisherData.email %}"email": "{{ publisherData.email | jsonEscape | safe }}",{% endif %}
-            {% if publisherSameAs | length %}"sameAs": {{ publisherSameAs | dump | safe }},{% endif %}
-            "{{ 'image' if siteconfig.authorType == 'Person' else 'logo' }}": {
-                "@type": "ImageObject",
-                "url": "{% imageTransformAbsoluteUrl publisherImage, 1200, 'webp' %}"
-            }
+            "@id": {{ (pageUrl ~ "#profile") | jsonScript | safe }},
+            {{ publisherFields | safe }}
         }
         {% else %}
         ,{
             "@type": "WebPage",
-            "@id": "{{ pageUrl }}#webpage",
-            "name": "{% if title %}{{ title | jsonEscape | safe }} - {% endif %}{{ siteconfig.title | jsonEscape | safe }}",
-            "url": "{{ pageUrl }}",
-            "isPartOf": { "@id": "{{ '/' | absoluteUrl }}#website" },
-            "inLanguage": "{{ siteconfig.lang }}",
-            "description": "{{ description | jsonEscape | safe }}"
+            "@id": {{ (pageUrl ~ "#webpage") | jsonScript | safe }},
+            "name": {{ pageTitle | jsonScript | safe }},
+            "url": {{ pageUrl | jsonScript | safe }},
+            "isPartOf": { "@id": {{ ('/' | absoluteUrl ~ "#website") | jsonScript | safe }} },
+            "inLanguage": {{ siteconfig.lang | jsonScript | safe }},
+            "description": {{ description | jsonScript | safe }}
         }
         {% endif %}
     ]

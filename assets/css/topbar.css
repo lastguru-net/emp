@@ -36,6 +36,22 @@
     @apply col-span-2 flex;
 }
 
+.top-bar a.topbar-with-logo {
+    @apply flex min-w-0 items-center justify-center gap-2;
+}
+
+.topbar-with-logo picture {
+    @apply shrink-0;
+}
+
+.topbar-with-logo .topbar-logo {
+    @apply h-8 w-8 shrink-0 object-contain;
+}
+
+.topbar-with-logo span {
+    @apply truncate;
+}
+
 .top-bar.hide {
     @apply -translate-y-12;
 }

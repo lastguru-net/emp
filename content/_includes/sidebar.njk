@@ -30,7 +30,7 @@
             {% endfor %}
         </ul>
     </nav>
-    {% if siteelements.features.search %}
+    {% if siteelements.features.search and siteelements.features.js %}
     <div class="sidebar-search">
         <button id="sidebar-search-open" class="sidebar-search-button" type="button" aria-haspopup="dialog" aria-controls="search-modal" aria-label="{{ sitestrings[siteconfig.lang].search_open }}" onclick="searchButton()">
             <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.search.viewBox }}">
@@ -43,7 +43,14 @@
         {% include "sitesocial.njk" %}
     {% endif %}
     <div class="privacy-policy">
-        {% if siteelements.features.privacyPolicy == "sidebar" %}
+        {% if siteelements.features.userMenu and siteelements.features.js %}
+        <button id="sidebar-user-menu-open" class="sidebar-user-menu-button" type="button" commandfor="user-menu-dialog" command="show-modal" aria-haspopup="dialog">
+            <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.user.viewBox }}">
+                <path d="{{ inlinesvg.user.path }}" />
+            </svg>
+            <span>{{ sitestrings[siteconfig.lang].user }}</span>
+        </button>
+        {% elseif siteelements.features.privacyPolicy == "sidebar" %}
         <a href="{{ siteelements.privacyPolicy.url | url }}" aria-label="{{ siteelements.privacyPolicy.name }}">{{ siteelements.privacyPolicy.name }}</a>
         {% endif %}
         {% if siteelements.features.colorMode != "light" and siteelements.features.colorMode != "dark" %}

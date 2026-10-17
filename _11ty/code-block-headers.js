@@ -42,28 +42,6 @@ const parseFenceInfo = (value) => {
     };
 };
 
-const getCodeBlockLanguageLabel = (info, codeLabel) => {
-    const { language } = parseFenceInfo(info);
-
-    if (!language) {
-        return codeLabel;
-    }
-
-    return languageLabels[language.toLowerCase()] ?? language;
-};
-
-const getCodeBlockMetadata = (info) => {
-    const { metadata } = parseFenceInfo(info);
-
-    for (const type of ["title", "filename"]) {
-        if (metadata[type]) {
-            return { type, label: metadata[type] };
-        }
-    }
-
-    return null;
-};
-
 export default (md, { copyIcon, strings }) => {
     const renderFence = md.renderer.rules.fence;
     const copyControls = `<button class="code-block-copy code-block-copy-pending" type="button" aria-label="${md.utils.escapeHtml(strings.copy_code_to_clipboard)}" data-copy-success="${md.utils.escapeHtml(strings.code_copied)}" data-copy-error="${md.utils.escapeHtml(strings.code_copy_failed)}" disabled aria-hidden="true">
@@ -76,11 +54,11 @@ export default (md, { copyIcon, strings }) => {
     md.renderer.rules.fence = (tokens, index, options, env, renderer) => {
         const token = tokens[index];
         const originalInfo = token.info;
-        const { languageSpec } = parseFenceInfo(originalInfo);
-        const languageLabel = getCodeBlockLanguageLabel(originalInfo, strings.code);
-        const metadataValue = getCodeBlockMetadata(originalInfo);
-        const metadata = metadataValue
-            ? `<span class="code-block-metadata code-block-${metadataValue.type}" title="${md.utils.escapeHtml(metadataValue.label)}">${md.utils.escapeHtml(metadataValue.label)}</span>\n`
+        const { languageSpec, language, metadata: fields } = parseFenceInfo(originalInfo);
+        const languageLabel = language ? (languageLabels[language.toLowerCase()] ?? language) : strings.code;
+        const metadataType = fields.title ? "title" : fields.filename ? "filename" : null;
+        const metadata = metadataType
+            ? `<span class="code-block-metadata code-block-${metadataType}" title="${md.utils.escapeHtml(fields[metadataType])}">${md.utils.escapeHtml(fields[metadataType])}</span>\n`
             : "";
         token.info = languageSpec || "text";
         const code = renderFence(tokens, index, options, env, renderer).trimEnd();

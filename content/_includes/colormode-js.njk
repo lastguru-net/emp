@@ -1,4 +1,4 @@
-<!-- Toggle dark/light mode. Inline JS to avoid any theme flicker on page load. -->
+{# Apply the saved or initial theme in the head, before rendering page content #}
 <script>
 const root = document.documentElement;
 const setTheme = (theme) => {
@@ -23,6 +23,6 @@ function toggleDarkLightMode(isInit) {
     } else {
         setTheme(localStorage.theme === "light" ? "dark" : "light");
     }
-};
+}
 toggleDarkLightMode(true);
 </script>

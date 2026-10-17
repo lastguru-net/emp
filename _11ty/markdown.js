@@ -14,8 +14,8 @@ import { loadConfig } from "./config.js";
 const inlinesvg = await loadConfig("inlinesvg");
 const sitestrings = await loadConfig("sitestrings");
 
-export const createMarkdownLibrary = () => {
-    return markdownIt({
+export const createMarkdownLibrary = (urlFilter = (url) => url) => {
+    const markdown = markdownIt({
         html: true,
         xhtmlOut: true,
         linkify: false,
@@ -33,4 +33,12 @@ export const createMarkdownLibrary = () => {
             copyIcon: inlinesvg.copy,
             strings: sitestrings[siteconfig.lang]
         });
+
+    // Resolve links while rendering; image sources remain filesystem inputs.
+    markdown.renderer.rules.link_open = (tokens, index, options, env, renderer) => {
+        const token = tokens[index];
+        token.attrSet("href", urlFilter(token.attrGet("href")));
+        return renderer.renderToken(tokens, index, options);
+    };
+    return markdown;
 };

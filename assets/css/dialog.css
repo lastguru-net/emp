@@ -1,0 +1,52 @@
+.dialog {
+    @apply p-0;
+    @apply border border-border dark:border-border-dark rounded-lg;
+    @apply bg-rightarea-bg dark:bg-rightarea-bg-dark;
+    @apply text-rightarea-text dark:text-rightarea-text-dark;
+    @apply shadow-xl;
+}
+
+.dialog::backdrop {
+    @apply bg-black/60;
+}
+
+.dialog-header {
+    @apply flex shrink-0 items-center justify-between gap-3;
+    @apply px-3 py-2;
+    @apply border-b border-border dark:border-border-dark;
+}
+
+.dialog-header h2 {
+    @apply m-0;
+    @apply font-header text-lg font-semibold;
+    @apply text-rightarea-title dark:text-rightarea-title-dark;
+}
+
+.dialog-close {
+    @apply inline-flex items-center justify-center;
+    @apply h-8 w-8;
+}
+
+.dialog-close svg {
+    @apply h-5 w-5;
+    @apply fill-rightarea-text dark:fill-rightarea-text-dark hover:fill-accent;
+    @apply transition-colors duration-200 ease-in;
+}
+
+.dialog-items {
+    @apply p-2;
+}
+
+.dialog-item {
+    @apply block w-full;
+    @apply px-2 py-2;
+    @apply rounded-md;
+    @apply text-left no-underline;
+    @apply text-rightarea-text dark:text-rightarea-text-dark hover:text-accent;
+    @apply hover:bg-rightarea-altbg dark:hover:bg-rightarea-altbg-dark;
+    @apply transition-colors duration-200 ease-in;
+}
+
+body:has(.dialog[open]) {
+    @apply overflow-hidden;
+}

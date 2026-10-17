@@ -1,4 +1,13 @@
-<!-- Meta Pixel Code -->
+export default {
+    opengraph(config) {
+        return config.appId ? `<meta property="fb:app_id" content="${config.appId}">` : "";
+    },
+    head(config) {
+        return config.pixelId ? '<link rel="preconnect" href="https://connect.facebook.net">' : "";
+    },
+    bodyStart(config) {
+        if (!config.pixelId) return "";
+        return `<!-- Meta Pixel Code -->
 <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -8,7 +17,7 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '{{ siteconfig.pixels.fbPixel }}');
+    fbq('init', '${config.pixelId}');
     fbq('track', 'PageView');
     // Track ViewContent after 3 seconds
     setTimeout(function() {
@@ -16,6 +25,8 @@
     }, 3000);
 </script>
 <noscript>
-    <img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id={{ siteconfig.pixels.fbPixel }}&ev=PageView&noscript=1" />
+    <img eleventy:ignore height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=${config.pixelId}&ev=PageView&noscript=1" />
 </noscript>
-<!-- End Meta Pixel Code -->
+<!-- End Meta Pixel Code -->`;
+    },
+};

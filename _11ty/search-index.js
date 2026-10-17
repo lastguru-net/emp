@@ -3,7 +3,7 @@ import MiniSearch from "minisearch";
 import siteconfig from "../content/_data/siteconfig.js";
 import { loadConfig } from "./config.js";
 import { extractExcerpt } from "./excerpt.js";
-import { stripTags, collapseWhitespace, toArray, capitalize } from "./collections.js";
+import { stripTags, collapseWhitespace, toArray, capitalize } from "./filters.js";
 
 const indexOptions = {
     idField: "id",
@@ -11,7 +11,7 @@ const indexOptions = {
     storeFields: ["id", "url", "title", "excerpt", "tags", "date"]
 };
 
-const buildSearchIndex = async (allItems) => {
+const buildSearchIndex = async (allItems, urlFilter) => {
     const sitetags = await loadConfig("sitetags");
     const sitestrings = await loadConfig("sitestrings");
     const localizedStrings = sitestrings[siteconfig.lang];
@@ -33,7 +33,7 @@ const buildSearchIndex = async (allItems) => {
 
             return {
                 id: item.url,
-                url: item.url,
+                url: urlFilter(item.url),
                 title: item.data.title,
                 excerpt,
                 content,
@@ -64,7 +64,8 @@ const buildSearchIndex = async (allItems) => {
 };
 
 export default (eleventyConfig) => {
+    // The callback lets Eleventy retry when collection content is not rendered yet.
     eleventyConfig.addNunjucksAsyncFilter("buildSearchIndex", (allItems, callback) => {
-        buildSearchIndex(allItems).then((result) => callback(null, result)).catch(callback);
+        buildSearchIndex(allItems, eleventyConfig.getFilter("url")).then((result) => callback(null, result)).catch(callback);
     });
 };

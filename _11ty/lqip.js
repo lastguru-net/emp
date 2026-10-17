@@ -88,7 +88,7 @@ const bitsToLab = (ll, aaa, bbb) => {
 };
 
 const imgCache = new Map();
-const calculateLqip = async (src) => {
+export const calculateLqip = async (src) => {
     if (imgCache.has(src)) return imgCache.get(src);
     const filePath = path.join(process.cwd(), "content", src);
     try {

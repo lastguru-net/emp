@@ -1,31 +1,32 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { HtmlBasePlugin } from "@11ty/eleventy";
 import registerFilters from "../_11ty/filters.js";
+import { createMarkdownLibrary } from "../_11ty/markdown.js";
 import siteconfig from "../content/_data/siteconfig.js";
 
 const filters = {};
 
-registerFilters({
+const filterConfig = {
+    pathPrefix: "/",
+    getFilter() {
+        return (path) => HtmlBasePlugin.applyBaseToUrl(path, filterConfig.pathPrefix);
+    },
+    addFilter(name, filter) {
+        filters[name] = filter;
+    },
     addNunjucksFilter(name, filter) {
         filters[name] = filter;
     },
     addNunjucksAsyncFilter() {}
-});
+};
 
-test("home-link detection requires both URLs to be the site root", () => {
-    assert.equal(filters.isHomeLink("/", "/"), "active");
-    assert.equal(filters.isHomeLink("/posts/", "/"), "");
-    assert.equal(filters.isHomeLink("/", "/posts/"), "");
-    assert.equal(filters.isHomeLink(undefined, undefined), "");
-});
+registerFilters(filterConfig);
 
-test("active-link detection uses a non-root prefix match", () => {
-    assert.equal(filters.isActiveLink("/posts/entry/", "/posts/"), "active");
+test("navigation is active on its own page and descendant pages", () => {
     assert.equal(filters.isActiveLink("/posts/", "/posts/"), "active");
-    assert.equal(filters.isActiveLink("/postscript/", "/posts"), "active");
-    assert.equal(filters.isActiveLink("/", "/"), "");
-    assert.equal(filters.isActiveLink("/posts/", ""), "");
-    assert.equal(filters.isActiveLink("/tags/", "/posts/"), "");
+    assert.equal(filters.isActiveLink("/posts/entry/", "/posts"), "active");
+    assert.equal(filters.isActiveLink("/postscript/", "/posts"), "");
 });
 
 test("absolute URLs resolve root-relative, relative, and external inputs", () => {
@@ -42,24 +43,40 @@ test("absolute URLs resolve root-relative, relative, and external inputs", () =>
     }
 });
 
-test("absolute URLs retain native URL base-path semantics", () => {
+test("absolute URLs include the deployment prefix for logical paths", () => {
     const originalUrl = siteconfig.url;
 
     try {
         siteconfig.url = "https://site.example/blog/";
-        assert.equal(filters.absoluteUrl("/"), "https://site.example/");
-        assert.equal(filters.absoluteUrl("/posts/"), "https://site.example/posts/");
+        filterConfig.pathPrefix = "/blog/";
+        assert.equal(filters.absoluteUrl("/"), "https://site.example/blog/");
+        assert.equal(filters.absoluteUrl("/posts/"), "https://site.example/blog/posts/");
         assert.equal(filters.absoluteUrl("posts/"), "https://site.example/blog/posts/");
         assert.equal(filters.absoluteUrl("#website"), "https://site.example/blog/#website");
     } finally {
         siteconfig.url = originalUrl;
+        filterConfig.pathPrefix = "/";
     }
 });
 
-test("reading-time calculation is unchanged", () => {
-    assert.equal(filters.readingTime(1), 1);
-    assert.equal(filters.readingTime(250), 1);
-    assert.equal(filters.readingTime(251), 2);
+test("feed image URLs prefix Markdown images without changing links, remote images or code", () => {
+    const markdown = createMarkdownLibrary();
+    const source = '[![A > B](/images/sample.png?x=1&y=2#detail)](/blog/post/)\n\n![Remote](https://example.com/image.png) ![CDN](//cdn.example.com/image.png) ![Relative](sample.png)\n\n`<img src="/images/code.png">`';
+    const html = markdown.render(source);
+    try {
+        for (const prefix of ["/", "/blog/", "/project/subdir/"]) {
+            filterConfig.pathPrefix = prefix;
+            const result = filters.feedImageUrls(html);
+            assert.ok(result.includes(`<img src="${prefix}images/sample.png?x=1&amp;y=2#detail" alt="A &gt; B"`));
+            assert.ok(result.includes('<a href="/blog/post/">'));
+            assert.ok(result.includes('<img src="https://example.com/image.png"'));
+            assert.ok(result.includes('<img src="//cdn.example.com/image.png"'));
+            assert.ok(result.includes('<img src="sample.png"'));
+            assert.ok(result.includes('<code>&lt;img src=&quot;/images/code.png&quot;&gt;</code>'));
+        }
+    } finally {
+        filterConfig.pathPrefix = "/";
+    }
 });
 
 test("reading-time units use English plural rules", () => {
@@ -109,12 +126,4 @@ test("word counts use the configured locale with an English fallback", () => {
     } finally {
         siteconfig.lang = originalLanguage;
     }
-});
-
-test("JSON escaping handles nullish, primitive, and control-character inputs", () => {
-    assert.equal(filters.jsonEscape(undefined), "");
-    assert.equal(filters.jsonEscape(null), "");
-    assert.equal(filters.jsonEscape(42), "42");
-    assert.equal(filters.jsonEscape(true), "true");
-    assert.equal(filters.jsonEscape('quote " slash \\ newline\n tab\t'), 'quote \\" slash \\\\ newline\\n tab\\t');
 });

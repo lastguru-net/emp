@@ -4,7 +4,7 @@ import { compile, optimize } from "@tailwindcss/node";
 import { Scanner } from "@tailwindcss/oxide";
 
 const tailwindTransform = async (content, outputPath) => {
-    if (!outputPath?.endsWith("min.css")) return content;
+    if (!outputPath || !outputPath.endsWith("min.css")) return content;
 
     const base = path.resolve(process.cwd());
 

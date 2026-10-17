@@ -52,7 +52,7 @@
 
 /* Post list thumbnails (responsive)
    - Mobile: full-width, stacked above excerpt (w-full h-50)
-   - sm: stacked above excerpt, medium size and centered (sm:w-48 sm:h-28 sm:mx-auto)
+   - sm: stacked above excerpt, medium size and centered (sm:w-56 sm:h-32 sm:mx-auto)
    - md+: side-by-side row with compact image; right variant enlarged at md
 */
 .postlist .postthumb {

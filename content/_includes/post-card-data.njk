@@ -1,0 +1,56 @@
+{# Prepare card data from the post and site configuration #}
+{% set data = post.data %}
+{% set tags = [] %}
+{% set notime = false %}
+{% for tag in data.tags %}
+    {% if tag not in sitetags.notag %}
+        {% set _ = tags.push({
+            name: (sitestrings[siteconfig.lang][tag] or tag) | capitalize,
+            url: (siteconfig.pagination.tagLinkPrefix ~ ((sitetags.aliases[tag] or tag) | empSlugify) ~ '/') | url,
+            icon: sitetags.icons[tag] or "hashtag"
+        }) %}
+    {% endif %}
+    {% if tag in sitetags.notime %}{% set notime = true %}{% endif %}
+{% endfor %}
+{% set actions = [] %}
+{% for action in data.decorations.actions %}
+    {% set _ = actions.push({
+        label: action.label,
+        href: (action.href | url) if action.href else "",
+        variant: action.variant,
+        icon: action.icon,
+        disabled: action.disabled
+    }) %}
+{% endfor %}
+{% set words = (post.templateContent | default("") | striptags | wordcount) if not notime else 0 %}
+{% set image = data.thumbnail or data.image %}
+{% set thumbnail = (image | postThumbnail(siteelements.features.lqip)) if includeThumbnail != false and siteelements.features.postlistThumbnail and data.thumbnail != false and image else null %}
+{% set card = {
+    id: (data.id or post.filePathStem or post.fileSlug or post.url or "") | string,
+    url: post.url | url,
+    title: data.title | default(""),
+    excerpt: data.excerpt or (post | getExcerpt),
+    pinned: data.pinned == true,
+    thumbnail: thumbnail,
+    properties: {
+        date: (post.date | readableDate) if post.date else "",
+        author: {
+            name: siteauthors[data.author].fullName or data.author,
+            url: (siteconfig.pagination.authorLinkPrefix ~ (data.author | empSlugify) ~ '/') | url
+        } if data.author else null,
+        place: {name: data.place, address: data.address} if data.place else null,
+        tags: tags,
+        readingTime: {
+            label: words | readingTime | formatReadingTime,
+            wordsLabel: (words | formatWords) ~ ' ' ~ sitestrings[siteconfig.lang].words
+        } if not notime else null,
+        decorations: {
+            badges: data.decorations.badges or [],
+            metrics: data.decorations.metrics or [],
+            actions: actions
+        }
+    }
+} %}
+{% if siteelements.features.liveMetricsActions and siteelements.features.postproperties %}
+    {% set _ = card.properties.decorations | exportMetricsActions(post.url) %}
+{% endif %}

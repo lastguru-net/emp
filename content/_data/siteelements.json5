@@ -1,42 +1,41 @@
 {
     // Feature toggles and layout options
     features: {
-        // Display post properties (e.g., author, date) on posts
-        postproperties: true,
+        // Post properties: false disables; 'above'/'below' the full-post image; true means 'below'
+        postproperties: "below",
+        // Generate/load metrics/actions JSON from post data; requires js and postproperties
+        liveMetricsActions: false,
         // Include description in OpenGraph and Twitter meta tags
         og_description: true,
         // Generate and include JSON-LD structured data
         json_ld: true,
-        // Generate a sitemap.xml file
+        // Include the sitemap link in the HTML head
         sitemap: true,
-        // Generate RSS feed
-        rssFeed: true,
-        // Generate Atom feed
-        atomFeed: true,
-        // Generate JSON feed
-        jsonFeed: true,
-        // Feed content mode: false = excerpts (default), true = full content
-        feedFullContent: true,
         // Include local JavaScript bundle
         js: true,
+        // Show the sidebar user menu (requires js: true)
+        userMenu: false,
         // Enable social sharing buttons on posts/pages
         sharer: true,
         // Enable previous/next post navigation
         prevnext: true,
-        // Color mode: 'light', 'light-dark', 'dark', 'dark-light', or 'auto' (follows system preference)
-        // Note that only 'light' and 'dark' can work without client-side JavaScript
+        // Color mode: 'light' or 'dark' (fixed), 'light-dark' or 'dark-light' (initial theme with a toggle),
+        // or 'auto' (initial system preference); toggle modes remember the selection in local storage
+        // Theme selection uses inline JavaScript independently of features.js
         colorMode: "auto",
         // Base layout: 'regular' (with sidebar) or 'primitive' (minimal layout)
         base: "regular",
-        // Index page type: 'postlist' (list of posts) or 'singlepost' (single post)
+        // Index mode: 'postlist' (build-time post lists), 'singlepost' (full post), or 'json' (browser-loaded post lists; requires js: true)
         index: "postlist",
         // Top bar behavior: false (none), 'static' (always visible), or 'dynamic' (shows/hides on scroll)
         topbar: "dynamic",
+        // Display the site image before the top bar title
+        topbarLogo: false,
         // Location of the Privacy Policy link: 'footer', 'sidebar', or false (none)
         privacyPolicy: "sidebar",
         // Display footer information (e.g., copyright, author)
         footer: true,
-        // Location of the site social block relative to the sidebar main menu: false, 'below', or 'above'
+        // Location of the site social block: false, 'above' or 'below' the sidebar menu, or 'footer'
         sitesocial: "below",
         // Postlist thumbnail: false | 'left' | 'right'
         postlistThumbnail: "right",
@@ -44,46 +43,30 @@
         authorCard: true,
         // Toggle for showing "Powered by" text/link in the footer
         poweredBy: true,
-        // Toggle for showing RSS feed link in the footer
-        rssInFooter: true,
         // Include generator meta tag
         generator: true,
         // Toggle Lean Rada CSS-only LQIP placeholders
         lqip: true,
-        // Toggle syntax highlighting CSS
-        syntaxHighlighting: true,
         // Toggle Minisearch modal search
         search: true,
         // Sitehero image style: 'square', 'rounded'
         siteheroStyle: "square",
         // Enable initial-letter styling on first paragraph
-        initialLetter: false,
+        initialLetter: false
     },
 
-    // Google Fonts configuration for typography
-    // - 'local': specify local font loading behavior
-    //   - "none": do not load fonts locally (standard Google Fonts loading)
-    //   - "css": embed Google's @font-face CSS in the site head (better performance and privacy)
-    //   - "full": download all font files locally and serve from the site (best privacy, no external requests)
-    // - 'swap': controls 'font-display: swap' behavior
-    //   - false by default to avoid flash unstyled text (FOUT)
-    //   - if flash of invisible text (FOIT) is more disturbing, enable it
-    // - 'body' and 'header': specify font families and weights
-    // 
-    // Every weight and style used anywhere must be defined here:
-    // - weights starting with "0," are non-italic
-    // - weights starting with "1," are italic
-    fonts: {
-        local: "css",
-        swap: false,
-        body: {
-            family: "Montserrat",
-            weights: "0,400;0,700;1,400;1,700"
-        },
-        header: {
-            family: "Titillium+Web",
-            weights: "0,400;0,500;0,600;0,700"
-        }
+    // Feed content and links
+    feeds: {
+        // Include the RSS feed link in the HTML head
+        rss: true,
+        // Include the Atom feed link in the HTML head
+        atom: true,
+        // Include the JSON Feed link in the HTML head
+        json: true,
+        // Feed content: false = excerpts, true = full content
+        fullContent: true,
+        // Toggle for showing RSS feed link in the footer
+        rssInFooter: true
     },
 
     // Label for the home menu link (mandatory)
@@ -91,7 +74,7 @@
     // Additional menu items (key: label, value: URL)
     menuItems: {
         "Events": "/events/",
-        "About us": "/about-us/",
+        "About us": "/about-us/"
     },
 
     // Header image for the landing page (relative path from the site root)
@@ -101,7 +84,7 @@
     // Link for the header image (optional; no link by default)
     headerLink: "",
 
-    // Social media profiles for the site (the object must be present, but profiles are optional)
+    // Social media profiles for the site
     social: {
         // GitHub username
         github: "lastguru-net",
@@ -109,27 +92,27 @@
         linkedin: "lastguru",
         // Twitter/X username
         twitter_x: "lastguru_net",
-        // YouTube channel/user
-//        youtube: "",
+        // YouTube channel ID
+        // youtube: "",
         // Facebook page name
-//        fbPage: "",
+        // fbPage: "",
         // Facebook username
-//        fbProfile: "",
+        // fbProfile: "",
         // Mastodon profile URL
         mastodon: "https://toot.lv/@lastguru",
         // Bluesky profile URL
         bluesky: "https://bsky.app/profile/lastguru.net",
         // Instagram username
-//        instagram: "",
+        // instagram: "",
         // Threads username
-        threads: "lastguru_net",
+        threads: "lastguru_net"
     },
 
     // Privacy Policy link configuration (displayed in the footer or sidebar)
-    // Set features.privacyPolicy to 'none' if not used (can be removed then)
+    // Set features.privacyPolicy to false to hide the link
     privacyPolicy: {
         name: "Privacy Policy",
-        url: "/privacy-policy/",
+        url: "/privacy-policy/"
     },
 
     // Powered-by configuration (displayed in footer when enabled)
@@ -138,7 +121,7 @@
     poweredBy: {
         text: "Powered by",
         name: "Eleventy Minimal Pages",
-        url: "https://github.com/lastguru-net/emp",
+        url: "https://github.com/lastguru-net/emp"
     },
 
     // Copyright configuration (used in the footer)
@@ -148,6 +131,6 @@
         // Copyright link (optional)
         link: "https://emp-starter.lastguru.dev",
         // Copyright text (optional)
-        text: "test",
+        text: "test"
     }
 }

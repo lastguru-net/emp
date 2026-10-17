@@ -1,19 +1,16 @@
-<div id="search-modal" class="search-modal hidden" role="dialog" aria-modal="true" aria-labelledby="search-modal-title">
-    <div class="search-modal-backdrop" onclick="closeSearchModal()"></div>
-    <div class="search-modal-panel" role="document">
-        <div class="search-modal-header">
-            <h2 id="search-modal-title">{{ sitestrings[siteconfig.lang].search_title }}</h2>
-            <button id="search-modal-close" class="search-modal-close" type="button" aria-label="{{ sitestrings[siteconfig.lang].search_close }}" onclick="closeSearchModal()">
-                <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.close.viewBox }}">
-                    <path d="{{ inlinesvg.close.path }}" />
-                </svg>
-            </button>
-        </div>
-        <div class="search-modal-body">
-            <label class="sr-only" for="search-input">{{ sitestrings[siteconfig.lang].search }}</label>
-            <input id="search-input" class="search-input" type="search" autocomplete="off" placeholder="{{ sitestrings[siteconfig.lang].search_placeholder }}" />
-            <div id="search-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
-            <div id="search-results" class="search-results"></div>
-        </div>
+<dialog id="search-modal" class="dialog search-modal" aria-labelledby="search-modal-title" closedby="any">
+    <div class="dialog-header">
+        <h2 id="search-modal-title">{{ sitestrings[siteconfig.lang].search_title }}</h2>
+        <button id="search-modal-close" class="dialog-close" type="button" aria-label="{{ sitestrings[siteconfig.lang].search_close }}" commandfor="search-modal" command="close">
+            <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.close.viewBox }}">
+                <path d="{{ inlinesvg.close.path }}" />
+            </svg>
+        </button>
     </div>
-</div>
+    <div class="dialog-items search-field">
+        <label class="sr-only" for="search-input">{{ sitestrings[siteconfig.lang].search }}</label>
+        <input id="search-input" class="search-input" type="search" autofocus autocomplete="off" placeholder="{{ sitestrings[siteconfig.lang].search_placeholder }}" />
+        <div id="search-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+    </div>
+    <div id="search-results" class="dialog-items search-results"></div>
+</dialog>

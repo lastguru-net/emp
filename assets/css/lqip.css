@@ -28,8 +28,8 @@ Based on Lean Rada's approach: https://leanrada.com/notes/css-only-lqip/
     --lqip-cf-clr: hsl(0 0% calc(var(--lqip-cf) / 3 * 100%));
     --lqip-base-clr: oklab(
         calc(var(--lqip-ll) / 3 * 0.6 + 0.2)
-            calc(var(--lqip-aaa) / 8 * 0.7 - 0.35)
-            calc((var(--lqip-bbb) + 1) / 8 * 0.7 - 0.35)
+        calc(var(--lqip-aaa) / 8 * 0.7 - 0.35)
+        calc((var(--lqip-bbb) + 1) / 8 * 0.7 - 0.35)
     );
 
     --lqip-stop10: 2%;

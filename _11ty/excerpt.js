@@ -1,6 +1,6 @@
 // Excerpt extraction from content
 import siteconfig from "../content/_data/siteconfig.js";
-import { stripTags, collapseWhitespace } from "./collections.js";
+import { stripTags, collapseWhitespace } from "./filters.js";
 
 export const extractExcerpt = (text = "", limit = 250) => {
     const plain = stripTags(text).trim();
@@ -44,13 +44,13 @@ const deriveShortDescription = (ctx = {}) => {
     return extractExcerpt(source, 150);
 };
 
-// Excerpt shortcode for post lists
+// Excerpt filter for post lists and feeds
 const getExcerpt = (article = {}) => {
     return extractExcerpt(article.templateContent || "", 250);
 };
 
 export default (eleventyConfig) => {
-    eleventyConfig.addShortcode("getExcerpt", getExcerpt);
+    eleventyConfig.addNunjucksFilter("getExcerpt", getExcerpt);
     eleventyConfig.addNunjucksShortcode("getShortDescription", function () {
         return deriveShortDescription(this.ctx);
     });

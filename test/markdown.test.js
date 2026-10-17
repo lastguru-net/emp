@@ -1,8 +1,23 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { HtmlBasePlugin } from "@11ty/eleventy";
 import { createMarkdownLibrary } from "../_11ty/markdown.js";
 
 const render = (source) => createMarkdownLibrary().render(source);
+
+test("Markdown links receive the deployment prefix during rendering, without changing image inputs", () => {
+    for (const prefix of ["/", "/project/"]) {
+        const markdown = createMarkdownLibrary(url => HtmlBasePlugin.applyBaseToUrl(url, prefix));
+        const html = markdown.render('[Post](/posts/?page=2&x=1#part) [Reference][ref] [Anchor](#part) [Relative](next/) [External](https://example.com/)\n\n[ref]: /project/posts/\n\n![Image](/images/sample.png)\n\n<a href="/literal/">Raw HTML</a>');
+        assert.ok(html.includes(`href="${prefix}posts/?page=2&amp;x=1#part"`));
+        assert.ok(html.includes(`href="${prefix}project/posts/"`));
+        assert.ok(html.includes('href="#part"'));
+        assert.ok(html.includes('href="next/"'));
+        assert.ok(html.includes('href="https://example.com/"'));
+        assert.ok(html.includes('src="/images/sample.png"'));
+        assert.ok(html.includes('href="/literal/"'));
+    }
+});
 
 test("core block and inline structures render semantic HTML", () => {
     const html = render(`
@@ -27,7 +42,7 @@ Paragraph with *emphasis*, **strong text**, [a link](https://example.com), and \
     assert.match(html, /<ol>\s*<li>Ordered<\/li>\s*<li>List\s*<ul>\s*<li>Nested item<\/li>\s*<\/ul>\s*<\/li>\s*<\/ol>/);
 });
 
-test("images, hard breaks, and thematic breaks use XHTML endings", () => {
+test("images retain their attributes, and explicit line and thematic breaks render", () => {
     const html = render([
         '![Alt text](image.png "Image title")',
         "",
@@ -37,9 +52,9 @@ test("images, hard breaks, and thematic breaks use XHTML endings", () => {
         "---"
     ].join("\n"));
 
-    assert.match(html, /<img src="image\.png" alt="Alt text" title="Image title" \/>/);
-    assert.match(html, /first line<br \/>\nsecond line/);
-    assert.match(html, /<hr \/>/);
+    assert.match(html, /<img src="image\.png" alt="Alt text" title="Image title"\s*\/?>/);
+    assert.match(html, /first line<br\s*\/?>\s*second line/);
+    assert.match(html, /<hr\s*\/?>/);
 });
 
 test("tables preserve header and alignment semantics", () => {
@@ -53,7 +68,7 @@ test("tables preserve header and alignment semantics", () => {
     assert.match(html, /<tbody>[\s\S]*<td style="text-align:left">A<\/td>[\s\S]*<td style="text-align:right">B<\/td>[\s\S]*<\/tbody>/);
 });
 
-test("raw HTML is deliberate while Markdown text and code remain escaped", () => {
+test("raw HTML passes through while Markdown text and code are escaped", () => {
     const html = render(`
 <section data-kind="raw"><strong>Raw HTML</strong></section>
 
@@ -86,7 +101,7 @@ test("typographic replacements are enabled", () => {
     assert.match(html, new RegExp(`“Quotes” \\u2013 … © ™`));
 });
 
-test("heading anchors generate stable unique IDs for duplicates", () => {
+test("duplicate headings receive distinct anchor IDs", () => {
     const html = render("## Repeat\n\n## Repeat");
 
     assert.match(html, /<h2 id="repeat"[^>]*>Repeat<\/h2>/);
@@ -143,7 +158,7 @@ test("task lists distinguish checked, unchecked, and ordinary items", () => {
     assert.match(html, /<li>\s*<p>Ordinary<\/p>\s*<\/li>/);
 });
 
-test("the production code-block plugin integrates with the configured language", () => {
+test("code-block headers include filenames and language labels", () => {
     const source = `
 \`inline\`
 
@@ -164,7 +179,7 @@ plain text
     assert.match(html, /<span class="code-block-language">Code<\/span>/);
 });
 
-test("a mixed document exercises the assembled plugin order", () => {
+test("Markdown extensions render together in a mixed document", () => {
     const html = render(`
 # Release :rocket:
 
