@@ -1,14 +1,9 @@
-{% set includeThumbnail = true %}
-{% if siteelements.features.index == "json" %}
-    {% set items = [] %}
-    {% for post in posts %}
-        {% import "post-card-data.njk" as prepared with context %}
-        {% set _ = items.push(prepared.card) %}
-    {% endfor %}
-    {% set list = items | postlistData(pagination) %}
-<section class="json-postlist" data-postlist-url="{{ list.readUrl | escape }}" data-initial-page="{{ list.number }}">
-    <script type="application/json" class="postlist-options">{{ list.context | jsonScript | safe }}</script>
-{% endif %}
+{% set items = [] %}
+{% for post in posts %}
+    {% import "post-card-data.njk" as prepared with context %}
+    {% set _ = items.push(prepared.card) %}
+{% endfor %}
+{% set list = items | postlistData(pagination) %}
 <div class="postlist">
     {% if siteelements.header and siteheader %}
         {% if siteelements.headerLink %}
@@ -20,16 +15,5 @@
         {% endif %}
     {% endif %}
     {% if title and not authorCard %}<h1>{{ title }}</h1>{% endif %}
-    {% if siteelements.features.index == "json" %}
-        <noscript><p class="postexcerpt">{{ sitestrings[siteconfig.lang].postlist_no_js | escape }}</p></noscript>
-        <p class="postlist-status postexcerpt" role="status" hidden></p>
-        <div class="postlist-items" tabindex="-1"></div>
-    {% else %}
-        {% for post in posts %}
-            {% import "post-card-data.njk" as prepared with context %}
-            {% postCard prepared.card %}
-        {% endfor %}
-    {% endif %}
+    {% include postlistTemplate %}
 </div>
-{% include "postpagination.njk" %}
-{% if siteelements.features.index == "json" %}</section>{% endif %}

@@ -3,7 +3,7 @@
     features: {
         // Post properties: false disables; 'above'/'below' the full-post image; true means 'below'
         postproperties: "below",
-        // Generate/load metrics/actions JSON from post data; requires js and postproperties
+        // Load metrics/actions JSON on full posts; requires js and postproperties
         liveMetricsActions: false,
         // Include description in OpenGraph and Twitter meta tags
         og_description: true,
@@ -25,7 +25,7 @@
         colorMode: "auto",
         // Base layout: 'regular' (with sidebar) or 'primitive' (minimal layout)
         base: "regular",
-        // Index mode: 'postlist' (build-time post lists), 'singlepost' (full post), or 'json' (browser-loaded post lists; requires js: true)
+        // Homepage layout: 'postlist' (uses siteconfig.pagination.postlist) or 'singlepost' (full post)
         index: "postlist",
         // Top bar behavior: false (none), 'static' (always visible), or 'dynamic' (shows/hides on scroll)
         topbar: "dynamic",

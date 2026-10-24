@@ -17,7 +17,7 @@ test("asset cache-busting URLs are stable and change with bundled inputs", async
         process.chdir(original);
         await rm(fixture, { recursive: true, force: true });
     });
-    for (const dir of ["assets/css", "assets/js", "content/_data", "content/_includes", "content/utils"]) {
+    for (const dir of ["assets/css", "assets/js", "content/_data", "content/_includes", "content/utils", "extensions/postlist/local"]) {
         await mkdir(join(fixture, dir), { recursive: true });
     }
     const files = {
@@ -27,6 +27,8 @@ test("asset cache-busting URLs are stable and change with bundled inputs", async
         "content/_data/siteconfig.js": 'export default { lang: "en", internalUrls: [] };',
         "content/_data/inlinesvg.json5": '{ calendar: { viewBox: "0 0 24 24", path: "M1 1h12v12H1z" } }',
         "content/_includes/card.njk": '<div class="p-11">Card</div>',
+        "extensions/postlist/local/postlist.njk": '<div class="m-11">List</div>',
+        "extensions/postlist/local/browser.js": 'const label = "Original";',
         "content/utils/js.njk": 'const language = "{{ siteconfig.lang }}";',
         "package.json": '{ "dependencies": { "tailwindcss": "4.0.0" } }'
     };
@@ -67,6 +69,8 @@ test("asset cache-busting URLs are stable and change with bundled inputs", async
         ["content/_data/siteconfig.js", 'export default { lang: "lv", internalUrls: [] };', ["js"]],
         ["content/_data/inlinesvg.json5", '{ calendar: { viewBox: "0 0 24 24", path: "M2 2h10v10H2z" } }', ["js"]],
         ["content/_includes/card.njk", '<div class="p-12">Card</div>', ["css"]],
+        ["extensions/postlist/local/postlist.njk", '<div class="m-12">List</div>', ["css"]],
+        ["extensions/postlist/local/browser.js", 'const label = "Changed";', ["js"]],
         ["content/_data/siteelements.json5", "{ features: { search: true } }", ["css", "js"]],
         ["package.json", '{ "dependencies": { "tailwindcss": "4.1.0" } }', ["css", "js"]]
     ]) {

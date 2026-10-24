@@ -13,24 +13,17 @@ const miniSearchUrl = "{{ '/assets/js/minisearch.js' | url }}";
 {% include "../../assets/js/search.js" %}
 {% endif %}
 
-{% if siteelements.features.postproperties and siteelements.features.liveMetricsActions %}
-{% include "../../assets/js/post-metrics-actions.js" %}
-const metricsActionsContext = {{ {siteconfig: {lang: siteconfig.lang, url: siteconfig.url, internalUrls: siteconfig.internalUrls}, inlinesvg: inlinesvg} | jsonScript | safe }};
-async function initializeMetricsActions() {
-    const regions = document.querySelectorAll("[data-metrics-actions-url]");
-    if (!regions.length) return;
-    try {
-        const { renderMetricsActions } = await import("{{ '/assets/js/post-card.js' | addDirHash | url }}");
-        for (const region of regions) mountMetricsActions(region, renderMetricsActions, metricsActionsContext);
-    } catch {
-        // Leave content readable if the renderer cannot be loaded.
-    }
-}
-initializeMetricsActions();
+{% if postlistJsTemplate or (siteelements.features.postproperties and siteelements.features.liveMetricsActions) %}
+{% include "../../assets/js/html.js" %}
+{% include "../../assets/js/post-properties.js" %}
+const { renderProperties, renderMetricsActions } = createPostPropertiesRenderer(html);
 {% endif %}
 
-{% if siteelements.features.index == "json" %}
-import { renderCard, renderPagination } from "{{ '/assets/js/post-card.js' | addDirHash | url }}";
-import { mountPostlist } from "{{ '/assets/js/postlist.js' | addDirHash | url }}";
-for (const root of document.querySelectorAll(".json-postlist")) mountPostlist(root, renderCard, renderPagination);
+{% if siteelements.features.postproperties and siteelements.features.liveMetricsActions %}
+{% include "../../assets/js/post-metrics-actions.js" %}
+const metricsActionsContext = {{ {siteconfig: {lang: siteconfig.lang}, inlinesvg: inlinesvg} | jsonScript | safe }};
+for (const region of document.querySelectorAll("[data-metrics-actions-url]")) mountMetricsActions(region, renderMetricsActions, metricsActionsContext);
 {% endif %}
+
+{% pluginsJs %}
+{% if postlistJsTemplate %}{% include postlistJsTemplate %}{% endif %}

@@ -39,5 +39,7 @@
 {% if siteelements.features.colorMode != "light" and siteelements.features.colorMode != "dark" %}
 {% include "colormode-js.njk" %}
 {% endif %}
-{% if siteelements.features.js %}<script defer src="{{ '/assets/js/min.js' | addDirHash | url }}" type="module"></script>{% endif %}
+{% if siteelements.features.js %}
+<script defer src="{{ '/assets/js/min.js' | addDirHash | url }}" type="module"></script>
+{% endif %}
 {% pluginsHead %}

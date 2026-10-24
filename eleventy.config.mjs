@@ -14,8 +14,10 @@ import lqip from "./_11ty/lqip.js";
 import minify from "./_11ty/minify.js";
 import collections from "./_11ty/collections.js";
 import searchIndex from "./_11ty/search-index.js";
-import postCard from "./_11ty/post-card.js";
+import postProperties from "./_11ty/post-properties.js";
+import postCardImage from "./_11ty/post-card-image.js";
 import postlist from "./_11ty/postlist.js";
+import metricsActions from "./_11ty/metrics-actions.js";
 import postAdditions from "./_11ty/post-additions.js";
 import tailwind from "./_11ty/tailwind.js";
 import { createMarkdownLibrary } from "./_11ty/markdown.js";
@@ -74,8 +76,10 @@ export default (eleventyConfig) => {
 
     // Images and post cards
     eleventyConfig.addPlugin(imageTransform);
-    eleventyConfig.addPlugin(postCard);
+    eleventyConfig.addPlugin(postProperties);
+    eleventyConfig.addPlugin(postCardImage);
     eleventyConfig.addPlugin(postlist);
+    eleventyConfig.addPlugin(metricsActions);
     eleventyConfig.addPlugin(postAdditions);
 
     // Lean Rada CSS-only LQIP

@@ -5,56 +5,38 @@ import { fileURLToPath } from "node:url";
 import registerDateTransforms from "../_11ty/dates.js";
 import siteconfig from "../content/_data/siteconfig.js";
 
-const documentedInputs = {
-    dateOnly: "2025-05-23",
-    localDateTime: "2025-05-23 12:34:56",
-    positiveOffsetDateTime: "2025-05-23 12:34:56 +0300",
-    negativeOffsetDateTime: "2025-05-23 12:34:56 -0700"
-};
-
 const registerTransforms = () => {
     const filters = {};
-
     registerDateTransforms({
         addNunjucksFilter(name, filter) {
             filters[name] = filter;
         },
         addShortcode() {}
     });
-
-    return { filters };
+    return filters;
 };
-
-const renderAll = (filters, value) => ({
-    isoDate: filters.isoDate(value),
-    isoDateTime: filters.isoDateTime(value),
-    readableDate: filters.readableDate(value),
-    rssDate: filters.rssDate(value)
-});
 
 if (process.env.EMP_DATE_TEST_FIXTURE === "1") {
     siteconfig.lang = process.env.EMP_DATE_TEST_LANGUAGE ?? "en";
-    const { filters } = registerTransforms();
+    const filters = registerTransforms();
     const inputs = {
-        ...documentedInputs,
+        dateOnly: "2025-05-23",
+        localDateTime: "2025-05-23 12:34:56",
+        localIsoDateTime: "2025-05-23T12:34:56.789",
+        positiveOffsetDateTime: "2025-05-23 12:34:56 +0300",
+        negativeOffsetDateTime: "2025-05-23 12:34:56 -0700",
         dateObject: new Date("2025-05-23T00:00:00.000Z"),
-        millisecondDateObject: new Date("2025-05-23T12:34:56.789Z"),
-        winterDateObject: new Date("2025-01-15T12:00:00.000Z"),
-        summerDateObject: new Date("2025-07-15T12:00:00.000Z")
+        millisecondDateObject: new Date("2025-05-23T12:34:56.789Z")
     };
-    const transforms = Object.fromEntries(
-        Object.entries(inputs).map(([name, value]) => [name, renderAll(filters, value)])
-    );
-    const latestModifiedDate = filters.latestModifiedDate([
-        { date: "2025-05-23 12:34:56 +0300", data: {} },
-        { date: "2025-05-24 12:34:56 +0300", data: { updated: "2025-06-01 12:34:56 -0700" } },
-        { date: "2025-05-25 12:34:56 +0300", data: {} }
-    ]);
-
-    process.stdout.write(JSON.stringify({
-        transforms,
-        latestModifiedDate: latestModifiedDate.toISOString()
-    }));
+    process.stdout.write(JSON.stringify(Object.fromEntries(
+        Object.entries(inputs).map(([name, value]) => [name, {
+            isoDate: filters.isoDate(value),
+            isoDateTime: filters.isoDateTime(value),
+            readableDate: filters.readableDate(value),
+            readableDateTime: filters.readableDateTime(value),
+            rssDate: filters.rssDate(value)
+        }])
+    )));
 } else {
     const fixtureCache = new Map();
     const renderFixture = (timezone, language = "en") => {
@@ -77,145 +59,50 @@ if (process.env.EMP_DATE_TEST_FIXTURE === "1") {
         return fixtureCache.get(cacheKey);
     };
 
-    const expectedByTimezone = {
-        UTC: {
-            dateOnly: {
-                isoDate: "2025-05-23",
-                isoDateTime: "2025-05-23T00:00:00.000+00:00",
-                readableDate: "May 23, 2025",
-                rssDate: "Fri, 23 May 2025 00:00:00 +0000"
-            },
-            localDateTime: {
-                isoDate: "2025-05-23",
-                isoDateTime: "2025-05-23T12:34:56.000+00:00",
-                readableDate: "May 23, 2025",
-                rssDate: "Fri, 23 May 2025 12:34:56 +0000"
-            },
-            positiveOffsetDateTime: {
-                isoDate: "2025-05-23",
-                isoDateTime: "2025-05-23T09:34:56.000+00:00",
-                readableDate: "May 23, 2025",
-                rssDate: "Fri, 23 May 2025 09:34:56 +0000"
-            },
-            negativeOffsetDateTime: {
-                isoDate: "2025-05-23",
-                isoDateTime: "2025-05-23T19:34:56.000+00:00",
-                readableDate: "May 23, 2025",
-                rssDate: "Fri, 23 May 2025 19:34:56 +0000"
-            }
-        },
-        "Europe/Riga": {
-            dateOnly: {
-                isoDate: "2025-05-23",
-                isoDateTime: "2025-05-23T03:00:00.000+03:00",
-                readableDate: "May 23, 2025",
-                rssDate: "Fri, 23 May 2025 03:00:00 +0300"
-            },
-            localDateTime: {
-                isoDate: "2025-05-23",
-                isoDateTime: "2025-05-23T12:34:56.000+03:00",
-                readableDate: "May 23, 2025",
-                rssDate: "Fri, 23 May 2025 12:34:56 +0300"
-            },
-            positiveOffsetDateTime: {
-                isoDate: "2025-05-23",
-                isoDateTime: "2025-05-23T12:34:56.000+03:00",
-                readableDate: "May 23, 2025",
-                rssDate: "Fri, 23 May 2025 12:34:56 +0300"
-            },
-            negativeOffsetDateTime: {
-                isoDate: "2025-05-23",
-                isoDateTime: "2025-05-23T22:34:56.000+03:00",
-                readableDate: "May 23, 2025",
-                rssDate: "Fri, 23 May 2025 22:34:56 +0300"
-            }
-        },
-        "America/Los_Angeles": {
-            dateOnly: {
-                isoDate: "2025-05-22",
-                isoDateTime: "2025-05-22T17:00:00.000-07:00",
-                readableDate: "May 22, 2025",
-                rssDate: "Thu, 22 May 2025 17:00:00 -0700"
-            },
-            localDateTime: {
-                isoDate: "2025-05-23",
-                isoDateTime: "2025-05-23T12:34:56.000-07:00",
-                readableDate: "May 23, 2025",
-                rssDate: "Fri, 23 May 2025 12:34:56 -0700"
-            },
-            positiveOffsetDateTime: {
-                isoDate: "2025-05-23",
-                isoDateTime: "2025-05-23T02:34:56.000-07:00",
-                readableDate: "May 23, 2025",
-                rssDate: "Fri, 23 May 2025 02:34:56 -0700"
-            },
-            negativeOffsetDateTime: {
-                isoDate: "2025-05-23",
-                isoDateTime: "2025-05-23T12:34:56.000-07:00",
-                readableDate: "May 23, 2025",
-                rssDate: "Fri, 23 May 2025 12:34:56 -0700"
-            }
-        }
-    };
-
-    for (const [timezone, expectedInputs] of Object.entries(expectedByTimezone)) {
-        test(`all documented front-matter formats in ${timezone}`, () => {
-            const { transforms } = renderFixture(timezone);
-            for (const name of Object.keys(documentedInputs)) {
-                assert.deepEqual(transforms[name], expectedInputs[name], name);
-            }
-        });
-    }
-
-    test("Date objects are formatted in the build host timezone", () => {
-        for (const [timezone, expectedInputs] of Object.entries(expectedByTimezone)) {
-            assert.deepEqual(renderFixture(timezone).transforms.dateObject, expectedInputs.dateOnly, timezone);
-        }
-    });
-
-    test("build-host daylight-saving offsets are reflected in machine formats", () => {
+    test("machine dates default to UTC while preserving explicit offsets and Date objects", () => {
         const expected = {
-            UTC: ["2025-01-15T12:00:00.000+00:00", "2025-07-15T12:00:00.000+00:00"],
-            "Europe/Riga": ["2025-01-15T14:00:00.000+02:00", "2025-07-15T15:00:00.000+03:00"],
-            "America/Los_Angeles": ["2025-01-15T04:00:00.000-08:00", "2025-07-15T05:00:00.000-07:00"]
+            dateOnly: "2025-05-23T00:00:00Z",
+            localDateTime: "2025-05-23T12:34:56Z",
+            localIsoDateTime: "2025-05-23T12:34:56.789Z",
+            positiveOffsetDateTime: "2025-05-23T09:34:56Z",
+            negativeOffsetDateTime: "2025-05-23T19:34:56Z",
+            dateObject: "2025-05-23T00:00:00Z",
+            millisecondDateObject: "2025-05-23T12:34:56.789Z"
         };
-
-        for (const [timezone, outputs] of Object.entries(expected)) {
-            const { transforms } = renderFixture(timezone);
-            const actual = [
-                transforms.winterDateObject.isoDateTime,
-                transforms.summerDateObject.isoDateTime
-            ];
-            assert.deepEqual(actual, outputs, timezone);
+        for (const timezone of ["UTC", "Europe/Riga", "America/Los_Angeles"]) {
+            const actual = renderFixture(timezone);
+            for (const [name, instant] of Object.entries(expected)) {
+                const milliseconds = Date.parse(instant);
+                assert.match(actual[name].isoDateTime, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/);
+                assert.match(actual[name].rssDate, /^[A-Z][a-z]{2}, \d{2} [A-Z][a-z]{2} \d{4} \d{2}:\d{2}:\d{2} GMT$/);
+                assert.equal(Date.parse(actual[name].isoDateTime), milliseconds, `${timezone}: ${name}`);
+                assert.equal(Date.parse(actual[name].rssDate), Math.floor(milliseconds / 1000) * 1000, `${timezone}: ${name}`);
+            }
         }
     });
 
-    test("full ISO output preserves milliseconds while RSS output drops them", () => {
-        const output = renderFixture("UTC").transforms.millisecondDateObject;
-        assert.equal(output.isoDateTime, "2025-05-23T12:34:56.789+00:00");
-        assert.equal(output.rssDate, "Fri, 23 May 2025 12:34:56 +0000");
-    });
-
-    test("readable dates use the configured Latvian locale", () => {
-        const expected = {
-            UTC: "2025. g. 23. maijs",
-            "Europe/Riga": "2025. g. 23. maijs",
-            "America/Los_Angeles": "2025. g. 22. maijs"
-        };
-
-        for (const [timezone, output] of Object.entries(expected)) {
-            assert.equal(renderFixture(timezone, "lv").transforms.dateOnly.readableDate, output, timezone);
+    test("sitemap and readable dates use UTC while retaining the locale", () => {
+        for (const timezone of ["UTC", "Europe/Riga", "America/Los_Angeles"]) {
+            const actual = renderFixture(timezone).dateOnly;
+            assert.equal(actual.isoDate, "2025-05-23", timezone);
+            assert.equal(actual.readableDate, "May 23, 2025", timezone);
+            assert.equal(actual.readableDateTime, "May 23, 2025, 00:00", timezone);
+            assert.equal(renderFixture(timezone, "lv").dateOnly.readableDate, "2025. g. 23. maijs", timezone);
         }
     });
 
     test("latest modified date prefers updates and ignores collection order", () => {
-        for (const timezone of Object.keys(expectedByTimezone)) {
-            assert.equal(renderFixture(timezone).latestModifiedDate, "2025-06-01T19:34:56.000Z", timezone);
-        }
+        const filters = registerTransforms();
+        const latest = filters.latestModifiedDate([
+            { date: "2025-05-23 12:34:56 +0300", data: {} },
+            { date: "2025-05-24 12:34:56 +0300", data: { updated: "2025-06-01 12:34:56 -0700" } },
+            { date: "2025-05-25 12:34:56 +0300", data: {} }
+        ]);
+        assert.equal(latest.toISOString(), "2025-06-01T19:34:56.000Z");
     });
 
     test("latest modified date leaves empty collections undated", () => {
-        const { filters } = registerTransforms();
+        const filters = registerTransforms();
         assert.equal(filters.latestModifiedDate([]), undefined);
     });
 }

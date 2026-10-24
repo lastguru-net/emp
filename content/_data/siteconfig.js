@@ -89,10 +89,12 @@ export default {
     },
 
     // Pagination configuration
+    // - 'postlist': extension in extensions/postlist/ ('static' or 'dynamic'; dynamic requires features.js)
     // - 'postsPerPage': number of posts per paginated page
     // - 'authorLinkPrefix': permalink prefix for author paginated listings
     // - 'tagLinkPrefix': permalink prefix for tag paginated listings
     pagination: {
+        postlist: "static",
         postsPerPage: 10,
         authorLinkPrefix: "/author/",
         tagLinkPrefix: "/"

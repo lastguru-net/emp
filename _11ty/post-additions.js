@@ -1,5 +1,6 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
+import { toDate } from "./dates.js";
 
 const updatesFor = (items = [], input) => items
     .filter(item => item.data.updateParent === path.normalize(input))
@@ -35,7 +36,7 @@ export default (eleventyConfig) => {
             postUpdates: ({ collections }) => updatesFor(collections.postUpdates, input),
             updated: ({ postUpdates }) => {
                 const latest = postUpdates[0]?.date;
-                return latest && (!authoredUpdated || latest > new Date(authoredUpdated))
+                return latest && (!authoredUpdated || latest > toDate(authoredUpdated))
                     ? latest : authoredUpdated;
             }
         };

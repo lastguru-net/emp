@@ -1,3 +1,5 @@
-{% set includeThumbnail = false %}
-{% import "post-card-data.njk" as prepared with context %}
-{% postProperties prepared.card %}
+{% import "post-properties-data.njk" as prepared with context %}
+{% if siteelements.features.liveMetricsActions and siteelements.features.postproperties %}
+    {% set _ = prepared.properties.decorations | exportMetricsActions(post.url) %}
+{% endif %}
+{% postProperties {url: post.url | url, properties: prepared.properties} %}

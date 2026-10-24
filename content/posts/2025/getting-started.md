@@ -1,7 +1,7 @@
 ---
 title: "Getting Started"
 date: "2025-05-23"
-updated: "2026-09-24"
+updated: "2026-10-23"
 tags: article
 author: "lastguru"
 excerpt: "Create, configure and deploy a website with Eleventy Markdown Prime."
@@ -30,7 +30,7 @@ To build your website, you need your own copy of the EMP starter repository. Thi
 
 1. Go to the [EMP Starter Repository](https://github.com/lastguru-net/emp).
 2. Click **Use this template** or **Fork** (see the next section for guidance on which to choose).
-3. Name your repository and choose public or private.
+3. Name your repository. With **Use this template**, choose public or private; a fork of the public EMP repository is public.
 4. If you want to edit files locally on your computer, clone your repository:
    ```
    git clone <your-repo-url>
@@ -97,14 +97,14 @@ If you want to preview and edit your site locally, follow these steps.
 
 For more detailed guides on setting up Node.js and npm, check:
 
-- [Beginner's Guide to Node.js](https://nodejs.dev/en/learn/)
+- [Beginner's Guide to Node.js](https://nodejs.org/en/learn/)
 - [Installing Node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 ## Site Structure
 
 The regular layout has four areas:
 
-1. **Sidebar**: Always visible on larger screens and hidden on mobile devices. The sidebar is defined in the configuration files and includes:
+1. **Sidebar**: Always visible on larger screens and opened with the menu button on mobile devices. The sidebar is defined in the configuration files and includes:
    - Site logo or profile image
    - Site title and description
    - Main menu (manually defined for full control)
@@ -117,15 +117,15 @@ The regular layout has four areas:
      - Lists non-hidden posts newest first, with pinned posts at the top. Each post includes a title, description (or excerpt), and optional properties like date, location, author, tags, and reading time.
      - Optional thumbnails can be enabled and placed on the left or right; they are responsive and clickable.
      - If there are more than a configured number of posts (10 by default), pagination with navigation controls appears at the bottom.
-   - **Tag Page**: Similar to the landing page but without a header image. Lists posts with a specific tag (e.g., "events").
+   - **Tag Page**: Similar to the landing page but without a header image. Lists non-hidden content with a specific tag (e.g., "events").
      - Supports pagination and is generated automatically for each tag.
-   - **Author Page**: Similar to the landing page but without a header image. Lists posts by a specific author (e.g., "lastguru").
+   - **Author Page**: Similar to the landing page but without a header image. Lists non-hidden content with a specific author (e.g., "lastguru").
      - Supports pagination and is generated automatically for each author.
      - When enabled, an author business card (photo, bio, website/email, socials) is displayed above the list.
    - **Post**: The most common content type - a blog post.
      - Includes a title, date, and optional image. Additional properties like location, author, and tags can be added.
      - Below each post, share buttons and navigation buttons for newer/older posts are available.
-   - **Page**: Special content like "About Us." Pages are not listed among blog posts and do not include dates, post properties, or navigation buttons. They are typically linked directly in the main menu or from other posts or pages.
+   - **Page**: Special content like "About Us." Pages are not included in the main blog post list or feeds, but can appear in tag or author listings when that metadata is set. Their layout omits dates, post properties and newer/older navigation buttons. They are typically linked directly in the main menu or from other posts or pages.
 4. **Footer**: Optional footer with social links, copyright information, privacy policy link and "Powered by" link.
 
 ## File Structure
@@ -134,6 +134,7 @@ Site content, configuration and templates are stored in these files and director
 
 - Utility configuration files are located in the root folder (e.g., `/package.json`, `/eleventy.config.mjs`). Avoid modifying these unless necessary.
 - **/_11ty**: Contains custom components that enhance Eleventy. Scripts for tasks like image transformation, link transformation, and excerpt generation are located here. Modifications are rarely needed.
+- **/extensions**: Contains the selectable authentication methods, postlist renderers and plugins. See [Advanced Setup](/advanced-setup/#local-providers) to add your own.
 - **/assets**: Stores shared files for your site. You can modify or add files here. Visitors can access these files via direct links.
   - **css**: Contains CSS source files. Eleventy assembles them through `content/utils/css.njk`, and Tailwind CSS compiles and minifies the result into `_site/assets/css/min.css`. Add custom styles in `custom.css`.
   - **js**: Contains JavaScript files. The `min.js` file is generated by Eleventy (`content/utils/js.njk`) by inlining feature scripts.
@@ -164,7 +165,7 @@ This file contains the essential configuration settings for your site. It define
 - **Plugins**: Optional syntax highlighting, Google Fonts, Google tag and Meta app/pixel configuration.
 - **Pagination**: number of posts per page, and the link prefixes for author/tag pages.
 
-This file is the starting point for setting up your site.
+Start by setting `url` to your complete public site URL, including any deployment subpath, for example `https://example.com/blog/`. It controls generated links, metadata and feeds. If you do not yet know the final URL, update it after the first deployment. Restart the development server after changing these settings.
 
 ### `/content/_data/siteelements.json5`
 
@@ -198,7 +199,7 @@ This file manages tag-related configurations for posts. It includes:
 - **notag**: Tags that are hidden in post properties (e.g., "article," "posts").
 - **events**: Tags that trigger Event JSON-LD instead of BlogPosting.
 - **icons**: Overrides for the standard tag icon in post properties.
-- **aliases**: Overrides the link to the tag page.
+- **aliases**: Maps a tag to another canonical tag when linking from post properties.
 
 This file helps control how tags are presented and used across the site.
 
@@ -268,15 +269,17 @@ Rebuild after adding, editing or removing an update. The [sample event](/sample-
 
 ### Editing with PagesCMS (Optional)
 
-If you prefer a more user-friendly editing experience (especially for non-technical editors), you can manage your EMP content with [**PagesCMS**](https://pagescms.org/). PagesCMS connects to your GitHub repository and provides a browser-based editor for Markdown content. Changes are saved back to the repository as commits, which then trigger your normal deployment pipeline (e.g., Cloudflare Workers rebuilds automatically).
+For browser-based editing, [Pages CMS](https://pagescms.org/) connects to your GitHub repository using the included `.pages.yml` configuration. Open [Pages CMS](https://app.pagescms.org/), sign in with GitHub, grant access to your repository, and select the repository and branch to edit. See its [documentation](https://pagescms.org/docs/) for more details.
+
+Saved changes become Git commits. They trigger a rebuild when the edited branch is connected to your deployment workflow.
 
 ### Header Variables
 
 The header contains metadata for the post or page. Set **title** for both posts and pages, and an explicit **date** for posts. Supported variables include:
 
 - **title** (*required*): The title of the post or page. The URL is based on the title unless overridden in the header.
-- **date** (*recommended for posts*): The publication date in `YYYY-MM-DD` format or with time in `YYYY-MM-DD HH:MM:SS` or `YYYY-MM-DD HH:MM:SS +/-TTTT` format.
-- **updated**: Optional last modification date in the same formats as **date**. When present, it is used in JSON-LD, the sitemap, and the Atom and JSON feeds.
+- **date** (*recommended for posts*): The publication date in `YYYY-MM-DD` or `YYYY-MM-DD HH:MM:SS` format. For an explicit timezone offset, use an ISO datetime such as `2026-10-19T12:00:00+03:00`. Dates and times without a timezone are interpreted as UTC; all date output uses UTC.
+- **updated**: Optional last modification date in the same formats as **date**. When present, it is used in BlogPosting JSON-LD, the sitemap, and the Atom and JSON feeds.
 - **permalink**: Overrides the default URL for the post/page.
 - **image**: Path to the title image, relative to the `content` folder.
 - **thumbnail**: Optional path for a thumbnail image to use in post lists instead of the title image. To hide the thumbnail completely instead, use `thumbnail: false`.
@@ -288,7 +291,7 @@ The header contains metadata for the post or page. Set **title** for both posts 
 - **address**: The location address of the event. Displayed as a tooltip for **place** and in the Event JSON-LD structured data.
 - **profilePage**: When set to `true` on a page (not a post), generates ProfilePage JSON-LD and a corresponding Person/Organization node describing the site publisher. Commonly used for pages like "About Us."
 - **hidden**: When set to `true` on a post or page, excludes it from listings, search, the sitemap and feeds. Its HTML file is still generated and accessible by URL, so this does not make a draft private.
-- **pinned**: When set to `true`, puts the post ahead of unpinned posts in landing and author/tag listings, the sitemap and feeds. Within each group, posts are sorted newest first.
+- **pinned**: When set to `true`, puts the post ahead of unpinned posts in landing and author/tag listings and feeds. Within each group, posts are sorted newest first.
 
 For example, the [sample event](/sample-2023-pinned-event/) links to the existing image as `sample.png`:
 
@@ -344,23 +347,30 @@ Cloudflare Workers builds the site from your Git repository and serves the gener
    - Click **Create application**, and connect your Git repository.
 4. **Configure build settings**:
    - In the **Create an app** step, set:
-     - **Project name**: the name of your deployment
-     - **Build command**: leave the default `npm run build`
-     - **Deploy command**: leave the default `npx wrangler deploy`
+     - **Worker name**: the same value as `name` in the root `wrangler.json`. To use your own name, update that file and commit it before deploying.
+     - **Production branch**: the branch to publish, usually `main`.
+     - **Root directory**: the repository root.
+     - **Build command**: set `npm run build`.
+     - **Deploy command**: use `npx wrangler deploy`.
    - Click on the **Advanced settings** and add an environment variable (enables HTML, feed and JavaScript minification):
      - **Variable name**: `NODE_ENV`
      - **Variable value**: `production`
 5. **Start Deployment**:
-   - Click **Deploy**. Cloudflare Workers will build and deploy your site.
-   - Once the deployment is complete, you will receive a unique URL for your site.
+   - Click **Save and Deploy**. Cloudflare Workers will build and deploy your site.
+   - Once the deployment is complete, you will receive a unique URL for your site. Set `siteconfig.url` to that public URL (or your custom domain below), then commit the change to rebuild with correct links and metadata.
+
+For further build settings and troubleshooting, see [Cloudflare Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/).
 
 ### Custom Domain (Optional)
 
 To use a custom domain:
 
-1. Open your Cloudflare Workers project you just created.
-2. Go to the **Domains** section.
-3. Add your custom domain and follow the instructions to configure DNS settings.
+1. Ensure the domain is an active Cloudflare zone.
+2. Open your Worker and go to **Settings > Domains & Routes > Add > Custom Domain**.
+3. Enter the hostname and select **Add Custom Domain**. Cloudflare creates its DNS record and certificate.
+4. Set `siteconfig.url` to your final public URL and commit the change.
+
+See [Cloudflare Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/) for requirements and existing-DNS conflicts.
 
 ## Other Deployment Environments
 

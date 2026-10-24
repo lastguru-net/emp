@@ -32,14 +32,18 @@ test("test authentication restores, signs in and signs out through the common id
     vm.runInNewContext(`${source}\nglobalThis.selectedAuthentication = authentication;`, context);
     const authentication = context.selectedAuthentication;
 
+    assert.equal(authentication.storageKey, "user");
+    assert.equal(authentication.cached(), null);
     assert.equal(await authentication.restore(), null);
     await authentication.signIn();
+    assert.deepEqual(JSON.parse(JSON.stringify(authentication.cached())), { id: "test-user", name: "Test Username" });
     assert.deepEqual(JSON.parse(JSON.stringify(await authentication.restore())), { id: "test-user", name: "Test Username" });
     assert.equal(values.get("other"), "keep me");
 
     values.set("user", "Legacy Name");
     assert.deepEqual(JSON.parse(JSON.stringify(await authentication.restore())), { id: "test-user", name: "Legacy Name" });
     assert.equal(await authentication.signOut(), null);
+    assert.equal(authentication.cached(), null);
     assert.equal(values.has("user"), false);
     assert.equal(values.get("other"), "keep me");
 });

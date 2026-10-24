@@ -1,0 +1,37 @@
+{# Prepare the properties shared by full posts and list cards #}
+{% set data = post.data %}
+{% set tags = [] %}
+{% set notime = false %}
+{% for tag in data.tags %}
+    {% if tag not in sitetags.notag %}
+        {% set _ = tags.push({
+            name: (sitestrings[siteconfig.lang][tag] or tag) | capitalize,
+            url: (siteconfig.pagination.tagLinkPrefix ~ ((sitetags.aliases[tag] or tag) | empSlugify) ~ '/') | url,
+            icon: sitetags.icons[tag] or "hashtag"
+        }) %}
+    {% endif %}
+    {% if tag in sitetags.notime %}{% set notime = true %}{% endif %}
+{% endfor %}
+{% set actions = [] %}
+{% for action in data.decorations.actions %}
+    {% set _ = actions.push(action | postAction) %}
+{% endfor %}
+{% set words = (post.templateContent | default("") | striptags | wordcount) if not notime else 0 %}
+{% set properties = {
+    date: (post.date | readableDate) if post.date else "",
+    author: {
+        name: siteauthors[data.author].fullName or data.author,
+        url: (siteconfig.pagination.authorLinkPrefix ~ (data.author | empSlugify) ~ '/') | url
+    } if data.author else null,
+    place: {name: data.place, address: data.address} if data.place else null,
+    tags: tags,
+    readingTime: {
+        label: words | readingTime | formatReadingTime,
+        wordsLabel: (words | formatWords) ~ ' ' ~ sitestrings[siteconfig.lang].words
+    } if not notime else null,
+    decorations: {
+        badges: data.decorations.badges or [],
+        metrics: data.decorations.metrics or [],
+        actions: actions
+    }
+} %}

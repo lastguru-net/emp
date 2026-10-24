@@ -28,6 +28,7 @@ export default async (eleventyConfig) => {
         head: "pluginsHead",
         bodyStart: "pluginsBodyStart",
         css: "pluginsCss",
+        js: "pluginsJs",
     };
     for (const [hook, shortcode] of Object.entries(shortcodes)) {
         eleventyConfig.addNunjucksAsyncShortcode(shortcode, () => renderPlugins(hook));

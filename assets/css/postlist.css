@@ -98,7 +98,8 @@
 /* Collection pagination */
 
 .postpagination {
-    @apply mx-4 mt-2 pb-8 md:px-4 lg:mx-20;
+    @apply mt-4 pb-4 md:px-4;
+    @apply tracking-normal leading-normal;
 }
 
 ul.pagination {

@@ -16,7 +16,8 @@ const tailwindTransform = async (content, outputPath) => {
     const scanner = new Scanner({
         sources: [
             ...compiler.sources,
-            { base, pattern: "content/**/*.njk", negated: false }
+            { base, pattern: "content/**/*.njk", negated: false },
+            { base, pattern: "extensions/postlist/**/*.njk", negated: false }
         ]
     });
 

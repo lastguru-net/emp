@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { setImmediate } from "node:timers/promises";
 import { mountMetricsActions } from "../assets/js/post-metrics-actions.js";
-import { renderProperties, renderMetricsActions } from "../assets/js/post-card.js";
+import { renderProperties, renderMetricsActions } from "../_11ty/post-properties.js";
 
 const context = { siteconfig: { lang: "lv" } };
 const data = { metrics: [{ label: "Participants", value: 18, max: 30, progress: true }], actions: [] };

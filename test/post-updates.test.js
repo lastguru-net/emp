@@ -40,12 +40,12 @@ export default config => {
         write("content/_includes/post.njk", '{{ content | safe }}{% include "post-additions.njk" %}');
         write("content/report.njk", '---\npermalink: /report.json\neleventyImport:\n  collections: [posts]\n---\n{% for item in collections.posts %}{% reportdata item %}\n{% endfor %}');
         for (const [source, title] of [["conference", "root"], ["2026/conference", "year"], ["topics/local/conference", "deep"]]) {
-            write(`content/posts/${source}.md`, `---\ntitle: ${title}\ndate: 2026-01-01\nexcerpt: Original excerpt\n${title === "deep" ? "updated: 2026-04-01\n" : ""}---\nOriginal ${title} body.\n`);
+            write(`content/posts/${source}.md`, `---\ntitle: ${title}\ndate: 2026-01-01\nexcerpt: Original excerpt\n${title === "deep" ? 'updated: "2026-03-01 01:00:00"\n' : ""}---\nOriginal ${title} body.\n`);
             write(`content/posts/${source}/change.md`, `---\ndate: 2026-03-01\ntitle: 'News <strong> & details'\n---\nLatest **${title}** update.\n`);
         }
         write("content/posts/conference/early.md", "---\ndate: 2026-02-01\n---\nEarlier update without a title.\n");
         write("content/posts/ordinary.md", "---\ntitle: ordinary\ndate: 2026-01-01\n---\nUnchanged body.\n");
-        execFileSync(process.execPath, [cli, "--quiet"], { cwd: root, stdio: "pipe" });
+        execFileSync(process.execPath, [cli, "--quiet"], { cwd: root, stdio: "pipe", env: { ...process.env, TZ: "Europe/Riga" } });
         const initial = reports();
         assert.equal(initial.length, 4, "updates are not independent posts");
         for (const title of ["root", "year", "deep"]) {
@@ -54,7 +54,7 @@ export default config => {
             assert.equal(post.content, `<p>Original ${title} body.</p>\n`, "post templateContent is only the original body");
             assert.equal(post.excerpt, "Original excerpt");
             assert.equal(post.date, "2026-01-01T00:00:00.000Z");
-            assert.equal(post.updated, title === "deep" ? "2026-04-01T00:00:00.000Z" : "2026-03-01T00:00:00.000Z");
+            assert.equal(post.updated, title === "deep" ? "2026-03-01 01:00:00" : "2026-03-01T00:00:00.000Z");
             assert.equal(post.updateCount, title === "root" ? 2 : 1);
             assert.match(html, new RegExp(`Latest <strong>${title}</strong> update`));
             assert.match(html, /News &lt;strong&gt; &amp; details/);

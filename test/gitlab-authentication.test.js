@@ -43,8 +43,8 @@ async function harness(fetchHandler = () => { throw new Error("Unexpected networ
     };
     const context = {
         localStorage, sessionStorage, location, history, fetch: fetchHandler,
-        crypto: webcrypto, URL, URLSearchParams, Uint8Array, TextEncoder, btoa,
-        navigator: shared.navigator ?? { locks: { request: (_name, callback) => callback() } },
+        crypto: webcrypto, URL, URLSearchParams, Uint8Array, TextEncoder, btoa, AbortSignal,
+        navigator: shared.navigator ?? { locks: { request: (_name, _options, callback) => callback() } },
     };
     const source = await renderAuthenticationMethod({ method: "gitlab", options: methodOptions }, siteUrl);
     vm.runInNewContext(`${source}\nglobalThis.selectedAuthentication = authentication;`, context);
@@ -73,7 +73,7 @@ test("GitLab sign-in binds state and S256 PKCE, then exchanges directly and retu
     const h = await harness(async (url, init) => {
         calls.push({ url, init, callbackUrl: h.location.href });
         if (url.endsWith("/oauth/token")) return ok({ access_token: "access-1", refresh_token: "refresh-1", token_type: "bearer", expires_in: 3600 });
-        if (url.endsWith("/api/v4/user")) return ok({ id: 42, username: "beru", name: "Beru Example" });
+        if (url.endsWith("/api/v4/user")) return ok({ id: 42, username: "beru", name: "  Beru Example  " });
         throw new Error("Unexpected URL");
     });
     h.localStorage.setItem("unrelated", "preserve");
@@ -164,7 +164,7 @@ test("GitLab restore validates profile, persists rotated tokens and local sign-o
     const h = await harness(async (url, init) => {
         calls.push({ url, init });
         if (url.endsWith("/oauth/token")) return ok({ access_token: "access-2", refresh_token: "refresh-2", token_type: "bearer", expires_in: 7200 });
-        return ok({ id: 43, username: "newname" });
+        return ok({ id: 43, username: "newname", name: "  " });
     });
     h.localStorage.setItem(sessionKey, JSON.stringify({
         accessToken: "access-1", refreshToken: "refresh-1", expiresAt: Date.now() - 1,
@@ -197,6 +197,17 @@ test("GitLab rejected refresh clears invalid session, while transport failure re
     assert.equal(await invalid.authentication.restore(), null);
     assert.equal(invalid.localStorage.getItem(sessionKey), null);
 
+    for (const response of [
+        fail(403), fail(503),
+        ok({ access_token: "new-access", refresh_token: "new-refresh", token_type: "bearer", expires_in: "3600" }),
+    ]) {
+        const malformed = await harness(async () => response);
+        const stored = JSON.stringify(makeSession());
+        malformed.localStorage.setItem(sessionKey, stored);
+        await assert.rejects(malformed.authentication.restore());
+        assert.equal(malformed.localStorage.getItem(sessionKey), stored);
+    }
+
     const offline = await harness(async url => {
         if (url.endsWith("/oauth/token")) return ok({ access_token: "new-access", refresh_token: "new-refresh", token_type: "bearer", expires_in: 3600 });
         throw new TypeError("Network unavailable");
@@ -211,7 +222,7 @@ test("GitLab rejected refresh clears invalid session, while transport failure re
 test("Web Locks prevents two tabs from spending the same one-use refresh token", async () => {
     const localStorage = storage();
     const tails = new Map();
-    const navigator = { locks: { request(name, callback) {
+    const navigator = { locks: { request(name, _options, callback) {
         const current = (tails.get(name) ?? Promise.resolve()).then(callback);
         tails.set(name, current.catch(() => {}));
         return current;
@@ -223,7 +234,7 @@ test("Web Locks prevents two tabs from spending the same one-use refresh token",
             if (exchanges > 1) return fail(400);
             return ok({ access_token: "new", refresh_token: "new-refresh", token_type: "bearer", expires_in: 3600 });
         }
-        return ok({ id: 1, name: "Current" });
+        return ok({ id: 1, username: "provider-user", name: "Current" });
     };
     const a = await harness(fetchHandler, { localStorage, navigator });
     const b = await harness(fetchHandler, { localStorage, navigator });
@@ -250,7 +261,7 @@ test("A cross-tab sign-out during refresh does not resurrect the session", async
             await response;
             return ok({ access_token: "new", refresh_token: "new-refresh", token_type: "bearer", expires_in: 3600 });
         }
-        return ok({ id: 1, name: "Current" });
+        return ok({ id: 1, username: "provider-user", name: "Current" });
     };
     const a = await harness(fetchHandler, { localStorage });
     const b = await harness(fetchHandler, { localStorage });
@@ -278,7 +289,7 @@ test("A later sign-out prevents an in-flight callback from restoring the old log
             await response;
             return ok({ access_token: "new", refresh_token: "new-refresh", token_type: "bearer", expires_in: 3600 });
         }
-        return ok({ id: 2, name: "New user" });
+        return ok({ id: 2, username: "provider-user", name: "New user" });
     }, { localStorage });
     const otherTab = await harness(undefined, { localStorage });
     const { pending } = await start(callback);
@@ -302,7 +313,7 @@ test("A replacement login survives an older in-flight callback", async () => {
         if (url.endsWith("/oauth/token")) return ok({ access_token: "callback", refresh_token: "callback-refresh", token_type: "bearer", expires_in: 3600 });
         started();
         await response;
-        return ok({ id: 2, name: "Callback user" });
+        return ok({ id: 2, username: "provider-user", name: "Callback user" });
     }, { localStorage });
     const { pending } = await start(callback);
     localStorage.setItem(sessionKey, JSON.stringify({ accessToken: "old", refreshToken: "old-refresh", expiresAt: Date.now() + 3600000, config }));
@@ -316,14 +327,15 @@ test("A replacement login survives an older in-flight callback", async () => {
     assert.equal(localStorage.getItem(sessionKey), replacement);
 });
 
-test("An unusable GitLab profile cannot restore a stale identity", async () => {
+test("An unusable GitLab profile is not displayed and does not revoke valid credentials", async () => {
     const h = await harness(async () => ok({}));
     h.localStorage.setItem(sessionKey, JSON.stringify({
         accessToken: "access", refreshToken: "refresh", expiresAt: Date.now() + 3600000,
         config,
     }));
-    assert.equal(await h.authentication.restore(), null);
-    assert.equal(h.localStorage.getItem(sessionKey), null);
+    const stored = h.localStorage.getItem(sessionKey);
+    await assert.rejects(h.authentication.restore(), /invalid profile/);
+    assert.equal(h.localStorage.getItem(sessionKey), stored);
 });
 
 test("Changing requested scopes discards tokens granted only the old scopes", async () => {
@@ -344,23 +356,27 @@ test("Changing requested scopes discards tokens granted only the old scopes", as
 });
 
 test("Rejected credentials end the session, while permission denials and outages retain it", async () => {
-    for (const status of [401, 403, 503]) {
+    for (const status of [400, 401, 403, 503]) {
         let requests = 0;
         const h = await harness(async url => {
+            if (status === 401 && url.endsWith("/oauth/token")) {
+                requests++;
+                return fail(400);
+            }
             assert.equal(url, "https://gitlab.com/api/v4/user");
             requests++;
             return fail(status);
         });
         const stored = JSON.stringify({ accessToken: "token", refreshToken: "refresh", expiresAt: Date.now() + 3600000, config });
         h.localStorage.setItem(sessionKey, stored);
-        if (status === 403 || status === 503) {
+        if (status !== 401) {
             await assert.rejects(h.authentication.restore(), /GitLab request failed/);
             assert.equal(h.localStorage.getItem(sessionKey), stored);
         } else {
             assert.equal(await h.authentication.restore(), null);
             assert.equal(h.localStorage.getItem(sessionKey), null);
         }
-        assert.equal(requests, 1);
+        assert.equal(requests, status === 401 ? 2 : 1);
     }
 });
 
@@ -371,7 +387,7 @@ test("A sign-out while fetching a profile cannot restore the displayed identity"
     h.localStorage.setItem(sessionKey, JSON.stringify({ accessToken: "token", refreshToken: "refresh", expiresAt: Date.now() + 3600000, config }));
     const restoring = h.authentication.restore();
     await h.authentication.signOut();
-    release(ok({ id: 1, name: "Old identity" }));
+    release(ok({ id: 1, username: "provider-user", name: "Old identity" }));
     assert.equal(await restoring, null);
     assert.equal(h.localStorage.getItem(sessionKey), null);
 });
@@ -384,7 +400,7 @@ test("Sign-in restores the exact originating URL, including ordinary code/state 
     ]) {
         const h = await harness(async url => url.endsWith("/oauth/token")
             ? ok({ access_token: "access", refresh_token: "refresh", token_type: "bearer", expires_in: 3600 })
-            : ok({ id: 1, name: "Signed in" }));
+            : ok({ id: 1, username: "provider-user", name: "Signed in" }));
         h.location.href = returnTo;
         h.location.pathname = new URL(returnTo).pathname;
         const { pending } = await start(h);
@@ -422,7 +438,7 @@ test("Unsafe or missing return URLs use the homepage without preventing valid au
     for (const returnTo of [undefined, "https://elsewhere.test/"]) {
         const h = await harness(async url => url.endsWith("/oauth/token")
             ? ok({ access_token: "access", refresh_token: "refresh", token_type: "bearer", expires_in: 3600 })
-            : ok({ id: 1, name: "Signed in" }));
+            : ok({ id: 1, username: "provider-user", name: "Signed in" }));
         const { pending } = await start(h);
         h.sessionStorage.setItem(pendingKey, JSON.stringify({ ...pending, returnTo }));
         h.callback(`?code=code&state=${pending.state}`);
@@ -438,7 +454,7 @@ test("Replaying an OAuth callback without pending state leaves the URL and sessi
             exchanges++;
             return ok({ access_token: "access", refresh_token: "refresh", token_type: "bearer", expires_in: 3600 });
         }
-        return ok({ id: 1, name: "Signed in" });
+        return ok({ id: 1, username: "provider-user", name: "Signed in" });
     });
     const { pending } = await start(h);
     const query = `?code=code&state=${pending.state}`;
@@ -456,7 +472,7 @@ test("Replaying an OAuth callback without pending state leaves the URL and sessi
 });
 
 test("A failed new sign-in preserves an existing session and restores its identity alongside the error", async () => {
-    const h = await harness(async url => url.endsWith("/oauth/token") ? fail(400) : ok({ id: 2, name: "Existing user" }));
+    const h = await harness(async url => url.endsWith("/oauth/token") ? fail(400) : ok({ id: 2, username: "provider-user", name: "Existing user" }));
     const stored = JSON.stringify({ accessToken: "existing", refreshToken: "existing-refresh", expiresAt: Date.now() + 3600000, config });
     const { pending } = await start(h);
     h.localStorage.setItem(sessionKey, stored);
@@ -467,4 +483,34 @@ test("A failed new sign-in preserves an existing session and restores its identi
     assert.equal(h.authentication.error, true);
     assert.equal((await h.authentication.restore()).name, "Existing user");
     assert.equal(h.authentication.error, false);
+});
+
+test("A cancelled or superseded in-flight callback cannot log in, report errors or navigate", async () => {
+    for (const action of ["signOut", "signIn"]) {
+        for (const status of [200, 503]) {
+            let release;
+            let profileStarted;
+            const started = new Promise(resolve => { profileStarted = resolve; });
+            const response = new Promise(resolve => { release = resolve; });
+            const h = await harness(async url => {
+                if (url.endsWith("/oauth/token")) return ok({ access_token: "new", refresh_token: "new-refresh", token_type: "bearer", expires_in: 3600 });
+                profileStarted();
+                return response;
+            });
+            const { pending } = await start(h);
+            h.callback(`?code=code&state=${pending.state}`);
+            const restoring = h.authentication.restore();
+            await started;
+            h.location.navigated = null;
+            await h.authentication[action]();
+            const navigation = h.location.navigated;
+            const nextPending = h.sessionStorage.getItem(pendingKey);
+            release(status === 200 ? ok({ id: 2, username: "new-user", name: "New user" }) : fail(status));
+            assert.equal(await restoring, null);
+            assert.equal(h.localStorage.getItem(sessionKey), null);
+            assert.equal(h.sessionStorage.getItem("emp.gitlab.error"), null);
+            assert.equal(h.sessionStorage.getItem(pendingKey), nextPending);
+            assert.equal(h.location.navigated, navigation);
+        }
+    }
 });

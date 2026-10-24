@@ -13,7 +13,7 @@ permalink: /assets/css/min.css
 {% if siteelements.features.base == "regular" %}@import "./assets/css/sidebar.css";{% endif %}
 {% if siteelements.features.search or (siteelements.features.base == "regular" and siteelements.features.userMenu and siteelements.features.js) %}@import "./assets/css/dialog.css";{% endif %}
 {% if siteelements.features.base == "regular" and siteelements.features.userMenu and siteelements.features.js %}@import "./assets/css/user-menu.css";{% endif %}
-{% if siteelements.features.index == "postlist" or siteelements.features.index == "json" %}@import "./assets/css/postlist.css";{% endif %}
+@import "./assets/css/postlist.css";
 {% if siteelements.features.footer %}@import "./assets/css/footer.css";{% endif %}
 {% if siteelements.features.postproperties %}
 @import "./assets/css/postproperties.css";

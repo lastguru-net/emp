@@ -81,7 +81,7 @@ export default config => {
                 assert.ok(html.includes(`<a href="${href}">ārējais &amp; &quot;dokuments&quot;#1%.txt</a>`));
                 assert.ok(html.indexOf(href) < html.indexOf(`${prefix || "/"}images/sample.png`), "authored order retained");
             }
-            const localizedDate = new Intl.DateTimeFormat(lang, { dateStyle: "medium", timeStyle: "short", hourCycle: "h23" }).format(new Date("2026-02-01T00:00:00.000Z"));
+            const localizedDate = new Intl.DateTimeFormat(lang, { dateStyle: "medium", timeStyle: "short", hourCycle: "h23", timeZone: "UTC" }).format(new Date("2026-02-01T00:00:00.000Z"));
             for (const title of ["both", "updates"]) {
                 assert.ok(read(`${title}/index.html`).includes("Updated information."));
                 assert.ok(read(`${title}/index.html`).includes(`<time datetime="2026-02-01T00:00:00.000Z">${localizedDate}</time>`));

@@ -14,7 +14,7 @@ const options = {
 const pendingKey = "emp.github.pending";
 const sessionKey = "emp.github.session";
 const config = JSON.stringify([options.clientId, siteUrl, exchangeUrl, options.scopes.join(" ")]);
-const profile = { id: 123, login: "octo", name: "Octocat" };
+const profile = { id: 123, login: "octo", name: "  Octocat  " };
 const token = { access_token: "token-1", token_type: "bearer", expires_in: 3600 };
 
 function storage() {
@@ -52,7 +52,7 @@ async function browser(initialUrl = "https://emp.test/blog/post/?x=1#part", meth
         },
     };
     const context = { URL, URLSearchParams, TextEncoder, Uint8Array, crypto: webcrypto, btoa,
-        location, history, localStorage, sessionStorage, Date,
+        location, history, localStorage, sessionStorage, Date, AbortSignal,
         fetch: (input, init) => { calls.push([input, init, location.href]); return b.respond(input, init); },
     };
     const source = await renderAuthenticationMethod({ method: "github", options: methodOptions }, siteUrl);
@@ -228,9 +228,13 @@ test("expired and revoked sessions clear, while a transient profile error retain
     const b = await browser();
     const session = storedSession();
     b.localStorage.setItem(sessionKey, session);
-    b.respond = () => new Response(null, { status: 503 });
-    await assert.rejects(b.auth.restore());
-    assert.equal(b.localStorage.getItem(sessionKey), session);
+    for (const response of [Response.json({}), new Response(null, { status: 400 }), new Response(null, { status: 403 }), new Response(null, { status: 503 })]) {
+        b.respond = () => response;
+        await assert.rejects(b.auth.restore());
+        assert.equal(b.localStorage.getItem(sessionKey), session);
+    }
+    b.respond = () => Response.json({ ...profile, name: "  " });
+    assert.equal((await b.auth.restore()).name, "octo");
     b.respond = () => new Response(null, { status: 401 });
     assert.equal(await b.auth.restore(), null);
     assert.equal(b.localStorage.getItem(sessionKey), null);
@@ -278,6 +282,32 @@ test("cross-tab sign-out or session replacement during callback cannot restore s
         assert.equal(await restoring, null, change);
         assert.equal(b.localStorage.getItem(sessionKey), change === "sign-out" ? null : newer, change);
         assert.equal(b.location.replaced, pending.returnTo, change);
+    }
+});
+
+test("a cancelled or superseded in-flight callback cannot log in, report errors or navigate", async () => {
+    for (const action of ["signOut", "signIn"]) {
+        for (const status of [200, 503]) {
+            const b = await browser();
+            const pending = await begin(b);
+            let resolveProfile;
+            let profileStarted;
+            const started = new Promise(resolve => { profileStarted = resolve; });
+            b.respond = input => input === exchangeUrl ? Response.json(token) :
+                new Promise(resolve => { resolveProfile = resolve; profileStarted(); });
+            const restoring = callback(b, `?code=abc&state=${pending.state}`);
+            await started;
+            await b.auth[action]();
+            const navigation = b.location.assigned;
+            const nextPending = b.sessionStorage.getItem(pendingKey);
+            resolveProfile(status === 200 ? Response.json(profile) : new Response(null, { status }));
+            assert.equal(await restoring, null);
+            assert.equal(b.localStorage.getItem(sessionKey), null);
+            assert.equal(b.sessionStorage.getItem("emp.github.error"), null);
+            assert.equal(b.sessionStorage.getItem(pendingKey), nextPending);
+            assert.equal(b.location.assigned, navigation);
+            assert.equal(b.location.replaced, undefined);
+        }
     }
 });
 

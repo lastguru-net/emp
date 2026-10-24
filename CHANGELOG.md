@@ -2,7 +2,39 @@
 
 Notable changes to Eleventy Markdown Prime. Released versions link to the [public release notes](https://github.com/lastguru-net/emp/releases); dates are publication dates in UTC.
 
-## 7.0.0
+## [7.1.0](https://github.com/lastguru-net/emp/releases/tag/v7.1.0) - 2026-10-24
+
+Version 7.1 separates postlist rendering from the homepage layout and improves authentication refresh. Review the configuration, date and custom-template changes before upgrading from 7.0.
+
+### Breaking changes
+
+- Postlist rendering is selected by `siteconfig.pagination.postlist`: `"static"` (default) or `"dynamic"`. Replace `siteelements.features.index: "json"` with `features.index: "postlist"` and `pagination.postlist: "dynamic"`; keep `features.js: true` for dynamic lists.
+- `siteelements.features.liveMetricsActions` applies only to full posts. Static list cards now render authored metrics/actions directly; dynamic lists continue to use their JSON response data.
+- External JSON publishers must supply prepared, validated URLs and image attributes. Set `external: true` on action links that should open in a new tab; Markdown exports prepare this flag automatically.
+- Dates now display and serialize in UTC rather than the build machine's local timezone. Timezone-less datetime strings handled by EMP's date helpers also mean UTC; audit authored `updated` values and any reliance on the build timezone. Explicit offsets preserve the intended instant, but its displayed calendar date can change in UTC.
+- Custom static-list templates must pass an explicit rendering context to `postCard` (`{% postCard card, list.context %}`) and the prepared `list` object to `postPagination` (`{{ list | postPagination | safe }}`). The old `postpagination.njk` include and `_11ty/post-card.js`, `assets/js/post-card.js` and `assets/js/postlist.js` modules are removed. Use the shared `postlist.njk` include or adapt custom rendering to the selected extension and shared helpers.
+
+### Added
+
+- Static and dynamic postlist extensions under `extensions/postlist/<name>/`, receiving shared prepared card and pagination data. The selection applies to homepage and archive lists independently of the homepage layout.
+- A `js` plugin hook for including JavaScript in the site's existing bundle.
+
+### Changed
+
+- Authentication displays the session's cached identity while revalidating in the background, clears failed display checks without discarding usable credentials, and updates on Back/Forward restoration and cross-tab session changes.
+- GitHub and GitLab requests, and GitLab lock waits, have a ten-second timeout without changing token lifetimes. These providers now require browser support for `AbortSignal.timeout()`.
+- Shared renderers and selected extension JavaScript are included through `js.njk`, without separate renderer requests or an import map.
+- Reorganized setup guides around site-owner tasks, clarified Cloudflare deployment settings, and aligned GitHub/GitLab configuration instructions and optional defaults.
+- Updated Eleventy Image to 7.1.1 and HTML Minifier Next to 9.0.1, regenerated the dependency lockfile, and explicitly retained inline JSON minification under the minifier's new defaults.
+
+### Fixed
+
+- GitLab retries a rejected access token once through its refresh grant and coordinates login callbacks with token rotation, avoiding lost sessions or discarded new logins.
+- Authentication ignores superseded login and identity responses after logout or replacement, and distinguishes temporary or malformed provider responses from credential rejection.
+- Empty list homepages are generated in both modes, and archive list styles load with a full-post homepage.
+- Bundle hashes include extension JavaScript and postlist templates; Tailwind scans postlist extension templates, and static renderer edits reload during development.
+
+## [7.0.0](https://github.com/lastguru-net/emp/releases/tag/v7.0.0) - 2026-10-17
 
 Version 7.0 brings a pluggable extension architecture, optional sign-in, richer posts and JSON-backed lists. Configuration has been reorganized to support these features; review the breaking changes below before upgrading.
 

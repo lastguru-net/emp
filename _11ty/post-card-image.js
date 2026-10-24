@@ -18,3 +18,10 @@ export const prepareThumbnail = async (src, { urlFilter = (url) => url, lqip = f
     const placeholder = lqip && !/^https?:/i.test(src) && !/\.svg$/i.test(src) ? await calculateLqip(src) : null;
     return { ...image, sources, ...(placeholder !== null ? { lqip: Number(placeholder) } : {}) };
 };
+
+export default (eleventyConfig) => {
+    eleventyConfig.addFilter("postThumbnail", async (src, lqip) => prepareThumbnail(src, {
+        urlFilter: eleventyConfig.getFilter("url"),
+        lqip
+    }));
+};

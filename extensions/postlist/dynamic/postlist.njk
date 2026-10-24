@@ -1,0 +1,8 @@
+{% set json = list | postlistJson %}
+<section class="json-postlist" data-postlist-url="{{ json.readUrl | escape }}" data-initial-page="{{ list.pagination.page or 1 }}">
+    <script type="application/json" class="postlist-options">{{ json.context | jsonScript | safe }}</script>
+    <noscript><p class="postexcerpt">{{ list.context.sitestrings[list.context.siteconfig.lang].postlist_no_js | escape }}</p></noscript>
+    <p class="postlist-status postexcerpt" role="status" hidden></p>
+    <div class="postlist-items" tabindex="-1"></div>
+    <div class="postpagination"></div>
+</section>

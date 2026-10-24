@@ -22,6 +22,7 @@ const htmlOptions = {
     // Inline minification
     minifyCSS: true,
     minifyJS: true,
+    minifyJSON: true,
 
     // Avoid doctype shortening
     useShortDoctype: false

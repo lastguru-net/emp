@@ -65,21 +65,29 @@ const calculateDirHash = async (absolutePath) => {
             join(process.cwd(), "content", "_data", "inlinesvg.json5"),
             join(process.cwd(), "content", "utils", "js.njk")
         );
-    } else if (absolutePath.startsWith("/assets/css/")) {
-        // Match the Nunjucks sources scanned by the Tailwind transform.
-        const templates = await readdir(join(process.cwd(), "content"), { recursive: true, withFileTypes: true });
-        configPaths.push(...templates
-            .filter((entry) => entry.isFile() && entry.name.endsWith(".njk"))
+        const extensions = await readdir(join(process.cwd(), "extensions"), { recursive: true, withFileTypes: true });
+        configPaths.push(...extensions
+            .filter((entry) => entry.isFile())
             .map((entry) => join(entry.parentPath, entry.name))
             .sort());
+    } else if (absolutePath.startsWith("/assets/css/")) {
+        // Match the Nunjucks sources scanned by the Tailwind transform.
+        for (const directory of ["content", "extensions/postlist"]) {
+            const templates = await readdir(join(process.cwd(), directory), { recursive: true, withFileTypes: true });
+            configPaths.push(...templates
+                .filter((entry) => entry.isFile() && entry.name.endsWith(".njk"))
+                .map((entry) => join(entry.parentPath, entry.name))
+                .sort());
+        }
     }
     for (const configPath of configPaths) {
         combined += h64(await readFile(configPath, "utf8")).toString(36) + "|";
     }
 
-    // The generated JavaScript bundle also includes the selected auth method.
+    // Include generated JavaScript and CSS from configured extensions.
     if (absolutePath.startsWith("/assets/js/")) {
         combined += h64(await renderAuthenticationMethod(siteconfig.authentication, siteconfig.url)).toString(36) + "|";
+        combined += h64(await renderPlugins("js")).toString(36) + "|";
     } else if (absolutePath.startsWith("/assets/css/")) {
         combined += h64(await renderPlugins("css")).toString(36) + "|";
     }

@@ -1,0 +1,6 @@
+{% for card in list.items %}
+    {% postCard card, list.context %}
+{% endfor %}
+<div class="postpagination">
+    {{ list | postPagination | safe }}
+</div>

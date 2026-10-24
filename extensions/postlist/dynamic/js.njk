@@ -1,0 +1,6 @@
+{% include "../post-card.js" %}
+const renderCard = createPostCardRenderer(html, renderProperties);
+{% include "../pagination.js" %}
+const renderPagination = createPaginationRenderer(html);
+{% include "./browser.js" %}
+for (const root of document.querySelectorAll(".json-postlist")) mountPostlist(root, renderCard, renderPagination);
