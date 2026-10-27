@@ -3,11 +3,12 @@ import test from "node:test";
 import { HtmlBasePlugin } from "@11ty/eleventy";
 import { createMarkdownLibrary } from "../_11ty/markdown.js";
 
-const render = (source) => createMarkdownLibrary().render(source);
+const markdown = await createMarkdownLibrary();
+const render = (source) => markdown.render(source);
 
-test("Markdown links receive the deployment prefix during rendering, without changing image inputs", () => {
+test("Markdown links receive the deployment prefix during rendering, without changing image inputs", async () => {
     for (const prefix of ["/", "/project/"]) {
-        const markdown = createMarkdownLibrary(url => HtmlBasePlugin.applyBaseToUrl(url, prefix));
+        const markdown = await createMarkdownLibrary(url => HtmlBasePlugin.applyBaseToUrl(url, prefix));
         const html = markdown.render('[Post](/posts/?page=2&x=1#part) [Reference][ref] [Anchor](#part) [Relative](next/) [External](https://example.com/)\n\n[ref]: /project/posts/\n\n![Image](/images/sample.png)\n\n<a href="/literal/">Raw HTML</a>');
         assert.ok(html.includes(`href="${prefix}posts/?page=2&amp;x=1#part"`));
         assert.ok(html.includes(`href="${prefix}project/posts/"`));

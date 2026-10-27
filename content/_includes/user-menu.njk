@@ -10,6 +10,9 @@
     <div class="dialog-items">
         <button id="user-menu-sign-in" class="dialog-item" type="button">{{ sitestrings[siteconfig.lang].sign_in }}</button>
         <button id="user-menu-sign-out" class="dialog-item" type="button" hidden>{{ sitestrings[siteconfig.lang].sign_out }}</button>
+        {% if cmsPath %}
+        <a id="user-menu-cms" class="dialog-item" href="{{ cmsPath | url }}" hidden>{{ sitestrings[siteconfig.lang].cms_title }}</a>
+        {% endif %}
         {% if siteelements.features.privacyPolicy == "sidebar" %}
         <a class="dialog-item" href="{{ siteelements.privacyPolicy.url | url }}">{{ siteelements.privacyPolicy.name }}</a>
         {% endif %}

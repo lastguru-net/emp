@@ -46,3 +46,14 @@ test("user popup obeys privacy placement and uses localized labels and configure
         assert.match(dialog, lang === "en" ? /Sign in/ : /Pierakst/);
     }
 });
+
+test("CMS menu link follows the configured prefixed path and stays gated by sign-in", async () => {
+    for (const lang of ["en", "lv"]) {
+        const values = context({ userMenu: true, js: true }, lang);
+        assert.doesNotMatch(await env.render("user-menu.njk", values), /user-menu-cms/);
+        values.cmsPath = "/tools/editor/";
+        const html = await env.render("user-menu.njk", values);
+        assert.match(html, /id="user-menu-cms"[^>]+href="\/blog\/tools\/editor\/"[^>]*hidden/);
+        assert(html.includes(values.sitestrings[lang].cms_title));
+    }
+});

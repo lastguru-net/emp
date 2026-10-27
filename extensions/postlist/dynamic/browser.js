@@ -61,6 +61,7 @@ export const mountPostlist = (root, renderCard, renderPagination) => {
             status.textContent = data.items.length ? "" : strings.postlist_empty;
             status.hidden = Boolean(data.items.length);
             if (focus) items.focus();
+            if (focus && updateHistory) window.scrollTo(0, 0);
         } catch {
             if (request.signal.aborted) return;
             status.textContent = strings.postlist_error;

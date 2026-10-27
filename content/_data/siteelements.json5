@@ -15,8 +15,8 @@
         js: true,
         // Show the sidebar user menu (requires js: true)
         userMenu: false,
-        // Enable social sharing buttons on posts/pages
-        sharer: true,
+        // Sharing on posts/pages: 'both' (default), 'above' or 'below' the body; false disables; true means 'below'
+        sharer: "both",
         // Enable previous/next post navigation
         prevnext: true,
         // Color mode: 'light' or 'dark' (fixed), 'light-dark' or 'dark-light' (initial theme with a toggle),

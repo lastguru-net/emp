@@ -5,6 +5,8 @@ import JSON5 from "json5";
 
 const cache = new Map();
 
+export const clearConfigCache = () => cache.clear();
+
 export const loadConfig = async (name) => {
     if (cache.has(name)) return cache.get(name);
     const filePath = path.join(process.cwd(), "content", "_data", name + ".json5");

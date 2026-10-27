@@ -1,0 +1,11 @@
+#cms-admin .cms-actions {
+    @apply flex flex-wrap gap-3;
+}
+
+#cms-admin .cms-actions button {
+    @apply px-4 py-2;
+    @apply border border-border dark:border-border-dark rounded-md;
+    @apply bg-rightarea-altbg dark:bg-rightarea-altbg-dark;
+    @apply text-rightarea-text dark:text-rightarea-text-dark hover:text-accent;
+    @apply cursor-pointer disabled:opacity-50;
+}

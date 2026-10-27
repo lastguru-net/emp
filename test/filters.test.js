@@ -59,8 +59,8 @@ test("absolute URLs include the deployment prefix for logical paths", () => {
     }
 });
 
-test("feed image URLs prefix Markdown images without changing links, remote images or code", () => {
-    const markdown = createMarkdownLibrary();
+test("feed image URLs prefix Markdown images without changing links, remote images or code", async () => {
+    const markdown = await createMarkdownLibrary();
     const source = '[![A > B](/images/sample.png?x=1&y=2#detail)](/blog/post/)\n\n![Remote](https://example.com/image.png) ![CDN](//cdn.example.com/image.png) ![Relative](sample.png)\n\n`<img src="/images/code.png">`';
     const html = markdown.render(source);
     try {

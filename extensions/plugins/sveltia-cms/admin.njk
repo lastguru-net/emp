@@ -1,0 +1,25 @@
+---
+layout: base.njk
+eleventyExcludeFromCollections: true
+meta:
+    robots:
+        value: noindex,nofollow
+---
+
+<div id="cms-admin">
+    <div class="content">
+        <h1>{{ title }}</h1>
+        <div id="cms-gate" class="incontent"{% if cms.mode == "shared" %} data-cms-script="{{ cms.scriptUrl }}"{% endif %} data-error="{{ cms.labels.cms_error }}">
+            <p id="cms-status" role="status">{{ cms.labels.cms_loading }}</p>
+            <div class="cms-actions">
+                <button id="cms-sign-in" type="button" hidden>{{ cms.labels.sign_in }}</button>
+                <button id="cms-retry" type="button" hidden>{{ cms.labels.cms_retry }}</button>
+            </div>
+            <noscript>{{ cms.labels.cms_error }}</noscript>
+        </div>
+        <p><a id="cms-back" href="{{ '/' | url }}">{{ cms.labels.cms_back }}</a></p>
+    </div>
+</div>
+{% if cms.mode == "standalone" %}
+<script type="module" src="{{ cms.scriptUrl }}"></script>
+{% endif %}

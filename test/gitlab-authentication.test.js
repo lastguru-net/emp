@@ -47,15 +47,29 @@ async function harness(fetchHandler = () => { throw new Error("Unexpected networ
         navigator: shared.navigator ?? { locks: { request: (_name, _options, callback) => callback() } },
     };
     const source = await renderAuthenticationMethod({ method: "gitlab", options: methodOptions }, siteUrl);
-    vm.runInNewContext(`${source}\nglobalThis.selectedAuthentication = authentication;`, context);
-    return {
-        authentication: context.selectedAuthentication,
+    const h = {
         localStorage, sessionStorage, location,
+        reload() {
+            const page = { ...context };
+            vm.runInNewContext(`${source}\nglobalThis.selectedAuthentication = authentication;`, page);
+            h.authentication = page.selectedAuthentication;
+        },
         callback(search) {
             location.href = `${siteUrl}${search}`;
             location.pathname = "/blog/";
+            location.navigated = null;
+        },
+        async completeCallback() {
+            const result = await h.authentication.restore();
+            if (!JSON.parse(sessionStorage.getItem(pendingKey))?.callback) return result;
+            location.href = location.navigated;
+            location.pathname = new URL(location.href).pathname;
+            h.reload();
+            return h.authentication.restore();
         },
     };
+    h.reload();
+    return h;
 }
 
 const ok = body => ({ ok: true, status: 200, json: async () => body });
@@ -67,6 +81,19 @@ async function start(h) {
     const pending = JSON.parse(h.sessionStorage.getItem(pendingKey));
     return { authorize, pending };
 }
+
+test("GitLab authorization uses the api default only when scopes are omitted", async () => {
+    for (const [overrides, expected] of [
+        [{}, "api"],
+        [{ scopes: [] }, ""],
+        [{ scopes: ["read_user"] }, "read_user"],
+        [{ scopes: "read_user read_api" }, "read_user read_api"],
+    ]) {
+        const h = await harness(undefined, {}, { clientId: options.clientId, ...overrides });
+        const { authorize } = await start(h);
+        assert.equal(authorize.searchParams.get("scope"), expected);
+    }
+});
 
 test("GitLab sign-in binds state and S256 PKCE, then exchanges directly and returns the provider identity", async () => {
     const calls = [];
@@ -144,7 +171,8 @@ test("Cancellation and request failures return to the starting page with a one-u
         h.location.href = returnTo;
         const { pending } = await start(h);
         h.callback(`?${failure === "cancelled" ? "error=access_denied" : "code=code"}&state=${pending.state}`);
-        await assert.rejects(h.authentication.restore());
+        await assert.rejects(h.completeCallback());
+        assert.equal(h.authentication.error, true);
         if (failure === "cancelled") assert.equal(calls, 0);
         assert.equal(h.location.navigated, returnTo);
         assert.equal(h.localStorage.getItem(sessionKey), null);
@@ -152,7 +180,7 @@ test("Cancellation and request failures return to the starting page with a one-u
         const destination = await harness(undefined, { sessionStorage: h.sessionStorage });
         destination.location.href = returnTo;
         assert.equal(await destination.authentication.restore(), null);
-        assert.equal(destination.authentication.error, true);
+        assert.equal(destination.authentication.error, failure === "cancelled");
         assert.equal(await destination.authentication.restore(), null);
         assert.equal(destination.authentication.error, false);
         assert.equal(destination.location.navigated, null);
@@ -347,12 +375,12 @@ test("Changing requested scopes discards tokens granted only the old scopes", as
     }));
     let requests = 0;
     const updated = await harness(() => { requests++; throw new Error("Old token must not be used"); },
-        { localStorage }, { ...options, scopes: ["read_user", "api"] });
+        { localStorage }, { clientId: options.clientId, origin: options.origin });
     assert.equal(await updated.authentication.restore(), null);
     assert.equal(localStorage.getItem(sessionKey), null);
     assert.equal(requests, 0);
     const { authorize } = await start(updated);
-    assert.equal(authorize.searchParams.get("scope"), "read_user api");
+    assert.equal(authorize.searchParams.get("scope"), "api");
 });
 
 test("Rejected credentials end the session, while permission denials and outages retain it", async () => {
@@ -409,7 +437,7 @@ test("Sign-in restores the exact originating URL, including ordinary code/state 
         assert.equal(h.sessionStorage.getItem(pendingKey) !== null, true);
         h.location.navigated = null;
         h.callback(`?code=code&state=${pending.state}`);
-        assert.equal((await h.authentication.restore()).name, "Signed in");
+        assert.equal((await h.completeCallback()).name, "Signed in");
         assert.equal(h.location.navigated, returnTo);
         h.location.href = returnTo;
         h.location.pathname = new URL(returnTo).pathname;
@@ -443,7 +471,8 @@ test("Unsafe or missing return URLs use the homepage without preventing valid au
         h.sessionStorage.setItem(pendingKey, JSON.stringify({ ...pending, returnTo }));
         h.callback(`?code=code&state=${pending.state}`);
         assert.equal((await h.authentication.restore()).name, "Signed in");
-        assert.equal(h.location.navigated, siteUrl);
+        assert.equal(h.location.href, siteUrl);
+        assert.equal(h.location.navigated, null);
     }
 });
 
@@ -479,8 +508,9 @@ test("A failed new sign-in preserves an existing session and restores its identi
     h.callback(`?code=invalid-code&state=${pending.state}`);
     await assert.rejects(h.authentication.restore());
     assert.equal(h.localStorage.getItem(sessionKey), stored);
-    assert.equal((await h.authentication.restore()).name, "Existing user");
     assert.equal(h.authentication.error, true);
+    assert.equal((await h.authentication.restore()).name, "Existing user");
+    assert.equal(h.authentication.error, false);
     assert.equal((await h.authentication.restore()).name, "Existing user");
     assert.equal(h.authentication.error, false);
 });

@@ -1,6 +1,6 @@
 {% set shareUrl = page.url | absoluteUrl | urlencode %}
 <div class="social">
-    <button class="link copy-url-pending" type="button" aria-label="{{ sitestrings[siteconfig.lang].copy_to_clipboard }}" aria-describedby="copy-link-status" data-copy-url data-copy-success="{{ sitestrings[siteconfig.lang].copied }}" data-copy-error="{{ sitestrings[siteconfig.lang].copy_failed }}" disabled aria-hidden="true">
+    <button class="link copy-url-pending" type="button" aria-label="{{ sitestrings[siteconfig.lang].copy_to_clipboard }}" aria-describedby="copy-link-status-{{ sharerPosition }}" data-copy-url data-copy-success="{{ sitestrings[siteconfig.lang].copied }}" data-copy-error="{{ sitestrings[siteconfig.lang].copy_failed }}" disabled aria-hidden="true">
         <svg class="share" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="{{ inlinesvg.share.viewBox }}">
             <path d="{{ inlinesvg.share.path }}" />
         </svg>
@@ -30,6 +30,6 @@
             <path d="{{ inlinesvg.linkedin.path }}" />
         </svg>
     </a>
-    <span id="copy-link-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></span>
+    <span id="copy-link-status-{{ sharerPosition }}" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></span>
     <span class="social-label">{{ sitestrings[siteconfig.lang].share }}: </span>
 </div>

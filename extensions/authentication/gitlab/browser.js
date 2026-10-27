@@ -1,8 +1,9 @@
 // GitLab's public-client flow runs entirely in the browser.
 const authentication = (() => {
-    const { clientId, redirectUri, scopes = "read_user", origin = "https://gitlab.com" } = authenticationOptions;
+    const { clientId, redirectUri, scopes, origin = "https://gitlab.com" } = authenticationOptions;
     const pendingKey = "emp.gitlab.pending";
     const sessionKey = "emp.gitlab.session";
+    let sessions = globalThis.localStorage;
     const errorKey = "emp.gitlab.error";
     const scope = Array.isArray(scopes) ? scopes.join(" ") : scopes;
     const config = JSON.stringify([origin, clientId, redirectUri, scope]);
@@ -56,27 +57,30 @@ const authentication = (() => {
         const value = read(stored);
         if (!value || typeof value !== "object") return stored;
         const { user, ...session } = value;
-        return JSON.stringify(session);
+        return JSON.stringify(Object.keys(session).sort().map(key => [key, session[key]]));
     };
-    const matches = session => credentials(localStorage.getItem(sessionKey)) ===
+    const matches = session => credentials(sessions.getItem(sessionKey)) ===
         credentials(typeof session === "string" || session === null ? session : JSON.stringify(session));
-    const cacheUser = (session, user) => {
+    const cacheUser = async (session, user, current = revision) => {
         if (!session || !matches(session)) return;
-        const stored = localStorage.getItem(sessionKey);
+        const stored = sessions.getItem(sessionKey);
         const value = read(stored);
         if (!value || typeof value !== "object") return;
         if (user) value.user = { id: user.id, name: user.name };
         else delete value.user;
         const next = JSON.stringify(value);
-        if (next !== stored) localStorage.setItem(sessionKey, next);
+        if (next !== stored || (user && sessions !== globalThis.localStorage)) {
+            return sessions.setItem(sessionKey, next, Boolean(user), () => current === revision && matches(session));
+        }
     };
-    const withSessionLock = action => navigator.locks.request(sessionKey, { signal: AbortSignal.timeout(10000) }, action);
+    const withSessionLock = action => navigator.locks.request(sessions.refreshLock ?? sessionKey, { signal: AbortSignal.timeout(10000) }, action);
 
     return {
         error: false,
+        useSessionStorage(storage) { sessions = storage; },
         storageKey: sessionKey,
         cached() {
-            const session = read(localStorage.getItem(sessionKey));
+            const session = read(sessions.getItem(sessionKey));
             const user = session?.user;
             return validSession(session) && typeof user?.id === "string" && user.id &&
                 typeof user.name === "string" && user.name.trim() ? { id: user.id, name: user.name } : null;
@@ -84,6 +88,7 @@ const authentication = (() => {
         async signIn() {
             const current = ++revision;
             this.error = false;
+            sessionStorage.removeItem(pendingKey);
             sessionStorage.removeItem(errorKey);
             const callback = new URL(redirectUri);
             if (!clientId || callback.origin !== location.origin || callback.protocol !== "https:" ||
@@ -115,15 +120,16 @@ const authentication = (() => {
             sessionStorage.removeItem(errorKey);
             const callback = new URL(location.href);
             const rawPending = sessionStorage.getItem(pendingKey);
-            if (`${callback.origin}${callback.pathname}` !== redirectUri ||
+            const pending = read(rawPending);
+            const returning = typeof pending?.callback === "string" && pending.returnTo === callback.href;
+            if (!returning && (`${callback.origin}${callback.pathname}` !== redirectUri ||
                 !callback.searchParams.has("state") ||
                 !(callback.searchParams.has("code") || callback.searchParams.has("error")) ||
-                rawPending === null || read(rawPending)?.returnTo === callback.href) return restoreSession();
+                rawPending === null || pending?.returnTo === callback.href || pending?.callback)) return restoreSession();
             const current = ++revision;
-            const query = callback.searchParams;
-            let previousSession = localStorage.getItem(sessionKey);
-            history.replaceState(null, "", redirectUri);
-            const pending = read(rawPending);
+            const query = new URLSearchParams(returning ? pending.callback : callback.search);
+            let previousSession = sessions.getItem(sessionKey);
+            if (!returning) history.replaceState(null, "", redirectUri);
             sessionStorage.removeItem(pendingKey);
             // Returning to our own saved page does not depend on OAuth succeeding.
             let returnTo = redirectUri;
@@ -131,6 +137,10 @@ const authentication = (() => {
                 const url = new URL(pending?.returnTo);
                 if (url.origin === location.origin) returnTo = url.href;
             } catch {}
+            const destination = new URL(returnTo);
+            const navigate = !returning && (destination.pathname !== callback.pathname || Boolean(destination.search));
+            // A homepage fragment is a same-document navigation, so finish here.
+            if (!returning && !navigate && destination.hash) location.replace(returnTo);
             try {
                 if (!pending || pending.config !== config ||
                     !/^[A-Za-z0-9_-]{43}$/.test(pending.verifier) ||
@@ -141,11 +151,18 @@ const authentication = (() => {
                 }
                 if (query.has("error")) throw new Error("GitLab sign-in was cancelled or denied.");
                 if (query.getAll("code").length !== 1 || !query.get("code")) throw new Error("GitLab authorization code is missing.");
+                if (navigate) {
+                    // Carry only this tab's one-use callback; no provider request blocks returning.
+                    // Remember presence, not tokens: another tab may rotate them before we take the lock.
+                    sessionStorage.setItem(pendingKey, JSON.stringify({ ...pending, returnTo, callback: query.toString(), hadSession: Boolean(previousSession) }));
+                    return null;
+                }
+                if (returning && pending.hadSession && !previousSession) return null;
                 return await withSessionLock(async () => {
                     if (current !== revision) return null;
                     // A completed rotation before lock acquisition is not a competing login.
                     const sessionBeforeLock = previousSession;
-                    previousSession = localStorage.getItem(sessionKey);
+                    previousSession = sessions.getItem(sessionKey);
                     if (sessionBeforeLock && !previousSession) return null;
                     const session = await exchange({
                         grant_type: "authorization_code", code: query.get("code"), code_verifier: pending.verifier,
@@ -153,16 +170,20 @@ const authentication = (() => {
                     const user = await profile(session.accessToken);
                     // Logout is immediate and does not wait for the network lock.
                     if (current !== revision || !matches(previousSession)) return null;
-                    localStorage.setItem(sessionKey, JSON.stringify({ ...session, user }));
+                    const saved = await sessions.setItem(sessionKey, JSON.stringify({ ...session, user }),
+                        true, () => current === revision && matches(previousSession));
+                    if (saved === false || current !== revision) return null;
                     return user;
                 });
             } catch (error) {
                 if (current !== revision) return null;
-                cacheUser(previousSession, null);
-                sessionStorage.setItem(errorKey, "1");
+                await cacheUser(previousSession, null);
+                if (current !== revision) return null;
+                this.error = true;
+                if (navigate) sessionStorage.setItem(errorKey, "1");
                 throw error;
             } finally {
-                if (current === revision) location.replace(returnTo);
+                if (current === revision && navigate) location.replace(returnTo);
             }
         },
 
@@ -171,25 +192,25 @@ const authentication = (() => {
             this.error = false;
             sessionStorage.removeItem(pendingKey);
             sessionStorage.removeItem(errorKey);
-            localStorage.removeItem(sessionKey);
+            sessions.removeItem(sessionKey);
             return null;
         },
     };
 
     async function restoreSession() {
         const current = revision;
-        let session = read(localStorage.getItem(sessionKey));
+        let session = read(sessions.getItem(sessionKey));
         try {
             // Rotation invalidates the old access token too: profile lookup shares the lock.
             return await withSessionLock(async () => {
                 if (current !== revision) return null;
-                session = read(localStorage.getItem(sessionKey));
+                session = read(sessions.getItem(sessionKey));
                 if (!session) {
-                    localStorage.removeItem(sessionKey);
+                    sessions.removeItem(sessionKey);
                     return null;
                 }
                 if (!validSession(session)) {
-                    localStorage.removeItem(sessionKey);
+                    sessions.removeItem(sessionKey);
                     return null;
                 }
                 const refreshToken = async () => {
@@ -204,13 +225,14 @@ const authentication = (() => {
                     if (!matches(session)) return false;
                     // Keep accepted rotation even if a new sign-in started meanwhile.
                     // Its old refresh token has already been spent.
-                    const user = read(localStorage.getItem(sessionKey))?.user;
+                    const user = read(sessions.getItem(sessionKey))?.user;
                     session = { ...next, ...(user ? { user } : {}) };
-                    localStorage.setItem(sessionKey, JSON.stringify(session));
+                    await sessions.setItem(sessionKey, JSON.stringify(session));
                     return true;
                 };
                 let refreshed = false;
-                if (session.expiresAt <= Date.now() + 30000) {
+                // Stock CMS refreshes omit expiry metadata; validate its current token first.
+                if (!sessions.refreshLock && session.expiresAt <= Date.now() + 30000) {
                     if (!await refreshToken()) return null;
                     refreshed = true;
                 }
@@ -225,14 +247,15 @@ const authentication = (() => {
                     user = await profile(session.accessToken);
                 }
                 if (current !== revision || !matches(session)) return null;
-                cacheUser(session, user);
+                if (await cacheUser(session, user) === false || current !== revision) return null;
                 return user;
             });
         } catch (error) {
             if (current !== revision || !matches(session)) return null;
-            cacheUser(session, null);
+            await cacheUser(session, null);
+            if (current !== revision || !matches(session)) return null;
             if (!error.invalidGrant && error.status !== 401) throw error;
-            localStorage.removeItem(sessionKey);
+            sessions.removeItem(sessionKey);
             return null;
         }
     }

@@ -56,8 +56,12 @@ async function browser(initialUrl = "https://emp.test/blog/post/?x=1#part", meth
         fetch: (input, init) => { calls.push([input, init, location.href]); return b.respond(input, init); },
     };
     const source = await renderAuthenticationMethod({ method: "github", options: methodOptions }, siteUrl);
-    vm.runInNewContext(`${source}\nglobalThis.selectedAuthentication = authentication;`, context);
-    b.auth = context.selectedAuthentication;
+    b.reload = () => {
+        const page = { ...context };
+        vm.runInNewContext(`${source}\nglobalThis.selectedAuthentication = authentication;`, page);
+        b.auth = page.selectedAuthentication;
+    };
+    b.reload();
     return b;
 }
 
@@ -65,8 +69,11 @@ async function begin(b) {
     await b.auth.signIn();
     return JSON.parse(b.sessionStorage.getItem(pendingKey));
 }
-function callback(b, query) {
+async function callback(b, query) {
     b.location.href = `${siteUrl}${query}`;
+    const result = await b.auth.restore();
+    if (!JSON.parse(b.sessionStorage.getItem(pendingKey))?.callback) return result;
+    b.reload();
     return b.auth.restore();
 }
 function storedSession(accessToken = "old-token", expiresAt = null) {
@@ -74,6 +81,20 @@ function storedSession(accessToken = "old-token", expiresAt = null) {
 }
 
 // Browser flow contracts: the callback is the homepage, so an ordinary homepage query is not OAuth.
+// Requested defaults must reach GitHub, while explicit least-privilege overrides remain authoritative.
+test("GitHub authorization uses repository/user defaults only when scopes are omitted", async () => {
+    for (const [overrides, expected] of [
+        [{}, "repo user"],
+        [{ scopes: [] }, ""],
+        [{ scopes: ["public_repo"] }, "public_repo"],
+        [{ scopes: "read:user" }, "read:user"],
+    ]) {
+        const b = await browser(undefined, { clientId: options.clientId, ...overrides });
+        await begin(b);
+        assert.equal(new URL(b.location.assigned).searchParams.get("scope"), expected);
+    }
+});
+
 test("GitHub sign-in binds PKCE and state, exchanges only code/verifier, and restores exact return URL", async () => {
     const b = await browser();
     const pending = await begin(b);
@@ -87,7 +108,7 @@ test("GitHub sign-in binds PKCE and state, exchanges only code/verifier, and res
     assert.equal(authorize.searchParams.get("code_challenge"), createHash("sha256").update(pending.verifier).digest("base64url"));
     const user = await callback(b, `?code=abc&state=${pending.state}`);
     assert.deepEqual(JSON.parse(JSON.stringify(user)), { id: "123", name: "Octocat" });
-    assert.equal(b.calls[0][2], siteUrl);
+    assert.equal(b.calls[0][2], pending.returnTo);
     assert.equal(b.location.replaced, "https://emp.test/blog/post/?x=1#part");
     assert.deepEqual(JSON.parse(b.calls[0][1].body), { code: "abc", codeVerifier: pending.verifier });
     assert.equal(b.calls[0][1].cache, "no-store");
@@ -160,12 +181,13 @@ test("cancellation and exchange/profile failure return with a one-use error and 
         };
         const query = failure === "cancelled" ? `?error=access_denied&state=${pending.state}` : `?code=abc&state=${pending.state}`;
         await assert.rejects(callback(b, query));
+        assert.equal(b.auth.error, true);
         assert.equal(b.location.replaced, pending.returnTo);
         if (failure === "cancelled") assert.equal(b.calls.length, 0);
         assert.equal(b.localStorage.getItem(sessionKey), failure === "exchange" ? storedSession() : null);
         b.respond = () => Response.json(profile);
         assert.equal((await b.auth.restore())?.name ?? null, failure === "exchange" ? "Octocat" : null);
-        assert.equal(b.auth.error, true);
+        assert.equal(b.auth.error, failure === "cancelled");
         await b.auth.restore();
         assert.equal(b.auth.error, false);
     }
@@ -177,14 +199,16 @@ test("unsafe or absent return destination falls back to the callback URL regardl
     pending.returnTo = "https://evil.test/private";
     successful.sessionStorage.setItem(pendingKey, JSON.stringify(pending));
     await callback(successful, `?code=abc&state=${pending.state}`);
-    assert.equal(successful.location.replaced, siteUrl);
+    assert.equal(successful.location.href, siteUrl);
+    assert.equal(successful.location.replaced, undefined);
 
     const failed = await browser();
     const missingReturn = await begin(failed);
     delete missingReturn.returnTo;
     failed.sessionStorage.setItem(pendingKey, JSON.stringify(missingReturn));
     await assert.rejects(callback(failed, "?code=abc&state=wrong"));
-    assert.equal(failed.location.replaced, siteUrl);
+    assert.equal(failed.location.href, siteUrl);
+    assert.equal(failed.location.replaced, undefined);
     assert.equal(failed.calls.length, 0);
 });
 
@@ -211,7 +235,7 @@ test("ordinary homepage queries are preserved before and after a sign-in", async
 test("changing requested scopes invalidates an old token", async () => {
     const oldBrowser = await browser(undefined, { ...options, scopes: [] });
     const oldConfig = (await begin(oldBrowser)).config;
-    const existing = await browser();
+    const existing = await browser(undefined, { clientId: options.clientId });
     existing.localStorage.setItem(sessionKey, JSON.stringify({ accessToken: "old-token", expiresAt: null, config: oldConfig }));
     assert.equal(await existing.auth.restore(), null);
     assert.equal(existing.localStorage.getItem(sessionKey), null);
@@ -297,6 +321,7 @@ test("a cancelled or superseded in-flight callback cannot log in, report errors 
                 new Promise(resolve => { resolveProfile = resolve; profileStarted(); });
             const restoring = callback(b, `?code=abc&state=${pending.state}`);
             await started;
+            b.location.replaced = undefined;
             await b.auth[action]();
             const navigation = b.location.assigned;
             const nextPending = b.sessionStorage.getItem(pendingKey);

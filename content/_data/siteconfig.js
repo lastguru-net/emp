@@ -71,21 +71,26 @@ export default {
                 weights: "0,400;0,500;0,600;0,700"
             }
         },
+        // Optional local CMS. Set { repo: "owner/repository", branch: "main" }
+        // to share EMP authentication; repo also accepts GitLab subgroup paths.
+        // Add backend: { name: "github" } for independent stock CMS login.
+        // Add path: "/tools/editor/" to change the default /admin/ link.
+        "sveltia-cms": false,
         // Toggle syntax highlighting and its CSS
         "syntax-highlighting": true,
         google: {
-            tagId: "",
+            tagId: ""
         },
         meta: {
             appId: "",
-            pixelId: "",
-        },
+            pixelId: ""
+        }
     },
 
     // Optional browser authentication; null disables the authentication bundle
     authentication: {
         method: null,
-        options: {},
+        options: {}
     },
 
     // Pagination configuration

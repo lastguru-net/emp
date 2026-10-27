@@ -7,8 +7,15 @@ layout: base.njk
     {% if image %}
     <img class="postimage" src="{{ image }}" alt="{{ imageAlt }}" fetchpriority="high" />
     {% endif %}
+    {% if siteelements.features.sharer == "above" or siteelements.features.sharer == "both" %}
+        {% set sharerPosition = "above" %}
+        {% include "social.njk" %}
+    {% endif %}
     <div class="incontent{% if siteelements.features.initialLetter %} initial-letter{% endif %}">
         {{ content | safe }}
     </div>
-    {% if siteelements.features.sharer %}{% include "social.njk" %}{% endif %}
+    {% if siteelements.features.sharer == true or siteelements.features.sharer == "below" or siteelements.features.sharer == "both" %}
+        {% set sharerPosition = "below" %}
+        {% include "social.njk" %}
+    {% endif %}
 </div>

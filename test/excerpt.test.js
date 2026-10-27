@@ -10,8 +10,8 @@ test("empty and whitespace-only content produces no excerpt", () => {
     assert.equal(extractExcerpt("<p> </p>"), "");
 });
 
-test("rendered Markdown excerpts preserve visible characters and inline words", () => {
-    const html = createMarkdownLibrary().render('Fish & chips with **salt**, un**believ**able &copy; and `x < y`.');
+test("rendered Markdown excerpts preserve visible characters and inline words", async () => {
+    const html = (await createMarkdownLibrary()).render('Fish & chips with **salt**, un**believ**able &copy; and `x < y`.');
     assert.equal(extractExcerpt(html), "Fish & chips with salt, unbelievable © and x < y.");
 });
 

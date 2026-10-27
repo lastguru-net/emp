@@ -32,8 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const code = header.parentElement.querySelector("pre code");
         bindCopyButton(button, () => code.textContent, header.querySelector("[role=status]"), "code-block-copy-pending");
     }
-    const urlButton = document.querySelector("[data-copy-url]");
-    if (urlButton) {
-        bindCopyButton(urlButton, () => location.href, document.getElementById("copy-link-status"), "copy-url-pending");
+    for (const button of document.querySelectorAll("[data-copy-url]")) {
+        bindCopyButton(button, () => location.href, document.getElementById(button.getAttribute("aria-describedby")), "copy-url-pending");
     }
 });

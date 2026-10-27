@@ -49,8 +49,8 @@ async function browser(method, extra = {}) {
         session: {
             accessToken: "old", expiresAt: Date.now() + 3600000,
             ...(method === "gitlab" ? { refreshToken: "refresh" } : {}),
-            config: method === "github" ? JSON.stringify(["client", site, site + "api/auth/github/exchange", ""])
-                : JSON.stringify(["https://gitlab.com", "client", site, "read_user"]),
+            config: method === "github" ? JSON.stringify(["client", site, site + "api/auth/github/exchange", "repo user"])
+                : JSON.stringify(["https://gitlab.com", "client", site, "api"]),
         },
         save(value = h.session) { localStorage.setItem(key, JSON.stringify(value)); },
         saved() { return JSON.parse(localStorage.getItem(key)); },

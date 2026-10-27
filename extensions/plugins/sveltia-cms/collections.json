@@ -1,0 +1,594 @@
+[
+    {
+        "name": "posts",
+        "label": "Posts",
+        "folder": "content/posts",
+        "create": true,
+        "extension": "md",
+        "format": "yaml-frontmatter",
+        "nested": {
+            "subfolders": false
+        },
+        "meta": {
+            "path": {
+                "widget": "string"
+            }
+        },
+        "fields": [
+            {
+                "name": "title",
+                "label": "Title",
+                "widget": "string",
+                "required": false,
+                "hint": "Use a title for a main post; attached updates may leave it empty."
+            },
+            {
+                "name": "date",
+                "label": "Date",
+                "widget": "string",
+                "required": false,
+                "hint": "Use YYYY-MM-DD, YYYY-MM-DD HH:MM:SS or an ISO timestamp including its timezone. Supply a date for new posts; attached updates require one."
+            },
+            {
+                "name": "updated",
+                "label": "Updated",
+                "widget": "string",
+                "required": false,
+                "hint": "Optional date or ISO timestamp, including its timezone."
+            },
+            {
+                "name": "author",
+                "label": "Author",
+                "widget": "string",
+                "required": false,
+                "hint": "Author key from content/_data/siteauthors.json5, or an identifier without a configured author profile."
+            },
+            {
+                "name": "permalink",
+                "label": "Permalink",
+                "widget": "string",
+                "required": false
+            },
+            {
+                "name": "excerpt",
+                "label": "Excerpt",
+                "widget": "text",
+                "required": false
+            },
+            {
+                "name": "image",
+                "label": "Image",
+                "widget": "image",
+                "required": false,
+                "hint": "Title image. Keep logical /images/ paths; EMP adds any deployment prefix when rendering."
+            },
+            {
+                "name": "imageAlt",
+                "label": "Image alternative text",
+                "widget": "string",
+                "required": false
+            },
+            {
+                "name": "place",
+                "label": "Place",
+                "widget": "string",
+                "required": false,
+                "hint": "Location displayed in archive cards and post properties; also used for Event structured data."
+            },
+            {
+                "name": "address",
+                "label": "Address",
+                "widget": "string",
+                "required": false,
+                "hint": "Address for the location tooltip and Event structured data."
+            },
+            {
+                "name": "pinned",
+                "label": "Pinned",
+                "widget": "boolean",
+                "required": false,
+                "hint": "Places this item ahead of unpinned items in applicable listings."
+            },
+            {
+                "name": "hidden",
+                "label": "Hidden",
+                "widget": "boolean",
+                "required": false,
+                "hint": "Excludes the item from listings, search, the sitemap and feeds. Its URL remains public."
+            },
+            {
+                "name": "sitemapPriority",
+                "label": "Sitemap priority",
+                "widget": "number",
+                "value_type": "float",
+                "min": 0,
+                "max": 1,
+                "required": false
+            },
+            {
+                "name": "sitemapChangefreq",
+                "label": "Sitemap change frequency",
+                "widget": "select",
+                "required": false,
+                "options": [
+                    "always",
+                    "hourly",
+                    "daily",
+                    "weekly",
+                    "monthly",
+                    "yearly",
+                    "never"
+                ],
+                "hint": "Optional sitemap hint; EMP defaults to daily."
+            },
+            {
+                "name": "attachments",
+                "label": "Attachments",
+                "widget": "list",
+                "required": false,
+                "hint": "Local site-file paths, such as /assets/files/agenda.pdf or /images/sample.png. Attachment blocks appear on posts, not in feeds or search.",
+                "field": {
+                    "name": "path",
+                    "label": "File path",
+                    "widget": "string",
+                    "required": true
+                }
+            },
+            {
+                "name": "decorations",
+                "label": "Decorations",
+                "widget": "object",
+                "required": false,
+                "collapsed": true,
+                "hint": "Shown with post properties on posts and archive cards. Values are authored manually.",
+                "fields": [
+                    {
+                        "name": "badges",
+                        "label": "Badges",
+                        "widget": "list",
+                        "required": false,
+                        "fields": [
+                            {
+                                "name": "label",
+                                "label": "Label",
+                                "widget": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "variant",
+                                "label": "Variant",
+                                "widget": "string",
+                                "required": false,
+                                "hint": "neutral (default), primary, success or warning. Custom themes may support other values."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "metrics",
+                        "label": "Metrics",
+                        "widget": "list",
+                        "required": false,
+                        "hint": "Set a value, maximum or both. An omitted value is unknown, not zero.",
+                        "fields": [
+                            {
+                                "name": "label",
+                                "label": "Label",
+                                "widget": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "label": "Value",
+                                "widget": "number",
+                                "value_type": "float",
+                                "required": false
+                            },
+                            {
+                                "name": "max",
+                                "label": "Maximum",
+                                "widget": "number",
+                                "value_type": "float",
+                                "required": false
+                            },
+                            {
+                                "name": "progress",
+                                "label": "Show progress bar",
+                                "widget": "boolean",
+                                "required": false,
+                                "hint": "Requires a value and a positive maximum; values may exceed the maximum."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "actions",
+                        "label": "Actions",
+                        "widget": "list",
+                        "required": false,
+                        "fields": [
+                            {
+                                "name": "label",
+                                "label": "Label",
+                                "widget": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "href",
+                                "label": "Link",
+                                "widget": "string",
+                                "required": false,
+                                "hint": "Site-root path, HTTP(S) URL or mailto: link. Omit for a button without attached behavior."
+                            },
+                            {
+                                "name": "icon",
+                                "label": "Icon",
+                                "widget": "string",
+                                "required": false,
+                                "hint": "Optional icon key from content/_data/inlinesvg.json5."
+                            },
+                            {
+                                "name": "variant",
+                                "label": "Variant",
+                                "widget": "string",
+                                "required": false,
+                                "hint": "neutral (default), primary, success or warning. Custom themes may support other values."
+                            },
+                            {
+                                "name": "disabled",
+                                "label": "Disabled",
+                                "widget": "boolean",
+                                "required": false,
+                                "hint": "Renders a non-navigating button even when a link is supplied."
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "body",
+                "label": "Body",
+                "widget": "markdown"
+            }
+        ]
+    },
+    {
+        "name": "pages",
+        "label": "Pages",
+        "folder": "content/pages",
+        "create": true,
+        "extension": "md",
+        "format": "yaml-frontmatter",
+        "nested": {
+            "subfolders": false
+        },
+        "meta": {
+            "path": {
+                "widget": "string"
+            }
+        },
+        "fields": [
+            {
+                "name": "title",
+                "label": "Title",
+                "widget": "string",
+                "required": true
+            },
+            {
+                "name": "date",
+                "label": "Date",
+                "widget": "string",
+                "required": false,
+                "hint": "Optional publication date for archive listings and the sitemap. Use YYYY-MM-DD, YYYY-MM-DD HH:MM:SS or an ISO timestamp including its timezone."
+            },
+            {
+                "name": "updated",
+                "label": "Updated",
+                "widget": "string",
+                "required": false,
+                "hint": "Optional date or ISO timestamp, including its timezone."
+            },
+            {
+                "name": "author",
+                "label": "Author",
+                "widget": "string",
+                "required": false,
+                "hint": "Author key from content/_data/siteauthors.json5, or an identifier without a configured author profile."
+            },
+            {
+                "name": "permalink",
+                "label": "Permalink",
+                "widget": "string",
+                "required": false
+            },
+            {
+                "name": "excerpt",
+                "label": "Excerpt",
+                "widget": "text",
+                "required": false
+            },
+            {
+                "name": "image",
+                "label": "Image",
+                "widget": "image",
+                "required": false,
+                "hint": "Title image. Keep logical /images/ paths; EMP adds any deployment prefix when rendering."
+            },
+            {
+                "name": "imageAlt",
+                "label": "Image alternative text",
+                "widget": "string",
+                "required": false
+            },
+            {
+                "name": "place",
+                "label": "Place",
+                "widget": "string",
+                "required": false,
+                "hint": "Location displayed in archive cards and post properties; also used for Event structured data."
+            },
+            {
+                "name": "address",
+                "label": "Address",
+                "widget": "string",
+                "required": false,
+                "hint": "Address for the location tooltip and Event structured data."
+            },
+            {
+                "name": "pinned",
+                "label": "Pinned",
+                "widget": "boolean",
+                "required": false,
+                "hint": "Places this item ahead of unpinned items in applicable listings."
+            },
+            {
+                "name": "profilePage",
+                "label": "Profile page",
+                "widget": "boolean",
+                "required": false
+            },
+            {
+                "name": "hidden",
+                "label": "Hidden",
+                "widget": "boolean",
+                "required": false,
+                "hint": "Excludes the item from listings, search, the sitemap and feeds. Its URL remains public."
+            },
+            {
+                "name": "sitemapPriority",
+                "label": "Sitemap priority",
+                "widget": "number",
+                "value_type": "float",
+                "min": 0,
+                "max": 1,
+                "required": false
+            },
+            {
+                "name": "sitemapChangefreq",
+                "label": "Sitemap change frequency",
+                "widget": "select",
+                "required": false,
+                "options": [
+                    "always",
+                    "hourly",
+                    "daily",
+                    "weekly",
+                    "monthly",
+                    "yearly",
+                    "never"
+                ],
+                "hint": "Optional sitemap hint; EMP defaults to daily."
+            },
+            {
+                "name": "decorations",
+                "label": "Decorations",
+                "widget": "object",
+                "required": false,
+                "collapsed": true,
+                "hint": "Shown on tag and author archive cards, not in the default page layout. Values are authored manually.",
+                "fields": [
+                    {
+                        "name": "badges",
+                        "label": "Badges",
+                        "widget": "list",
+                        "required": false,
+                        "fields": [
+                            {
+                                "name": "label",
+                                "label": "Label",
+                                "widget": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "variant",
+                                "label": "Variant",
+                                "widget": "string",
+                                "required": false,
+                                "hint": "neutral (default), primary, success or warning. Custom themes may support other values."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "metrics",
+                        "label": "Metrics",
+                        "widget": "list",
+                        "required": false,
+                        "hint": "Set a value, maximum or both. An omitted value is unknown, not zero.",
+                        "fields": [
+                            {
+                                "name": "label",
+                                "label": "Label",
+                                "widget": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "label": "Value",
+                                "widget": "number",
+                                "value_type": "float",
+                                "required": false
+                            },
+                            {
+                                "name": "max",
+                                "label": "Maximum",
+                                "widget": "number",
+                                "value_type": "float",
+                                "required": false
+                            },
+                            {
+                                "name": "progress",
+                                "label": "Show progress bar",
+                                "widget": "boolean",
+                                "required": false,
+                                "hint": "Requires a value and a positive maximum; values may exceed the maximum."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "actions",
+                        "label": "Actions",
+                        "widget": "list",
+                        "required": false,
+                        "fields": [
+                            {
+                                "name": "label",
+                                "label": "Label",
+                                "widget": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "href",
+                                "label": "Link",
+                                "widget": "string",
+                                "required": false,
+                                "hint": "Site-root path, HTTP(S) URL or mailto: link. Omit for a button without attached behavior."
+                            },
+                            {
+                                "name": "icon",
+                                "label": "Icon",
+                                "widget": "string",
+                                "required": false,
+                                "hint": "Optional icon key from content/_data/inlinesvg.json5."
+                            },
+                            {
+                                "name": "variant",
+                                "label": "Variant",
+                                "widget": "string",
+                                "required": false,
+                                "hint": "neutral (default), primary, success or warning. Custom themes may support other values."
+                            },
+                            {
+                                "name": "disabled",
+                                "label": "Disabled",
+                                "widget": "boolean",
+                                "required": false,
+                                "hint": "Renders a non-navigating button even when a link is supplied."
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "body",
+                "label": "Body",
+                "widget": "markdown"
+            }
+        ]
+    },
+    {
+        "name": "configuration",
+        "label": "Configuration",
+        "description": "Edit the site's configuration and theme source files. Changes take effect after the site is rebuilt.",
+        "format": "raw",
+        "files": [
+            {
+                "name": "siteconfig",
+                "label": "Site configuration (siteconfig.js)",
+                "file": "content/_data/siteconfig.js",
+                "fields": [
+                    {
+                        "name": "body",
+                        "label": "content/_data/siteconfig.js",
+                        "widget": "code",
+                        "default_language": "javascript",
+                        "allow_language_selection": false,
+                        "output_code_only": true
+                    }
+                ]
+            },
+            {
+                "name": "siteelements",
+                "label": "Site elements (siteelements.json5)",
+                "file": "content/_data/siteelements.json5",
+                "fields": [
+                    {
+                        "name": "body",
+                        "label": "content/_data/siteelements.json5",
+                        "widget": "code",
+                        "default_language": "json5",
+                        "allow_language_selection": false,
+                        "output_code_only": true
+                    }
+                ]
+            },
+            {
+                "name": "sitestrings",
+                "label": "Site strings (sitestrings.json5)",
+                "file": "content/_data/sitestrings.json5",
+                "fields": [
+                    {
+                        "name": "body",
+                        "label": "content/_data/sitestrings.json5",
+                        "widget": "code",
+                        "default_language": "json5",
+                        "allow_language_selection": false,
+                        "output_code_only": true
+                    }
+                ]
+            },
+            {
+                "name": "siteauthors",
+                "label": "Authors (siteauthors.json5)",
+                "file": "content/_data/siteauthors.json5",
+                "fields": [
+                    {
+                        "name": "body",
+                        "label": "content/_data/siteauthors.json5",
+                        "widget": "code",
+                        "default_language": "json5",
+                        "allow_language_selection": false,
+                        "output_code_only": true
+                    }
+                ]
+            },
+            {
+                "name": "sitetags",
+                "label": "Tags (sitetags.json5)",
+                "file": "content/_data/sitetags.json5",
+                "fields": [
+                    {
+                        "name": "body",
+                        "label": "content/_data/sitetags.json5",
+                        "widget": "code",
+                        "default_language": "json5",
+                        "allow_language_selection": false,
+                        "output_code_only": true
+                    }
+                ]
+            },
+            {
+                "name": "theme",
+                "label": "Theme (theme.css)",
+                "file": "assets/css/theme.css",
+                "fields": [
+                    {
+                        "name": "body",
+                        "label": "assets/css/theme.css",
+                        "widget": "code",
+                        "default_language": "css",
+                        "allow_language_selection": false,
+                        "output_code_only": true
+                    }
+                ]
+            }
+        ]
+    }
+]

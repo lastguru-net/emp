@@ -16,10 +16,17 @@ layout: base.njk
     {% if siteelements.features.postproperties and siteelements.features.postproperties != "above" %}
         {% include "postproperties.njk" %}
     {% endif %}
+    {% if siteelements.features.sharer == "above" or siteelements.features.sharer == "both" %}
+        {% set sharerPosition = "above" %}
+        {% include "social.njk" %}
+    {% endif %}
     <div class="incontent{% if siteelements.features.initialLetter %} initial-letter{% endif %}">
         {{ content | safe }}
     </div>
-    {% if siteelements.features.sharer %}{% include "social.njk" %}{% endif %}
+    {% if siteelements.features.sharer == true or siteelements.features.sharer == "below" or siteelements.features.sharer == "both" %}
+        {% set sharerPosition = "below" %}
+        {% include "social.njk" %}
+    {% endif %}
     {% if siteelements.features.prevnext or postAttachments | length or postUpdates | length %}
     <div class="postbreak"></div>
     {% endif %}

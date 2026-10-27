@@ -1,9 +1,12 @@
 import { readFileSync } from "node:fs";
 
+export const defaultScopes = ["repo", "user"];
+
 export default {
     browser(options, siteUrl) {
         options = {
             ...options,
+            scopes: options.scopes === undefined ? defaultScopes : options.scopes,
             redirectUri: new URL(siteUrl).href,
             exchangeUrl: new URL("api/auth/github/exchange", siteUrl).href,
         };

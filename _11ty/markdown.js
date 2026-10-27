@@ -11,10 +11,9 @@ import siteconfig from "../content/_data/siteconfig.js";
 import codeBlockHeaders from "./code-block-headers.js";
 import { loadConfig } from "./config.js";
 
-const inlinesvg = await loadConfig("inlinesvg");
-const sitestrings = await loadConfig("sitestrings");
-
-export const createMarkdownLibrary = (urlFilter = (url) => url) => {
+export const createMarkdownLibrary = async (urlFilter = (url) => url) => {
+    const inlinesvg = await loadConfig("inlinesvg");
+    const sitestrings = await loadConfig("sitestrings");
     const markdown = markdownIt({
         html: true,
         xhtmlOut: true,

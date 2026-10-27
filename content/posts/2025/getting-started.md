@@ -124,7 +124,7 @@ The regular layout has four areas:
      - When enabled, an author business card (photo, bio, website/email, socials) is displayed above the list.
    - **Post**: The most common content type - a blog post.
      - Includes a title, date, and optional image. Additional properties like location, author, and tags can be added.
-     - Below each post, share buttons and navigation buttons for newer/older posts are available.
+     - Sharing buttons can appear above, below or on both sides of the post body. Navigation buttons for newer/older posts appear below.
    - **Page**: Special content like "About Us." Pages are not included in the main blog post list or feeds, but can appear in tag or author listings when that metadata is set. Their layout omits dates, post properties and newer/older navigation buttons. They are typically linked directly in the main menu or from other posts or pages.
 4. **Footer**: Optional footer with social links, copyright information, privacy policy link and "Powered by" link.
 
@@ -172,6 +172,7 @@ Start by setting `url` to your complete public site URL, including any deploymen
 This file contains configuration for site-specific elements such as menu items, social media links, header and footer settings. Key sections include:
 
 - **Features**: Settings for post properties, JSON-LD structured data, the sitemap link, and social sharing buttons. The sitemap file is generated regardless of its link setting. Set `features.postproperties` to `"below"` (default) or `"above"` for placement relative to the full-post image, or `false` to hide properties everywhere. `true` also places properties below the image.
+  Set `features.sharer` to `"both"` (default), `"above"` or `"below"` to place sharing controls around the main body on posts and pages, or `false` to hide them. Existing `true` still means below. Above-body controls follow the title, image and post properties; below-body controls precede any attachments, updates and post navigation.
 - **Feeds**: Full content or excerpts, RSS/Atom/JSON links in the HTML head, and the RSS link in the footer. Feed files are generated regardless of their link settings.
 - **Menu**: Labels and URLs for the home link and additional menu items.
 - **Header**: Header image for the landing page.
@@ -267,7 +268,11 @@ The build renders updates beneath the main body, newest first, using the site's 
 
 Rebuild after adding, editing or removing an update. The [sample event](/sample-2023-pinned-event/) demonstrates the result. When current details such as the venue change, edit those details in the main post and use an update to explain the change.
 
-### Editing with PagesCMS (Optional)
+### Editing with a CMS (Optional)
+
+EMP's optional [Sveltia CMS integration](/advanced-setup/#content-management) hosts an editor on your site for GitHub or GitLab content. It supports shared EMP sign-in or Sveltia's own login, including a third-party authenticator. Follow Advanced Setup to enable it and choose the repository and branch.
+
+#### Pages CMS
 
 For browser-based editing, [Pages CMS](https://pagescms.org/) connects to your GitHub repository using the included `.pages.yml` configuration. Open [Pages CMS](https://app.pagescms.org/), sign in with GitHub, grant access to your repository, and select the repository and branch to edit. See its [documentation](https://pagescms.org/docs/) for more details.
 
@@ -337,6 +342,8 @@ Each decoration group is optional. Set labels, numbers and availability in front
 ## Deploying to Cloudflare Workers
 
 Cloudflare Workers builds the site from your Git repository and serves the generated files over HTTPS. Pushes to the configured production branch trigger a build and deployment.
+
+The root `wrangler.json` sets `assets.not_found_handling` to `"404-page"`, so missing URLs serve the generated `404.html` with an HTTP 404 status. Keep this setting if you customize the deployment configuration; GitHub authentication's generated configuration preserves it.
 
 ### Steps to Deploy
 

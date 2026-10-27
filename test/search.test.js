@@ -66,7 +66,7 @@ test("the real search index finds words across inline markup and stores readable
     const item = {
         url: "/lunch/", date: new Date("2026-10-16"),
         data: { title: "Lunch", tags: ["posts"] },
-        templateContent: createMarkdownLibrary().render("Un**believ**able fish & chips.")
+        templateContent: (await createMarkdownLibrary()).render("Un**believ**able fish & chips.")
     };
     const payload = JSON.parse(await new Promise((resolve, reject) =>
         buildIndex([item], (error, result) => error ? reject(error) : resolve(result))));

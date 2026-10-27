@@ -20,26 +20,30 @@ import postlist from "./_11ty/postlist.js";
 import metricsActions from "./_11ty/metrics-actions.js";
 import postAdditions from "./_11ty/post-additions.js";
 import tailwind from "./_11ty/tailwind.js";
+import { clearConfigCache } from "./_11ty/config.js";
 import { createMarkdownLibrary } from "./_11ty/markdown.js";
 
-export default (eleventyConfig) => {
+export default async (eleventyConfig) => {
+    clearConfigCache();
+
     // JSON5 data files
     eleventyConfig.addDataExtension("json5", (contents) => JSON5.parse(contents));
 
     // Markdown library
     eleventyConfig.setLibrary(
         "md",
-        createMarkdownLibrary((url) => eleventyConfig.getFilter("url")(url))
+        await createMarkdownLibrary((url) => eleventyConfig.getFilter("url")(url))
     );
 
     // Passthrough assets and images
     eleventyConfig.addPassthroughCopy("assets");
     eleventyConfig.addPassthroughCopy("content/images/**/*.{avif,gif,ico,jpeg,jpg,png,svg,webp}");
 
-    // Watch JS and CSS for dev-mode rebuilds
+    // Watch source and configuration changes for dev-mode rebuilds
     eleventyConfig.addWatchTarget("./assets/js/");
     eleventyConfig.addWatchTarget("./assets/css/");
     eleventyConfig.addWatchTarget("./extensions/**", { resetConfig: true });
+    eleventyConfig.addWatchTarget("./content/_data/*.json5", { resetConfig: true });
 
     // Template formats
     eleventyConfig.setTemplateFormats([

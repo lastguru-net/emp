@@ -4,7 +4,7 @@ date: "2026-09-24"
 updated: "2026-10-23"
 tags: article
 author: "lastguru"
-excerpt: "Configure sign-in, plugins and browser-loaded content, or add your own EMP extensions."
+excerpt: "Configure sign-in, content management, plugins and browser-loaded content, or add your own EMP extensions."
 ---
 
 These optional setups extend a working Eleventy Markdown Prime (EMP) site. For repository creation, basic configuration, content authoring and deployment, start with [Getting Started](/getting-started/).
@@ -16,11 +16,12 @@ Settings below belong in `content/_data/siteconfig.js` unless stated otherwise. 
 1. [Sidebar user menu](#sidebar-user-menu)
    - [GitLab sign-in](#gitlab-sign-in)
    - [GitHub sign-in](#github-sign-in)
-2. [Built-in plugins](#built-in-plugins)
-3. [JSON postlists](#json-postlists)
-4. [JSON metrics and actions](#json-metrics-and-actions)
-5. [JSON read sources](#json-read-sources)
-6. [Local providers](#local-providers)
+2. [Content management](#content-management)
+3. [Built-in plugins](#built-in-plugins)
+4. [JSON postlists](#json-postlists)
+5. [JSON metrics and actions](#json-metrics-and-actions)
+6. [JSON read sources](#json-read-sources)
+7. [Local providers](#local-providers)
 
 ## Sidebar user menu
 
@@ -38,7 +39,7 @@ The menu offers **Sign in** or **Sign out** and the privacy-policy link when `fe
 
 GitLab sign-in works directly in the browser, including on static hosts. It needs no Worker or client secret.
 
-1. [Register a GitLab OAuth application](https://docs.gitlab.com/integration/oauth_provider/#create-a-user-owned-application). Set the redirect URI to your `siteconfig.url`, leave **Confidential** unchecked, and select `read_user`.
+1. [Register a GitLab OAuth application](https://docs.gitlab.com/integration/oauth_provider/#create-a-user-owned-application). Set the redirect URI to your `siteconfig.url`, leave **Confidential** unchecked, and select `api`.
 2. Copy its public Application ID into `siteconfig.js`:
 
    ```js
@@ -55,7 +56,7 @@ GitLab sign-in works directly in the browser, including on static hosts. It need
 **Optional settings** inside `options`:
 
 - `origin` defaults to `"https://gitlab.com"`. For self-managed GitLab, use its HTTPS origin without an API path or trailing slash, and register the application on that instance. It must allow browser token and user-API requests from your site.
-- `scopes` defaults to `"read_user"` for identity lookup. Omit it to use the default, or supply a space-separated string or an array of scope names. The registered application must allow the requested scopes.
+- `scopes` defaults to `"api"`, supporting identity lookup and CMS repository editing. Omit it to use the default, or supply a space-separated string or an array of scope names. For identity-only login, use `scopes: ["read_user"]`. The registered application must allow the requested scopes.
 
 ### GitHub sign-in
 
@@ -78,19 +79,21 @@ GitHub sign-in uses an OAuth app and a code-exchange handler in the site's exist
 
 **Optional settings** inside `options`:
 
-- `scopes` defaults to `[]`: no additional permissions, sufficient for the public profile. Omit it to use the default, or supply an array or a space-separated string of scope names. Request the permissions needed by any additional integration.
+- `scopes` defaults to `["repo", "user"]`, supporting repository editing and user information. Omit it to use the default, or supply an array or a space-separated string of scope names. For public-profile-only login, use `scopes: []`; for public-repository editing, `["public_repo"]` is sufficient for EMP.
 
 The build adds the exchange handler and derives its same-origin URL from `siteconfig.url`; do not configure a separate `exchangeUrl`. Generated Wrangler configuration is untracked. Disabling GitHub removes EMP's generated deployment configuration. Sites with a custom Worker handler or Wrangler `env` blocks must integrate those with the GitHub provider before enabling it.
 
 ### Sessions and permissions
 
-Both providers return to the page where sign-in started, preserving its query and fragment, after success, cancellation or failure. A missing or unsafe return address falls back to the homepage. Failed attempts show the menu's error status without replacing an existing session.
+Both providers use the homepage callback to return promptly to the page where sign-in started, preserving its query and fragment. A one-use callback in this tab's sessionStorage lets the original page finish token exchange and identity validation without waiting on the homepage or putting OAuth parameters in the destination URL. Homepage and fragment-only returns finish in the same document. The registered OAuth redirect URI stays unchanged.
+
+Cancellation and failure also return to the original page. A missing or unsafe return address falls back to the homepage. Failed attempts show the menu's error status without replacing an existing session.
 
 Tokens are stored in the browser and can be accessed by scripts on the same origin. Sign-out clears the local EMP login, not the provider's website session or the application's authorization. GitLab refreshes tokens and requires a current browser with Web Locks support; GitHub requires a new sign-in when its token expires or is revoked.
 
 The menu shows the last known ID/name immediately while checking identity in the background. A successful check updates that display cache; a failed check clears it without discarding otherwise usable credentials. The next page load can try again. The cache is display data, not proof that a session is currently valid. Background checks leave the controls usable, recheck pages restored with Back/Forward, and reflect session changes from other tabs. Requests and GitLab lock acquisition have a ten-second deadline; that bounds waiting, not the login lifetime.
 
-Changing requested scopes requires signing in again. Scopes do not grant repository membership or override branch protection. Before relying on a deployment, check sign-in, reload and sign-out with the registered application.
+These provider defaults apply even when the CMS plugin is disabled. Explicit `scopes` always takes precedence. Changing requested scopes requires signing in again. Scopes do not grant repository membership or override branch protection. Before relying on a deployment, check sign-in, reload and sign-out with the registered application.
 
 ### Test sign-in
 
@@ -101,6 +104,90 @@ authentication: { method: "test", options: {} },
 ```
 
 This browser-only method signs in as `Test Username` and stores the name in `localStorage.user`. It is not real authentication. Set `method: null` to disable authentication; an enabled user menu then has an inactive sign-in control.
+
+## Content management
+
+The optional [Sveltia CMS](https://sveltiacms.app/) plugin adds a browser editor at `/admin/`. Its loading and shared-sign-in screen uses the site's layout, navigation and styling, then opens Sveltia's full-browser interface in a separate document so the two stylesheets do not interfere. It edits Markdown and media in a GitHub or GitLab repository. Saving creates commits on the selected branch; connect that branch to your deployment workflow to publish the changes.
+
+Choose one login mode:
+
+- **Shared EMP sign-in:** reuse the site's GitHub or GitLab login and open the editor from the user menu.
+- **Standalone Sveltia login:** use Sveltia's own login, including a compatible third-party authenticator. EMP authentication and the public site's user menu/JavaScript are not required.
+
+Both modes need an HTTPS site and a current browser with Web Locks support.
+
+### Shared EMP sign-in
+
+First configure [GitLab](#gitlab-sign-in) or [GitHub](#github-sign-in) sign-in above. Keep the regular sidebar, user menu and JavaScript enabled. Add this entry to the existing `plugins` object:
+
+```js
+plugins: {
+    // Keep your other plugins here.
+    "sveltia-cms": {
+        repo: "YOUR_OWNER/YOUR_REPOSITORY",
+        branch: "YOUR_EDITING_BRANCH",
+    },
+},
+```
+
+`repo` and `branch` are required: the editing target is not inferred from your checkout. GitLab subgroup paths are supported. Omitting `backend` selects the same provider as `authentication.method`.
+
+The default EMP scopes already support repository editing. If you override them, shared GitHub login needs `repo` (or `public_repo` for public repositories), and GitLab needs `api`. The account must also have write access to the selected repository and branch.
+
+Build and deploy, sign in through EMP, then choose **Content management** in the user menu. Opening the editor URL directly uses the same login. Signing out through EMP or the CMS clears their shared local session.
+
+### Standalone Sveltia login
+
+Add `backend` to use Sveltia's own login. For example, this GitHub configuration uses an external OAuth authenticator:
+
+```js
+plugins: {
+    "sveltia-cms": {
+        repo: "YOUR_OWNER/YOUR_REPOSITORY",
+        branch: "YOUR_EDITING_BRANCH",
+        backend: {
+            name: "github",
+            base_url: "https://auth.example.com",
+            auth_methods: ["oauth"],
+        },
+    },
+},
+```
+
+`base_url` points to a compatible authenticator, such as [Sveltia CMS Authenticator](https://github.com/sveltia/sveltia-cms-auth). Configure the OAuth application and allowed site domains there. The default authentication endpoint is `auth`; set `auth_endpoint` only if your service uses another path. These public settings are passed to the generated CMS configuration. EMP's own GitHub exchange Worker does not implement the popup protocol.
+
+For personal-access-token login instead, use `backend: { name: "github", auth_methods: ["token"] }` and enter the token in the CMS login screen, never in site configuration. Standalone GitLab also supports direct PKCE login with `name: "gitlab"`, `auth_type: "pkce"` and a public `app_id`.
+
+Follow Sveltia's [GitHub](https://sveltiacms.app/en/docs/backends/github) or [GitLab](https://sveltiacms.app/en/docs/backends/gitlab) instructions for provider registration, callback URLs, permissions and self-hosted instances. Keep `repo` and `branch` in the plugin options, not inside `backend`. Only public authentication/API settings belong in `backend`.
+
+Build and deploy, then open the editor URL. Standalone sign-in/sign-out is independent of any EMP login. Set `authentication.method: null` if you do not need public-site authentication.
+
+### Address and version
+
+These options apply to either login mode:
+
+- `path` defaults to `"/admin/"`. Set a site-root-relative directory such as `"/tools/editor/"`, without the deployment prefix. With `siteconfig.url: "https://example.com/blog/"`, that example opens at `/blog/tools/editor/`.
+- `version` defaults to `"latest"`. Set a published Sveltia release or npm tag to select another version. Updates and rollbacks require a site rebuild, not a new EMP release.
+
+Enabled builds download the official main CMS script from UNPKG and serve it from your site. Watch rebuilds reuse that download; restart the development server to fetch a newer release. Sveltia still loads ancillary assets from upstream CDNs, so the editor is not fully local or offline. See [Sveltia's distribution documentation](https://sveltiacms.app/en/docs/releases#cdn-or-npm-package).
+
+Shared login relies on Sveltia's session format. If an upstream update breaks it, use `version` to select a working release. Close other editor tabs before changing login mode, provider or repository.
+
+To disable the CMS, remove the plugin entry or set it to `false`. When disabling it or changing `path`, clean the old build output before rebuilding/deploying: Eleventy does not remove stale editor files.
+
+### Editing content
+
+The generated configuration covers Markdown files under `content/posts` and `content/pages`, including nested folders, and images under `content/images`. Existing filenames are retained when editing. Image paths remain logical `/images/...` URLs; EMP adds any deployment prefix during the site build.
+
+Field definitions live in `extensions/plugins/sveltia-cms/collections.json`. The forms cover titles, dates, authors, image/alternative text, excerpts, location, visibility/pinning, sitemap hints and decorations; posts also have attachment paths, and pages have the profile-page flag.
+
+Dates are text fields: use the formats described in [Getting Started](/getting-started/#header-variables), and provide a publication date for new posts. Attached updates may omit their title. Tags (a string or array), thumbnail overrides (a path or `false`) and arbitrary `meta` entries remain source-managed: the stock form widgets would otherwise change their supported shapes. Unconfigured frontmatter is retained, including custom fields inside decorations. Saving can change YAML quoting or formatting.
+
+The **Configuration** collection provides source-code editors for `siteconfig.js`, `siteelements.json5`, `sitestrings.json5`, `siteauthors.json5` and `sitetags.json5` under `content/_data`, plus `assets/css/theme.css`. It does not expose `inlinesvg.json5` or `socialconfig.json5`.
+
+These editors keep JavaScript, JSON5 and CSS as source text, including comments, rather than converting them to structured form data. Sveltia normalizes line endings and trailing whitespace. Syntax highlighting is not configuration validation; changes must still pass the site build. Saves commit to the same configured repository and branch as content, and take effect after rebuilding and deploying the site. Templates and other source files remain outside the CMS.
+
+For the editor's general operation, use [Sveltia's user interface guide](https://sveltiacms.app/en/docs/ui).
 
 ## Built-in plugins
 

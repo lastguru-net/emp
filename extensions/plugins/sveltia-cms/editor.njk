@@ -1,0 +1,17 @@
+---
+layout: false
+eleventyExcludeFromCollections: true
+---
+<!doctype html>
+<html lang="{{ siteconfig.lang }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noindex,nofollow">
+        <title>{{ title }}</title>
+        <script type="module" src="{{ cms.scriptUrl }}"></script>
+    </head>
+    <body>
+        <noscript><a href="{{ cms.adminUrl }}">{{ cms.labels.cms_back }}</a></noscript>
+    </body>
+</html>

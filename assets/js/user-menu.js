@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const title = document.getElementById("user-menu-title");
     const signIn = document.getElementById("user-menu-sign-in");
     const signOut = document.getElementById("user-menu-sign-out");
+    const cms = document.getElementById("user-menu-cms");
     const status = document.getElementById("user-menu-status");
     const dialog = document.getElementById("user-menu-dialog");
     if (!label || !title || !signIn || !signOut || !status) return;
@@ -15,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
         label.textContent = title.textContent = user?.name || signedOutLabel;
         signIn.hidden = Boolean(user);
         signOut.hidden = !user;
+        if (cms) cms.hidden = !user;
     };
 
     // A completed older request must display the current session, not its old result.
@@ -73,5 +75,9 @@ document.addEventListener("DOMContentLoaded", () => {
             renderUser(currentUser(null));
         }
     });
-    void refresh();
+    if (typeof cmsSession !== "undefined") cmsSession.onChange(() => renderUser(currentUser(null)));
+    // On the shared CMS entry page the gate validates the session and publishes
+    // updates through the same adapter, so do not start a second restore.
+    if (typeof cmsSession !== "undefined" && document.querySelector("#cms-gate[data-cms-script]")) renderUser(currentUser(null));
+    else void refresh();
 });

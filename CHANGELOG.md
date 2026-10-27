@@ -2,6 +2,26 @@
 
 Notable changes to Eleventy Markdown Prime. Released versions link to the [public release notes](https://github.com/lastguru-net/emp/releases); dates are publication dates in UTC.
 
+## [7.2.0](https://github.com/lastguru-net/emp/releases/tag/v7.2.0) - 2026-10-27
+
+Version 7.2 introduces a built-in optional CMS, and improves the authentication flow.
+
+### Breaking changes
+
+- Omitted authentication scopes now default to GitHub `["repo", "user"]` and GitLab `"api"`, including when CMS is disabled. Existing explicit settings are unchanged. To retain identity-only permissions, set GitHub `scopes: []` or GitLab `scopes: ["read_user"]`. Sessions using the old omitted defaults require a fresh sign-in.
+
+### Added
+
+- Sharing controls can appear above, below or on both sides of post and page content with `features.sharer`. The default is now `"both"`; explicit `true` retains the existing below-body placement.
+- Optional Sveltia CMS for GitHub/GitLab site configuration, posts, pages and images, with shared EMP sign-in or standalone login through a token or compatible authenticator. Configure the repository, branch and optional editor path/version in `plugins["sveltia-cms"]`; see [Advanced Setup](https://emp-starter.lastguru.dev/advanced-setup/#content-management).
+
+### Fixed
+
+- Return GitHub/GitLab sign-in to the originating page before token exchange and profile lookup, completing login there without a redundant profile request or homepage reload.
+- Serve the generated static 404 page for missing URLs on Cloudflare Workers, retaining the HTTP 404 status.
+- Integrate the CMS loading/sign-in page with the site layout and shared sign-in controller; keep the full-browser editor isolated from site styles. Move the admin markup to separate Nunjucks templates and collection definitions to JSON, add missing content fields, and clarify EMP-only session migration and sign-in errors.
+- Reloaded JSON5 settings consistently across templates, Markdown and build helpers during development.
+
 ## [7.1.0](https://github.com/lastguru-net/emp/releases/tag/v7.1.0) - 2026-10-24
 
 Version 7.1 separates postlist rendering from the homepage layout and improves authentication refresh. Review the configuration, date and custom-template changes before upgrading from 7.0.
